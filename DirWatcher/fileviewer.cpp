@@ -86,7 +86,9 @@ void FileViewer::next()
     {
         current_file->setText( list[index].absoluteFilePath() );
         file_name->setText( list[index].fileName() );
-    } else {
+    }
+    else
+    {
         this->close();
     }
 }
@@ -99,9 +101,13 @@ void FileViewer::add_clicked()
     array.append(string);
     
     if( list[index].isFile() )
+    {
         file_out->write( array );
+    }
     else if( list[index].isDir() )
+    {
         dir_out->write(array);
+    }
     
     next();
 }

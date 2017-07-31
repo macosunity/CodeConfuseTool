@@ -4,7 +4,16 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
+LIBS     += -lsqlite3
+
+#不输出QDebug调试信息
+#DEFINES  += QT_NO_WARNING_OUTPUT\
+#           QT_NO_DEBUG_OUTPUT
+#CONFIG   += console
+#CONFIG   -= app_bundle
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.10
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,7 +23,19 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         dialog.cpp \
-    fileviewer.cpp
+    fileviewer.cpp \
+    cppparser.cpp \
+    ocparser.cpp \
+    srcfilemodel.cpp \
+    stringutil.cpp \
+    database.cpp \
+    classmodel.cpp
 
 HEADERS  += dialog.h \
-    fileviewer.h
+    fileviewer.h \
+    cppparser.h \
+    ocparser.h \
+    srcfilemodel.h \
+    stringutil.h \
+    database.h \
+    classmodel.h

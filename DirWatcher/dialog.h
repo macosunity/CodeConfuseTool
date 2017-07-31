@@ -11,8 +11,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QListWidget>
-
+#include <vector>
+#include <string>
 #include "fileviewer.h"
+#include "srcfilemodel.h"
+
+using namespace std;
 
 class Dialog : public QDialog
 {
@@ -27,6 +31,7 @@ private:
     
     QString file_storage;
     QString dir_storage;
+    vector<SrcFileModel> fileList;
     
 public:
     Dialog(QString file_storage, QString dir_storage, QWidget *parent = 0);
@@ -37,9 +42,12 @@ public slots:
     void add_next_path(QString path);
     
 private slots:
+    bool findMFileWithFileModel(SrcFileModel &fileModel);
+    bool findMMFileWithFileModel(SrcFileModel &fileModel);
+    bool findCppFileWithFileModel(SrcFileModel &fileModel);
+    bool findHeaderFileWithFileModel(SrcFileModel &fileModel);
+    void readFileList(const char *basePath);
     void choose_path();
-    void add_path();
-    void del_path();
     void start_choosing();
 };
 
