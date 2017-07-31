@@ -40,9 +40,7 @@ public:
     bool createTable();       //创建数据库表
     bool insertRecord(ClassModel classModel);      //新增数据
     bool queryAll();          //查询所有信息
-    bool updateById(int id);  //更新
-    bool deleteById(int id);  //删除
-    bool sortById();          //排序
+    bool deleteAll();         //删除所有信息
 };
 
 #endif // DATABASE_H

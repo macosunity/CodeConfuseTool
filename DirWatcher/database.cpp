@@ -126,22 +126,25 @@ bool DataBase::queryAll()
     }
 
     QSqlQuery query(m_db);
-    query.exec("select * from automobil");
-    QSqlRecord rec = query.record();
-    qDebug() << QObject::tr("automobil表字段数：" ) << rec.count();
-
-    while(query.next())
+    query.prepare("select distinct(identify_name) from classes_table");
+    if(!query.exec())
     {
-        for(int index = 0; index < 10; index++)
-            qDebug() << query.value(index) << " ";
-        qDebug() << "\n";
+        qDebug()<<query.lastError();
     }
-
+    else
+    {
+        while(query.next())
+        {
+            qDebug() << query.value(0).toString() << " ";
+            qDebug() << "\n";
+        }
+    }
+    
     return true;
 }
 
-//根据ID删除记录
-bool DataBase::deleteById(int id)
+//删除所有记录
+bool DataBase::deleteAll()
 {
     if(!m_db.isOpen())
     {
@@ -149,67 +152,11 @@ bool DataBase::deleteById(int id)
     }
 
     QSqlQuery query(m_db);
-    query.prepare(QString("delete from automobil where id = %1").arg(id));
+    query.prepare(QString("delete from classes_table"));
     if(!query.exec())
     {
         qDebug() << "删除记录失败！";
         return false;
     }
     return true;
-}
-
-//根据ID更新记录
-bool DataBase::updateById(int id)
-{
-    if(!m_db.isOpen())
-    {
-        createConnection();
-    }
-
-    QSqlQuery query(m_db);
-    query.prepare(QString("update automobil set attribute=?,type=?,"
-                             "kind=?, nation=?,"
-                             "carnumber=?, elevaltor=?,"
-                             "distance=?, oil=?,"
-                             "temperature=? where id=%1").arg(id));
-
-     query.bindValue(0,"四轮");
-     query.bindValue(1,"轿车");
-     query.bindValue(2,"富康");
-     query.bindValue(3,rand()%100);
-     query.bindValue(4,rand()%10000);
-     query.bindValue(5,rand()%300);
-     query.bindValue(6,rand()%200000);
-     query.bindValue(7,rand()%52);
-     query.bindValue(8,rand()%100);
-
-     bool success=query.exec();
-     if(!success)
-     {
-          QSqlError lastError = query.lastError();
-          qDebug() << lastError.driverText() << QString(QObject::tr("更新失败"));
-     }
-    return true;
-}
-
-//排序
-bool DataBase::sortById()
-{
-    if(!m_db.isOpen())
-    {
-        createConnection();
-    }
-
-    QSqlQuery query(m_db);
-    bool success=query.exec("select * from automobil order by id desc");
-    if(success)
-    {
-        qDebug() << QObject::tr("排序成功");
-        return true;
-    }
-    else
-    {
-        qDebug() << QObject::tr("排序失败！");
-        return false;
-    }
 }

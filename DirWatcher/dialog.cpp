@@ -14,6 +14,7 @@
 
 #include "cppparser.h"
 #include "ocparser.h"
+#include "database.h"
 
 void Dialog::readFileList(const char *basePath)
 {
@@ -286,6 +287,9 @@ void Dialog::start_choosing()
     list->setDragEnabled(true);
 
     start->setEnabled(true);
+    
+    DataBase *database = DataBase::Instance();
+    database->queryAll();
 }
 
 bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
