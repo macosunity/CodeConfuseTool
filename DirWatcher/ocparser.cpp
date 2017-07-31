@@ -570,7 +570,7 @@ int OCParser::find(string& str,string s,int& pos){
                     const string cn = findClassName(classline,begin);//classname
                     theclass.classname = cn;
 
-                    int cur_index = lBlock;//current_index
+                    size_t cur_index = lBlock;//current_index
                     vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
                     string temp = "";
                     //排除所有作用域内的字符串
@@ -729,12 +729,12 @@ const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName
 }
 
 //以下是判断作用域的位置，并返回合适的 { 和 } 位置来将变量名和函数名分割出来。
-void OCParser::actionscope_ignore(const string& str,int& fI)
+void OCParser::actionscope_ignore(const string& str,size_t& fI)
 {
     int lBlock_num = 1;
     while(lBlock_num)
     {
-        if(fI >= (int)str.length())
+        if(fI >= str.length())
         {
             break;
         }
@@ -789,7 +789,7 @@ bool OCParser::is_str_contain_chars(string str)
     return is_contain;
 }
 
-vector<int> OCParser::actionscope(const string& str,int& fI)
+vector<int> OCParser::actionscope(const string& str,size_t& fI)
 {
     vector<int> index;
     index.push_back(fI-1);
@@ -809,6 +809,10 @@ vector<int> OCParser::actionscope(const string& str,int& fI)
             continue;
         }
         ++fI;
+        if(fI >= str.length())
+        {
+            break;
+        }
     }
     return index;
 }

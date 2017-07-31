@@ -68,8 +68,8 @@ private:
     string findExtendsName(const string& str,int pos);//在一个字符串上找扩展名
     const vector<string> findDelegatesName(const string& str,int pos);//代理
     const map<string,vector<string>> findPropertiesAndFunctionDeclaresName(const string& str,int pos);//属性和方法
-    void actionscope_ignore(const string& str,int& fI);//忽略一个大的作用域中的所有作用域
-    vector<int> actionscope(const string& str,int& fI);//获取最大的作用域的位置
+    void actionscope_ignore(const string& str,size_t& fI);//忽略一个大的作用域中的所有作用域
+    vector<int> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
 };
 
 #endif // OCPARSER_H
