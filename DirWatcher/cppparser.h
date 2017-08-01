@@ -68,8 +68,6 @@ private:
     vector<string> split(std::string str,std::string pattern);
 
     bool is_str_contain_space(string str);//是否包含空格
-    bool is_var_or_function(string str);//判断是否为变量或者函数
-    bool is_str_contain_chars(string str);
 };
 
 

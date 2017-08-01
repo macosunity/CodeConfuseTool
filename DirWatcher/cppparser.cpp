@@ -528,7 +528,7 @@ int CppParser::findGlobalClassDeclares(string& str)
                 cls_index = friend_index;
             }
 
-            if (cur_var.length() > 2 && is_var_or_function(cur_var) && cls_index != string::npos)
+            if (cur_var.length() > 2 && cls_index != string::npos)
             {
                 string class_declare_str = cur_var + ";";
                 size_t index = str.find(class_declare_str);
@@ -586,7 +586,7 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
         {
             string cur_var = b->substr(0,sem_index);
             cur_var = trim(cur_var);
-            if (cur_var.length() > 2 && is_var_or_function(cur_var))
+            if (cur_var.length() > 2)
             {
                 tempC.var.push_back(cur_var);
             }
@@ -594,7 +594,7 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
         else
         {
             string cur_function_str = trim(*b);
-            if (cur_function_str.length() > 2 && is_var_or_function(cur_function_str))
+            if (cur_function_str.length() > 2)
             {
                 tempC.function.push_back(cur_function_str);
             }
@@ -703,7 +703,7 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                         {
                             string cur_var = b->substr(0,sem_index);
                             cur_var = trim(cur_var);
-                            if (cur_var.length() > 2 && is_var_or_function(cur_var))
+                            if (cur_var.length() > 2)
                             {
                                 theclass.var.push_back(cur_var);
                             }
@@ -711,7 +711,7 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                         else
                         {
                             string cur_function_str = trim(*b);
-                            if (cur_function_str.length() > 2 && is_var_or_function(cur_function_str))
+                            if (cur_function_str.length() > 2 )
                             {
                                 theclass.function.push_back(cur_function_str);
                             }
@@ -773,7 +773,7 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                         {
                             string cur_var = b->substr(0,sem_index);
                             cur_var = trim(cur_var);
-                            if (cur_var.length() > 2 && is_var_or_function(cur_var))
+                            if (cur_var.length() > 2)
                             {
                                 theclass.var.push_back(cur_var);
                             }
@@ -781,7 +781,7 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                         else
                         {
                             string cur_function_str = trim(*b);
-                            if (cur_function_str.length() > 2 && is_var_or_function(cur_function_str))
+                            if (cur_function_str.length() > 2)
                             {
                                 theclass.function.push_back(cur_function_str);
                             }
@@ -821,43 +821,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
 bool CppParser::is_str_contain_space(string str)
 {
     return str.find(' ') != string::npos;
-}
-
-bool CppParser::is_var_or_function(string str)
-{
-    return (str.find(';') == string::npos && is_str_contain_space(str) && !is_str_contain_chars(str));
-}
-
-bool CppParser::is_str_contain_chars(string str)
-{
-    bool is_contain = false;
-
-    vector<string> chars_vec;
-    chars_vec.push_back("public:");
-    chars_vec.push_back("private:");
-    chars_vec.push_back("protected:");
-    chars_vec.push_back("#");
-    chars_vec.push_back("=");
-    chars_vec.push_back(":");
-    chars_vec.push_back("if(");
-    chars_vec.push_back("return ");
-    chars_vec.push_back("cout<<");
-    chars_vec.push_back("cout ");
-    chars_vec.push_back(".");
-    chars_vec.push_back("this");
-    chars_vec.push_back("->");
-    chars_vec.push_back("\\");
-
-    for(vector<string>::iterator iter = chars_vec.begin(); iter!=chars_vec.end();++iter)
-    {
-        if (str.find(*iter) != string::npos)
-        {
-            is_contain = true;
-            break;
-        }
-    }
-
-    return is_contain;
 }
 
 int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParser& theclass)
