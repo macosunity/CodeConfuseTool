@@ -985,13 +985,13 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParse
 {
     size_t fI;//firstIndex
     string temp = "";
-
-    fI = str.find(s+"::",pos);//找到具体类
+    
+    fI = (int)str.find(s+"::",pos);//找到具体类
     size_t lBlock = str.find("{",fI) ;// 找{
     if(fI != string::npos)
     {
         fI += strlen(s.c_str());
-
+        
         size_t cur_index = lBlock;//current_index
         vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
         string temp = "";
@@ -1000,60 +1000,30 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParse
         {
             size_t start_index = *vit+1;
             size_t substr_index = *(vit+1)-*(vit)-1;
-
+            
             if (start_index > str.length() || start_index+substr_index > str.length())
             {
                 break;
             }
-
+            
             temp += str.substr(start_index, substr_index);
         }
         D(temp);//删除注释
         D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
         D(temp,'#');//删除 # 号 和 \n 号之间的信息，包括#号，不包括\n号
         vector<string> vs = divideByTab(temp);//根据制表符分解字符串
-        size_t sem_index;//分号下标
-        //根据分号来区分函数和变量
         for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
         {
-            sem_index = b->find_last_of(';');
-            if( sem_index != string::npos)
+            string cur_function_str = trim(*b);
+            if (cur_function_str.length() > 2 && cur_function_str.find(s+"::") != string::npos && is_str_contain_space(cur_function_str))
             {
-                string cur_var = b->substr(0,sem_index);
-                cur_var = trim(cur_var);
-                if (cur_var.length() > 2 && is_var_or_function(cur_var))
-                {
-                    theclass.var.push_back(cur_var);
-                }
-            }
-            else
-            {
-                string cur_function_str = trim(*b);
-                if (cur_function_str.length() > 2 && cur_function_str.find("::") != string::npos && is_var_or_function(cur_function_str))
-                {
-                    size_t new_line_index = cur_function_str.find("\r\n\t");
-                    if (new_line_index != string::npos)
-                    {
-                        vector<string> func_str_vector = split(cur_function_str, "\r\n\t");
-
-                        for (vector<string>::iterator func_iter = func_str_vector.begin(); func_iter != func_str_vector.end(); func_iter++)
-                        {
-                            string curr_func_str = *func_iter;
-                            curr_func_str = trim(cur_function_str);
-                            if(curr_func_str.length() > 2 && curr_func_str.find("::") != string::npos && is_var_or_function(curr_func_str))
-                            {
-                                theclass.function.push_back(curr_func_str);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        theclass.function.push_back(cur_function_str);
-                    }
-                }
+                theclass.function.push_back(cur_function_str);
             }
         }
-
+        
+        sort(theclass.function.begin(),theclass.function.end());
+        theclass.function.erase(unique(theclass.function.begin(), theclass.function.end()), theclass.function.end());
+        
         pos = fI + 1;//下一个搜索位置从fI开始，因为可能会出现类里面嵌套类的情况
         return HAVEFOUND;
     }
