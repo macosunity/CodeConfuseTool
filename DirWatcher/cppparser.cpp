@@ -185,6 +185,34 @@ int CppParser::judge(string s)
     return UNDEINED;
 }
 
+void CppParser::D(string& str,char c)
+{
+    if(c == '#') //如果字符是 '=' ， 则把 = 等号 和 ; 分号之间的信息除去，例如：int a = 5; 把=号、空格和5给擦除
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find(c,index_s);//找 '#' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+        return;
+    }
+    
+    //除'='号以外的字符找到直接删除
+    size_t index = 0;
+    while(index<str.length())
+    {
+        index = str.find(c,index);
+        if(index != string::npos)
+        {
+            str.erase(index,1);
+        }
+    }
+}
+
 //除去str中的所有s字符串
 void CppParser::D(string& str,string s)
 {
@@ -461,9 +489,7 @@ void CppParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = classname;
                 model.identifyName = varName;
-                model.identifyType = Var;
                 model.filePath = fileModel.filePath;
-                model.fileType = Cpp;
 
                 database->insertRecord(model);
 //                qDebug()<<varName.c_str()<<endl;
@@ -481,9 +507,7 @@ void CppParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = classname;
                 model.identifyName = functionName;
-                model.identifyType = Function;
                 model.filePath = fileModel.filePath;
-                model.fileType = Cpp;
 
                 database->insertRecord(model);
 //                qDebug()<<functionName.c_str()<<endl;
@@ -874,6 +898,7 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParse
             
             temp += str.substr(start_index, substr_index);
         }
+        D(temp,'#');//删除 # 号 和 \n 号之间的信息，包括#号，不包括\n号
         vector<string> vs = divideByTab(temp);//根据制表符分解字符串
         for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
         {

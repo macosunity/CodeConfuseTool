@@ -72,8 +72,7 @@ bool DataBase::createTable()
     bool success = query.exec("create table if not exists classes_table("
                               "[id] varchar PRIMARY KEY,"
                               "[file_path] varchar,[file_name] varchar,"
-                              "[class_name] varchar,[identify_name] varchar,"
-                              "[file_type] int,[identify_type] int)");
+                              "[class_name] varchar,[identify_name] varchar)");
     if(success)
     {
         qDebug() << QObject::tr("数据库表创建成功！\n");
@@ -89,31 +88,34 @@ bool DataBase::createTable()
 //向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {
-    if(!m_db.isOpen())
-    {
-        createConnection();
-    }
-
-    QSqlQuery query(m_db);
-    query.prepare("insert into classes_table values(:id,:file_path,:file_name,:class_name,:identify_name,:file_type,:identify_type)");
-
     QUuid id = QUuid::createUuid();
     QString strId = id.toString();
-    query.bindValue(":id", strId);
-    query.bindValue(":file_path", classModel.filePath.c_str());
-    query.bindValue(":file_name", classModel.fileName.c_str());
-    query.bindValue(":class_name", classModel.className.c_str());
-    query.bindValue(":identify_name", classModel.identifyName.c_str());
-    query.bindValue(":file_type", classModel.fileType);
-    query.bindValue(":identify_type", classModel.identifyType);
 
-    bool success=query.exec();
-    if(!success)
-    {
-        QSqlError lastError = query.lastError();
-        qDebug() << lastError.driverText() << QString(QObject::tr("插入失败"));
-        return false;
-    }
+    string sql = "insert into classes_table values(" + strId.toStdString() + "," + classModel.filePath + "," + classModel.fileName+ ","  + classModel.className+ "," + classModel.identifyName+")";
+    qDebug() << sql.c_str() << endl;
+//    if(!m_db.isOpen())
+//    {
+//        createConnection();
+//    }
+
+//    QSqlQuery query(m_db);
+//    query.prepare("insert into classes_table values(:id,:file_path,:file_name,:class_name,:identify_name,:file_type,:identify_type)");
+//
+//    query.bindValue(":id", strId);
+//    query.bindValue(":file_path", classModel.filePath.c_str());
+//    query.bindValue(":file_name", classModel.fileName.c_str());
+//    query.bindValue(":class_name", classModel.className.c_str());
+//    query.bindValue(":identify_name", classModel.identifyName.c_str());
+//    query.bindValue(":file_type", classModel.fileType);
+//    query.bindValue(":identify_type", classModel.identifyType);
+//
+//    bool success=query.exec();
+//    if(!success)
+//    {
+//        QSqlError lastError = query.lastError();
+//        qDebug() << lastError.driverText() << QString(QObject::tr("插入失败"));
+//        return false;
+//    }
     return true;
 }
 

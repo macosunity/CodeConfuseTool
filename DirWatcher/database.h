@@ -32,6 +32,7 @@ class DataBase
 private:
     bool m_isDbOpen;
     QSqlDatabase m_db;
+    vector<string> sqlcmds;
 public:
     DataBase();
     ~DataBase();

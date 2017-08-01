@@ -470,9 +470,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
                 model.identifyName = varName;
-                model.identifyType = Var;
                 model.filePath = fileModel.filePath;
-                model.fileType = ObjectiveC;
 
                 database->insertRecord(model);
             }
@@ -489,9 +487,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
                 model.identifyName = varName;
-                model.identifyType = Property;
                 model.filePath = fileModel.filePath;
-                model.fileType = ObjectiveC;
 
                 database->insertRecord(model);
             }
@@ -508,9 +504,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
                 model.identifyName = functionName;
-                model.identifyType = Function;
                 model.filePath = fileModel.filePath;
-                model.fileType = ObjectiveC;
 
                 database->insertRecord(model);
             }
