@@ -41,6 +41,8 @@ public:
     DataBase();
     ~DataBase();
     
+    void clearIdentifyVec();
+    
     inline bool is_allow_identify_name(string str);
     inline bool is_var_or_function(string str);
     inline bool is_str_contain_chars(string str);

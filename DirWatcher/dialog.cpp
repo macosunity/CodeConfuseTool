@@ -132,7 +132,9 @@ void Dialog::start_choosing()
         list->removeItemWidget(item);
         delete item;
     }
-
+    
+    DataBase *database = DataBase::Instance();
+    database->clearIdentifyVec();
     vector<SrcFileModel>().swap(fileList);
 
     QString path = edit_line->text();
@@ -289,7 +291,6 @@ void Dialog::start_choosing()
 
     start->setEnabled(true);
     
-    DataBase *database = DataBase::Instance();
     vector<string> identifyVec = database->queryAll();
     
     for (vector<string>::iterator iter=identifyVec.begin(); iter != identifyVec.end(); ++iter)

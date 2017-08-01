@@ -16,6 +16,12 @@ DataBase::~DataBase()
         m_db.close();
     }
 }
+
+void DataBase::clearIdentifyVec()
+{
+    vector<string>().swap(m_identifyVec);
+}
+
 //建立一个数据库连接
 bool DataBase::createConnection()
 {
@@ -173,7 +179,6 @@ inline void DataBase::deleteChar(string& str,char c)
 //向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {
-    return true;
     QUuid id = QUuid::createUuid();
     QString strId = id.toString();
 
