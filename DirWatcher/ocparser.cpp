@@ -248,6 +248,32 @@ void OCParser::R(string& str)
         }
         else break;
     }while(1);
+    
+    do
+    {
+        index = str.find("\"*/\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
+        if(index != string::npos)
+        {
+            str.replace(index,4,"\"\"");
+        }
+        else
+        {
+            break;
+        }
+    }while(1);
+    
+    do
+    {
+        index = str.find("\"//\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
+        if(index != string::npos)
+        {
+            str.replace(index,4,"\"\"");
+        }
+        else
+        {
+            break;
+        }
+    }while(1);
 
     do
     {
@@ -267,6 +293,22 @@ void OCParser::R(string& str)
             {
                 break;
             }
+        }
+        else break;
+    }while(1);
+    
+    //接下来找/*和*/的注释
+    do
+    {
+        index = str.find("/*");
+        if(index != string::npos)
+        {
+            size_t index_n = str.find("*/",index+2);
+            if(index_n != string::npos)
+            {
+                str.replace(index,index_n+2 - index,"");
+            }
+            else break;
         }
         else break;
     }while(1);
@@ -584,7 +626,6 @@ int OCParser::find(string& str,string s,int& pos){
                         }
                         temp += str.substr(index, length);
                     }
-                    D(temp);//删除注释
                     D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标

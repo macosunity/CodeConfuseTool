@@ -51,7 +51,6 @@ private:
     void D(string& str,char c);//在字符串str中循环删除字符c
     void D(string& str,string s);//删除所有指定的字符串
     void R(string& str);//以\r为判断删除注释
-    void D(string& str);//以\t为判断删除所有注释
     vector<string> divideByTab(string &str);//以制表符为分隔符分解字符串成vector
     void ignorespacetab(const string& str,size_t& fI);//fI停在非空格和制表符处
     void ignorealnum(const string&str ,size_t& fI);//fI停在非数字和字母处

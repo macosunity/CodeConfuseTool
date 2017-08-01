@@ -429,51 +429,6 @@ void CppParser::R(string& str)
     findGlobalClassDeclares(str);
 }
 
-//删除注释注意语法要正确。否则会删除一些有用的信息。
-//这里的语法正确是有首行推进
-//依据//和制表符来判别注释
-void CppParser::D(string& str)
-{
-    size_t index;
-
-    do
-    {
-        index = str.find("//");//找到 // 的位置
-        if(index != string::npos)
-        {
-            size_t index_n = str.find('\t',index+2);//找到 制表符的位置
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n - index,"");
-            }
-            else if(index<str.length())
-            {
-                str.replace(index,str.length()-index,"");
-            }
-            else
-            {
-                break;
-            }
-        }
-        else break;
-    }while(1);
-
-    //接下来找/*和*/的注释
-    do
-    {
-        index = str.find("/*");
-        if(index != string::npos){
-            size_t index_n = str.find("*/",index+2);
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n+2 - index,"");
-            }
-            else break;
-        }
-        else break;
-    }while(1);
-}
-
 //要求是用制表符进行首行推进，而不是用四个空格。
 //根据制表符来分解一个string为一个vector容器
 vector<string> CppParser::divideByTab(string &str)
@@ -689,7 +644,6 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
 
         temp += str.substr(start_index, substr_index);
     }
-    D(temp);//删除注释
     D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
     size_t sem_index;//分号下标
@@ -810,7 +764,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
 
                         temp += str.substr(start_index, substr_index);
                     }
-                    D(temp);//删除注释
                     D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
@@ -882,7 +835,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
 
                         temp += str.substr(start_index, substr_index);
                     }
-                    D(temp);//删除注释
                     D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
@@ -1008,8 +960,6 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParse
             
             temp += str.substr(start_index, substr_index);
         }
-        D(temp);//删除注释
-        D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
         D(temp,'#');//删除 # 号 和 \n 号之间的信息，包括#号，不包括\n号
         vector<string> vs = divideByTab(temp);//根据制表符分解字符串
         for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
