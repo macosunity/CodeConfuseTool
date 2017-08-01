@@ -199,6 +199,20 @@ void OCParser::D(string& str,char c)
         }
         return;
     }
+    else if(c == '#') //如果字符是 '=' ， 则把 = 等号 和 ; 分号之间的信息除去，例如：int a = 5; 把=号、空格和5给擦除
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find(c,index_s);//找 '#' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+        return;
+    }
+    
     //除'='号以外的字符找到直接删除
     size_t index = 0;
     while(index<str.length())
@@ -209,20 +223,6 @@ void OCParser::D(string& str,char c)
             str.erase(index,1);
         }
     }
-}
-
-//除去str中的所有s字符串
-void OCParser::D(string& str,string s)
-{
-    size_t index;
-    do{
-        index = str.find(s);
-        if(index != string::npos)
-        {
-            str.replace(index,s.length(),"");
-        }
-        else break;
-    }while(1);
 }
 
 void OCParser::R(string& str)
@@ -248,32 +248,6 @@ void OCParser::R(string& str)
         }
         else break;
     }while(1);
-    
-    do
-    {
-        index = str.find("\"*/\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
-        if(index != string::npos)
-        {
-            str.replace(index,4,"\"\"");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-    
-    do
-    {
-        index = str.find("\"//\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
-        if(index != string::npos)
-        {
-            str.replace(index,4,"\"\"");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
 
     do
     {
@@ -293,22 +267,6 @@ void OCParser::R(string& str)
             {
                 break;
             }
-        }
-        else break;
-    }while(1);
-    
-    //接下来找/*和*/的注释
-    do
-    {
-        index = str.find("/*");
-        if(index != string::npos)
-        {
-            size_t index_n = str.find("*/",index+2);
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n+2 - index,"");
-            }
-            else break;
         }
         else break;
     }while(1);
@@ -478,11 +436,11 @@ void OCParser::display(SrcFileModel fileModel)
             ignorespacetab(*b,pos);
             if(pos != b->length())
             {
-                string varName = b->substr(pos,b->length()-pos);
+                string propertyName = b->substr(pos,b->length()-pos);
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
-                model.identifyName = varName;
+                model.identifyName = propertyName;
                 model.filePath = fileModel.filePath;
 
                 database->insertRecord(model);
@@ -624,19 +582,24 @@ int OCParser::find(string& str,string s,int& pos){
                     for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
                     {
                         sem_index = b->find_last_of(';');
-                        if( sem_index != string::npos && is_var_or_function(*b))
+                        if( sem_index != string::npos)
                         {
                             theclass.var.push_back(b->substr(0,sem_index));
                         }
                         else
                         {
                             string functionStr = trim(*b);
-                            if (functionStr.length() > 2 && functionStr.find("@") == string::npos && is_var_or_function(functionStr))
+                            D(functionStr,'#');
+                            if (functionStr.length() > 2 && functionStr.find("@") == string::npos)
                             {
                                 theclass.function.push_back(*b);
                             }
                         }
                     }
+                    sort(theclass.var.begin(),theclass.var.end());
+                    theclass.var.erase(unique(theclass.var.begin(), theclass.var.end()), theclass.var.end());
+                    sort(theclass.function.begin(),theclass.function.end());
+                    theclass.function.erase(unique(theclass.function.begin(), theclass.function.end()), theclass.function.end());
                     _oc.push_back(theclass);
                     pos = fI + 1;//下一个搜索位置从fI开始，因为可能会出现类里面嵌套类的情况
                     return OC_HAVEFOUND;
@@ -725,6 +688,7 @@ const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName
             if(str[ps] == ';')
             {
                 string judgestr = str.substr(ins,ine-ins);
+                D(judgestr, '#');
                 judgestr = trim(judgestr);
 
                 size_t propertyPos = judgestr.find("@property");
@@ -732,19 +696,19 @@ const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName
                 size_t instanceMethodPos = judgestr.find("-");
                 size_t classMethodPos = judgestr.find("+");
 
-                if (propertyPos != string::npos && endPos == string::npos && is_var_or_function(judgestr))
+                if (propertyPos != string::npos && endPos == string::npos)
                 {
                     properties.push_back(judgestr);
                     ins = ++ps;
                     continue;
                 }
-                if (instanceMethodPos != string::npos && endPos == string::npos && is_var_or_function(judgestr))
+                if (instanceMethodPos != string::npos && endPos == string::npos)
                 {
                     functionDeclares.push_back(judgestr);
                     ins = ++ps;
                     continue;
                 }
-                if (classMethodPos != string::npos && endPos == string::npos && is_var_or_function(judgestr))
+                if (classMethodPos != string::npos && endPos == string::npos)
                 {
                     functionDeclares.push_back(judgestr);
                     ins = ++ps;
@@ -782,45 +746,6 @@ void OCParser::actionscope_ignore(const string& str,size_t& fI)
     }
 }
 
-
-bool OCParser::is_str_contain_space(string str)
-{
-    return str.find(' ') != string::npos;
-}
-
-bool OCParser::is_var_or_function(string str)
-{
-    return (str.find(';') == string::npos && is_str_contain_space(str) && !is_str_contain_chars(str));
-}
-
-bool OCParser::is_str_contain_chars(string str)
-{
-    bool is_contain = false;
-
-    vector<string> chars_vec;
-    chars_vec.push_back("#");
-    chars_vec.push_back("=");
-    chars_vec.push_back("\"");
-    chars_vec.push_back("if(");
-    chars_vec.push_back("if ");
-    chars_vec.push_back("return ");
-    chars_vec.push_back(".");
-    chars_vec.push_back("self.");
-    chars_vec.push_back("->");
-    chars_vec.push_back("\\");
-
-    for(vector<string>::iterator iter = chars_vec.begin(); iter!=chars_vec.end();++iter)
-    {
-        if (str.find(*iter) != string::npos)
-        {
-            is_contain = true;
-            break;
-        }
-    }
-
-    return is_contain;
-}
-
 vector<int> OCParser::actionscope(const string& str,size_t& fI)
 {
     vector<int> index;
@@ -841,10 +766,6 @@ vector<int> OCParser::actionscope(const string& str,size_t& fI)
             continue;
         }
         ++fI;
-        if(fI >= str.length())
-        {
-            break;
-        }
     }
     return index;
 }

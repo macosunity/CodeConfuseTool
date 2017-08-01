@@ -1101,10 +1101,6 @@ vector<int> CppParser::actionscope(const string& str,size_t& fI)
             continue;
         }
         ++fI;
-        if(fI >= str.length())
-        {
-            break;
-        }
     }
     return index;
 }

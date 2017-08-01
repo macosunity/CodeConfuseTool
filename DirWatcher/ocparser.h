@@ -48,15 +48,11 @@ public:
 
 private:
 
-    bool is_str_contain_chars(string str);
-    bool is_var_or_function(string str);
-    bool is_str_contain_space(string str);
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);
     string& trim(string &s); //去除空格和换行
     int judge(string s);//判断字符串名字返回不同的值
     void D(string& str,char c);//在字符串str中循环删除字符c
-    void D(string& str,string s);//删除所有指定的字符串
     void R(string& str);//以\r为判断删除注释
     void D(string& str);//以\t为判断删除所有注释
     vector<string> divideByTab(string &str);//以制表符为分隔符分解字符串成vector
