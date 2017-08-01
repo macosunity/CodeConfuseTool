@@ -185,87 +185,6 @@ int CppParser::judge(string s)
     return UNDEINED;
 }
 
-void CppParser::D(string& str,char c)
-{
-    if(c == '=') //如果字符是 '=' ， 则把 = 等号 和 ; 分号之间的信息除去，例如：int a = 5; 把=号、空格和5给擦除
-    {
-        size_t index_s = 0;
-        size_t index_e = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find(c,index_s);//找 '=' 的位置
-            if(index_s != string::npos)
-            {
-                index_e = str.find(';',index_s+1);//找 ';' 的位置
-                if(index_e != string::npos)
-                {
-                    str.replace(index_s,index_e-index_s,"");//擦除
-                    index_s = index_e;
-                }
-                else
-                {
-                    str.erase(index_s);
-                }
-            }
-        }
-        return;
-    }
-    if(c == '#') //如果字符是 '=' ， 则把 = 等号 和 ; 分号之间的信息除去，例如：int a = 5; 把=号、空格和5给擦除
-    {
-        size_t index_s = 0;
-        size_t index_e = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find(c,index_s);//找 '#' 的位置
-            if(index_s != string::npos)
-            {
-                index_e = str.find("\r\n\t",index_s+1);//找 '换行' 的位置
-                if(index_e != string::npos)
-                {
-                    str.replace(index_s,index_e-index_s,"");//擦除
-                    index_s = index_e;
-                }
-                else
-                {
-                    str.erase(index_s);
-                }
-            }
-        }
-        return;
-    }
-    else if(c == ' ')
-    {
-        size_t index = 0;
-        while(index<str.length())
-        {
-            index = str.find(c,index);
-            if(index != string::npos)
-            {
-                size_t fI = index;
-                //如果include的库里面有多个空格，那么仅仅保留一个
-                while(index<str.length() && str[++index] == ' ')
-                {
-                }
-                if(index - 1 != fI)
-                {
-                    str.erase(fI,index - fI - 1);
-                }
-            }
-        }
-        return;
-    }
-    //除'='号以外的字符找到直接删除
-    size_t index = 0;
-    while(index<str.length())
-    {
-        index = str.find(c,index);
-        if(index != string::npos)
-        {
-            str.erase(index,1);
-        }
-    }
-}
-
 //除去str中的所有s字符串
 void CppParser::D(string& str,string s)
 {
@@ -644,7 +563,6 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
 
         temp += str.substr(start_index, substr_index);
     }
-    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
     size_t sem_index;//分号下标
     //根据分号来区分函数和变量
@@ -708,8 +626,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                 nI = str.find('\n',fI);//找到分号
                 temp = str.substr(fI,nI-fI);//include名
                 //除去多余的制表符和空格
-                D(temp,'\t');
-                D(temp,' ');
 
                 if(type == INCLUDE){
                     include.push_back(temp);
@@ -764,7 +680,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
 
                         temp += str.substr(start_index, substr_index);
                     }
-                    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
                     //根据分号来区分函数和变量
@@ -835,7 +750,6 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
 
                         temp += str.substr(start_index, substr_index);
                     }
-                    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
                     //根据分号来区分函数和变量
@@ -960,7 +874,6 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParse
             
             temp += str.substr(start_index, substr_index);
         }
-        D(temp,'#');//删除 # 号 和 \n 号之间的信息，包括#号，不包括\n号
         vector<string> vs = divideByTab(temp);//根据制表符分解字符串
         for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
         {
