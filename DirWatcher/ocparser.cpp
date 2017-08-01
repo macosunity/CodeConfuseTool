@@ -118,7 +118,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
     }
     else
     {
-        qDebug() << "其他文件格式" << endl;
+        //其他文件格式
     }
 
     return 0;
@@ -432,32 +432,28 @@ void OCParser::display(SrcFileModel fileModel)
     size_t pos;
     for(b = oc_include.begin(); b!=oc_include.end();++b)
     {
-//        qDebug()<<(*b).c_str()<<endl;
+        //include
     }
-    qDebug()<<endl;
     for(b = oc_import.begin(); b!=oc_import.end();++b)
     {
-//        qDebug()<<(*b).c_str()<<endl;
+        //import
     }
-//    qDebug()<<endl;
     vector<OCParser>::iterator i;
     for(i = _oc.begin(); i!=_oc.end() ; ++i)
     {
+        //类名
         string oc_class_name = i->classname;
-//        qDebug()<<i->classname.c_str();
         if(i->extends.size() != 0)
         {
-//            qDebug()<<" extends "<<i->extends.c_str();
+            //继承
         }
         if(i->delegates.size()!=0)
         {
-//            qDebug()<<" delegates ";
             for(b = i->delegates.begin(); b != i->delegates.end(); ++b)
             {
-//                qDebug()<<" "<<(*b).c_str();
+                //代理
             }
         }
-//        qDebug()<<endl;
         for(b = i->var.begin(); b != i->var.end(); ++b)
         {
             pos = 0;

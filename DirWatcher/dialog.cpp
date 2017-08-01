@@ -126,7 +126,6 @@ void Dialog::start_choosing()
     list->setSelectionMode(QAbstractItemView::NoSelection);
     list->setDragEnabled(false);
 
-    qDebug() << "list count: " << list->count() << endl;
     while(list->count() != 0)
     {
         QListWidgetItem *item = list->takeItem(0);
@@ -149,7 +148,6 @@ void Dialog::start_choosing()
 
         if (file.isParsed || stringUtil.EndWith(file.filePath, "sqlite3.c"))
         {
-            qDebug() << "file: " << file.filePath.c_str() << " is Parsed!" << endl;
             continue;
         }
 
@@ -272,7 +270,7 @@ void Dialog::start_choosing()
         }
         else
         {
-            qDebug() << "跳过其他文件: " << file.filePath.c_str() << endl;
+            //跳过其他文件
         }
 
         list->update();
@@ -348,7 +346,6 @@ bool Dialog::findMFileWithFileModel(SrcFileModel &fileModel)
             mFilePath = mFilePath.append("/").append(fileBaseName);
             fileModel.mFilePath = mFilePath.toStdString();
             fileModel.mFileName = fileBaseName.toStdString();
-            qDebug() << "find m file: " << fileModel.mFilePath.c_str() << endl;
 
             file.isParsed = true;
             SrcFileModel tempModel = file;
@@ -383,7 +380,6 @@ bool Dialog::findMMFileWithFileModel(SrcFileModel &fileModel)
             mmFilePath = mmFilePath.append("/").append(fileBaseName);
             fileModel.mmFilePath = mmFilePath.toStdString();
             fileModel.mmFileName = fileBaseName.toStdString();
-            qDebug() << "find mm file: " << fileModel.mmFilePath.c_str() << endl;
 
             file.isParsed = true;
             SrcFileModel tempModel = file;
@@ -416,7 +412,6 @@ bool Dialog::findHeaderFileWithFileModel(SrcFileModel &fileModel)
             headerFilePath = headerFilePath.append("/").append(fileBaseName);
             fileModel.headerFilePath = headerFilePath.toStdString();
             fileModel.headerFileName = fileBaseName.toStdString();
-            qDebug() << "find header file: " << fileModel.headerFilePath.c_str() << endl;
 
             SrcFileModel tempModel = file;
             tempModel.isParsed = true;

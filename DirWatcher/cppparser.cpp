@@ -12,7 +12,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
     QFile file(srcFile.filePath.c_str());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << "error !" << srcFile.filePath.c_str() << endl;
         return -1;
     }
 
@@ -34,7 +33,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
         while(findSubStrAtPos(str,"template",pos)){}//连续读取代码中的类
 
         QFile cppFile(srcFile.cppFilePath.c_str());
-        qDebug() << "parsing cppFile: " << srcFile.filePath.c_str() << " ???? " <<  srcFile.cppFilePath.c_str() << endl;
         if(cppFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             fin.close();
@@ -68,7 +66,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
     else if(stringUtil.EndWith(srcFile.fileName, ".cpp") || stringUtil.EndWith(srcFile.fileName, ".cxx") || stringUtil.EndWith(srcFile.fileName, ".cc") || stringUtil.EndWith(srcFile.fileName, ".mm"))
     {
         QFile headFile(srcFile.headerFilePath.c_str());
-        qDebug() << "parsing header: " << srcFile.filePath.c_str() << " ???? "  <<  srcFile.headerFilePath.c_str() << endl;
         if(headFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             ifstream fHeaderIn(srcFile.headerFilePath.c_str());//文件输入流，p是代码路径
@@ -86,7 +83,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             while(findSubStrAtPos(str,"template",pos)){}//连续读取代码中的类
             fHeaderIn.close();
 
-            qDebug() << "parsing cpp file: " << srcFile.filePath.c_str() << " ???? "  <<  srcFile.filePath.c_str() << endl;
             ifstream fin_cpp(srcFile.filePath.c_str());//文件输入流，p是代码路径
             string str_cpp;
             string temp_cpp;
@@ -107,7 +103,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
         }
         else
         {
-            qDebug() <<  "parsing single cpp file : " << srcFile.filePath.c_str() << " ???? "  << srcFile.filePath.c_str() << endl;
             ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
             string str;
             string temp;
@@ -131,7 +126,6 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
     }
     else if(stringUtil.EndWith(srcFile.fileName, ".c"))
     {
-        qDebug() <<  "parsing c file: " << srcFile.filePath.c_str() << " ???? "  << srcFile.filePath.c_str() << endl;
         ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
         string str;
         string temp;
@@ -154,7 +148,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
     }
     else
     {
-        qDebug() << "其他文件格式" << endl;
+        //其他文件格式
     }
 
     return 0;
@@ -448,21 +442,19 @@ inline string& CppParser::trim(string &str)
 
 void CppParser::display(SrcFileModel fileModel)
 {
-//    qDebug() << "======= parsing" << fileModel.fileName.c_str() << "========" << endl;
     DataBase *database = DataBase::Instance();
 
     vector<string>::iterator b;
     size_t pos;
     for(b = include.begin(); b!=include.end();++b)
     {
-//        qDebug()<<(*b).c_str()<<endl;
+        //include
     }
-//    qDebug()<<endl;
     vector<CppParser>::iterator i;
     for(i = _classes.begin(); i!=_classes.end() ; ++i)
     {
+        //类名
         string classname = i->classname;
-//        qDebug()<<i->classname.c_str()<<endl;
         if(i->extends.size() != 0)
         {
             for(b = i->extends.begin(); b != i->extends.end(); ++b)
@@ -472,11 +464,10 @@ void CppParser::display(SrcFileModel fileModel)
                 ignorespacetab(*b,pos);
                 if(pos != b->length())
                 {
-//                    qDebug()<<b->substr(pos,b->length()-pos).c_str()<<endl;
+                    //继承
                 }
             }
         }
-//        qDebug()<<endl;
         for(b = i->var.begin(); b != i->var.end(); ++b)
         {
             pos = 0;
@@ -492,7 +483,6 @@ void CppParser::display(SrcFileModel fileModel)
                 model.filePath = fileModel.filePath;
 
                 database->insertRecord(model);
-//                qDebug()<<varName.c_str()<<endl;
             }
         }
         for(b = i->function.begin(); b != i->function.end(); ++b)
@@ -510,7 +500,6 @@ void CppParser::display(SrcFileModel fileModel)
                 model.filePath = fileModel.filePath;
 
                 database->insertRecord(model);
-//                qDebug()<<functionName.c_str()<<endl;
             }
         }
     }
