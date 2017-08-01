@@ -34,6 +34,10 @@ bool StringUtil::StartWith(const string& str,const string& strStart)
     {
         return false;
     }
+    if (strStart.size() > str.size())
+    {
+        return false;
+    }
 
     return str.compare(0,strStart.size(),strStart)==0?true:false;
 }
@@ -41,6 +45,11 @@ bool StringUtil::StartWith(const string& str,const string& strStart)
 bool StringUtil::EndWith(const string& str,const string& strEnd)
 {
     if(str.empty() || strEnd.empty())
+    {
+        return false;
+    }
+    
+    if (strEnd.size() > str.size())
     {
         return false;
     }

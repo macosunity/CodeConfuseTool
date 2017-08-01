@@ -46,14 +46,14 @@ void Dialog::readFileList(const char *basePath)
         }
         else if(ptr->d_type == 10)    ///link file
         {
-            string filePath = basePath;
-            string fileName = ptr->d_name;
-            filePath = filePath + "/" + fileName;
-            SrcFileModel fileModel;
-            fileModel.fileName = fileName;
-            fileModel.filePath = filePath;
-            fileModel.isParsed = false;
-            fileList.push_back(fileModel);
+//            string filePath = basePath;
+//            string fileName = ptr->d_name;
+//            filePath = filePath + "/" + fileName;
+//            SrcFileModel fileModel;
+//            fileModel.fileName = fileName;
+//            fileModel.filePath = filePath;
+//            fileModel.isParsed = false;
+//            fileList.push_back(fileModel);
         }
         else if(ptr->d_type == 4)    ///dir
         {
@@ -146,15 +146,15 @@ void Dialog::start_choosing()
     {
         SrcFileModel file = fileList.at(i);
 
-        if (file.isParsed || stringUtil.EndWith(file.filePath, "sqlite3.c"))
+        if (file.isParsed)
         {
             continue;
         }
-
+        
         if(stringUtil.EndWith(file.fileName, ".h"))
         {
             file.headerFilePath = file.filePath;
-
+            
             findCppFileWithFileModel(file);
             findMMFileWithFileModel(file);
             findMFileWithFileModel(file);
@@ -163,39 +163,42 @@ void Dialog::start_choosing()
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
                 list->addItem(headFileString);
-
+                
                 QString cppFilePathString = QString("正在分析:");
                 cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
                 list->addItem(cppFilePathString);
-
+                
                 CppParser cppParser;
                 cppParser.parseCppFile(file);
             }
-
+            
             if(file.mmFilePath.length() > 0)
             {
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
                 list->addItem(headFileString);
-
+                
                 QString mFilePathString = QString("正在分析:");
                 mFilePathString = mFilePathString.append(file.mmFilePath.c_str());
                 list->addItem(mFilePathString);
-
+                
+                OCParser ocParser;
+                ocParser.parseOCFile(file);
+                
                 CppParser cppParser;
                 cppParser.parseCppFile(file);
             }
-
+            
             if(file.mFilePath.length() > 0)
             {
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
                 list->addItem(headFileString);
-
+                
                 QString mFilePathString = QString("正在分析:");
                 mFilePathString = mFilePathString.append(file.mFilePath.c_str());
                 list->addItem(mFilePathString);
-
+                
                 OCParser ocParser;
                 ocParser.parseOCFile(file);
             }
@@ -220,17 +223,17 @@ void Dialog::start_choosing()
         }
         else if(stringUtil.EndWith(file.fileName, ".c"))
         {
-            findHeaderFileWithFileModel(file);
-
-            file.cFileName = file.fileName;
-            file.cFilePath = file.filePath;
-
-            QString parseInfoString = QString("正在分析:");
-            parseInfoString = parseInfoString.append(file.filePath.c_str());
-            list->addItem(parseInfoString);
-
-            CppParser cppParser;
-            cppParser.parseCppFile(file);
+//            findHeaderFileWithFileModel(file);
+//
+//            file.cFileName = file.fileName;
+//            file.cFilePath = file.filePath;
+//
+//            QString parseInfoString = QString("正在分析:");
+//            parseInfoString = parseInfoString.append(file.filePath.c_str());
+//            list->addItem(parseInfoString);
+//
+//            CppParser cppParser;
+//            cppParser.parseCppFile(file);
         }
         else if(stringUtil.EndWith(file.fileName, ".m"))
         {
@@ -287,7 +290,12 @@ void Dialog::start_choosing()
     start->setEnabled(true);
     
     DataBase *database = DataBase::Instance();
-    database->queryAll();
+    vector<string> identifyVec = database->queryAll();
+    
+    for (vector<string>::iterator iter=identifyVec.begin(); iter != identifyVec.end(); ++iter)
+    {
+        qDebug() << (*iter).c_str();
+    }
 }
 
 bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
@@ -303,7 +311,7 @@ bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-        if(stringUtil.EndWith(file.filePath, cppFileName) || stringUtil.EndWith(file.filePath, ccFileName) || stringUtil.EndWith(file.filePath, cxxFileName))
+        if(stringUtil.EndWith(file.filePath, "/"+cppFileName) || stringUtil.EndWith(file.filePath, "/"+ccFileName) || stringUtil.EndWith(file.filePath, "/"+cxxFileName))
         {
             QFile qfile(file.filePath.c_str());
             QFileInfo fi = QFileInfo(qfile);
@@ -336,7 +344,7 @@ bool Dialog::findMFileWithFileModel(SrcFileModel &fileModel)
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-        if(stringUtil.EndWith(file.filePath, ocFileName))
+        if(stringUtil.EndWith(file.filePath, "/"+ocFileName))
         {
             QFile qfile(file.filePath.c_str());
             QFileInfo fi = QFileInfo(qfile);
@@ -364,13 +372,13 @@ bool Dialog::findMMFileWithFileModel(SrcFileModel &fileModel)
     QFile srcFile(fileModel.filePath.c_str());
     QFileInfo fileInfo = QFileInfo(srcFile);
 
-    string ocFileName = fileInfo.baseName().append(".m").toStdString();
+    string ocFileName = fileInfo.baseName().append(".mm").toStdString();
 
     StringUtil stringUtil;
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-        if(stringUtil.EndWith(file.filePath, ocFileName))
+        if(stringUtil.EndWith(file.filePath, "/"+ocFileName))
         {
             QFile qfile(file.filePath.c_str());
             QFileInfo fi = QFileInfo(qfile);
@@ -402,7 +410,7 @@ bool Dialog::findHeaderFileWithFileModel(SrcFileModel &fileModel)
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-        if(stringUtil.EndWith(file.filePath, headerFileName))
+        if(stringUtil.EndWith(file.filePath, "/"+headerFileName))
         {
             QFile qfile(file.filePath.c_str());
             QFileInfo fi = QFileInfo(qfile);

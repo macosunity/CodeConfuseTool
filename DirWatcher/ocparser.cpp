@@ -425,6 +425,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.className = oc_class_name;
                 model.identifyName = varName;
                 model.filePath = fileModel.filePath;
+                model.isObjectiveC = true;
 
                 database->insertRecord(model);
             }
@@ -442,6 +443,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.className = oc_class_name;
                 model.identifyName = propertyName;
                 model.filePath = fileModel.filePath;
+                model.isObjectiveC = true;
 
                 database->insertRecord(model);
             }
@@ -459,6 +461,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.className = oc_class_name;
                 model.identifyName = functionName;
                 model.filePath = fileModel.filePath;
+                model.isObjectiveC = true;
 
                 database->insertRecord(model);
             }
@@ -575,7 +578,7 @@ int OCParser::find(string& str,string s,int& pos){
                         temp += str.substr(index, length);
                     }
                     D(temp);//删除注释
-                    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
+//                    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
                     //根据分号来区分函数和变量
@@ -753,6 +756,10 @@ vector<int> OCParser::actionscope(const string& str,size_t& fI)
     int lBlock_num = 1;
     while(lBlock_num)
     {
+        if(fI >= str.length())
+        {
+            break;
+        }
         if(str[fI] == '{')
         {
             index.push_back(fI);//获取'{'的下标

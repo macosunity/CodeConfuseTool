@@ -240,19 +240,6 @@ void CppParser::R(string& str)
 
     do
     {
-        index = str.find(", ");//消除,后面的空格
-        if(index != string::npos)
-        {
-            str.replace(index,2,",");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
         index = str.find("(\r\n\t ");
         if(index != string::npos)
         {
@@ -365,6 +352,19 @@ void CppParser::R(string& str)
             else break;
         }
         else break;
+    }while(1);
+    
+    do
+    {
+        index = str.find(", ");//消除,后面的空格
+        if(index != string::npos)
+        {
+            str.replace(index,2,",");
+        }
+        else
+        {
+            break;
+        }
     }while(1);
 
     findGlobalClassDeclares(str);
@@ -1051,6 +1051,10 @@ vector<int> CppParser::actionscope(const string& str,size_t& fI)
     int lBlock_num = 1;
     while(lBlock_num)
     {
+        if(fI >= str.length())
+        {
+            break;
+        }
         if(str[fI] == '{')
         {
             index.push_back(fI);//获取'{'的下标

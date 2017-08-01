@@ -10,6 +10,8 @@ public:
     string filePath; //文件路径
     string className;   //类名词
     string identifyName;
+    
+    bool isObjectiveC;
 
     ClassModel();
 };
