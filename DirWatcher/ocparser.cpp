@@ -620,6 +620,7 @@ int OCParser::find(string& str,string s,int& pos){
                         }
                         temp += str.substr(index, length);
                     }
+                    D(temp);//删除注释
                     D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标

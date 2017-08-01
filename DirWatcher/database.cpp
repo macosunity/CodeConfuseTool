@@ -91,7 +91,7 @@ bool DataBase::insertRecord(ClassModel classModel)
     QUuid id = QUuid::createUuid();
     QString strId = id.toString();
 
-    string sql = "insert into classes_table values(" + strId.toStdString() + "," + classModel.filePath + "," + classModel.fileName+ ","  + classModel.className+ "," + classModel.identifyName+")";
+    string sql = "insert into classes_table values('" + strId.toStdString() + "','" + classModel.filePath + "','" + classModel.fileName+ "','"  + classModel.className+ "','" + classModel.identifyName+"')";
     qDebug() << sql.c_str() << endl;
 //    if(!m_db.isOpen())
 //    {
