@@ -227,45 +227,6 @@ void CppParser::R(string& str)
 
     do
     {
-        index = str.find(",\r\n\t");//消除,后面的换行
-        if(index != string::npos)
-        {
-            str.replace(index,4,",");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
-        index = str.find("(\r\n\t ");
-        if(index != string::npos)
-        {
-            str.replace(index,5,"( ");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
-        index = str.find("(  ");
-        if(index != string::npos)
-        {
-            str.replace(index,3,"( ");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
         index = str.find("://");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
         if(index != string::npos)
         {
@@ -277,82 +238,29 @@ void CppParser::R(string& str)
         }
     }while(1);
 
-    do
+    while(1)
     {
-        index = str.find("\"/*\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
-        if(index != string::npos)
+        if(str.find("//")!=string::npos)
         {
-            str.replace(index,4,"\"\"");
+            size_t pos = str.find("//");
+            size_t end = str.find("\n",pos);//从pos位置开始寻找
+            size_t len = end - pos;
+            str.erase(pos,len);//删除pos位置开始后长度为len的字符串
+        }
+        else if(str.find("/*")!=string::npos)
+        {
+            size_t pos = str.find("/*");
+            size_t end = str.find("*/",pos);
+            string temp("*/");
+            size_t len = end - pos + temp.length();
+            str.erase(pos,len);
         }
         else
         {
             break;
         }
-    }while(1);
+    }
 
-    do
-    {
-        index = str.find("\"*/\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
-        if(index != string::npos)
-        {
-            str.replace(index,4,"\"\"");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
-        index = str.find("\"//\"");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
-        if(index != string::npos)
-        {
-            str.replace(index,4,"\"\"");
-        }
-        else
-        {
-            break;
-        }
-    }while(1);
-
-    do
-    {
-        index = str.find("//");//找到 // 的位置
-        if(index != string::npos)
-        {
-            size_t index_n = str.find("\n",index+2);//找到 回车的位置
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n + 2 - index,"\r\n\t");
-            }
-            else if(index<str.length())
-            {
-                str.replace(index,str.length()-index + 1,"\r\n\t");
-            }
-            else
-            {
-                break;
-            }
-        }
-        else break;
-    }while(1);
-
-    //接下来找/*和*/的注释
-    do
-    {
-        index = str.find("/*");
-        if(index != string::npos)
-        {
-            size_t index_n = str.find("*/",index+2);
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n+2 - index,"");
-            }
-            else break;
-        }
-        else break;
-    }while(1);
     
     do
     {

@@ -277,40 +277,28 @@ void OCParser::R(string& str)
 //依据//和制表符来判别注释
 void OCParser::D(string& str)
 {
-    size_t index;
-
-    do
+    while(1)
     {
-        index = str.find("//");//找到 // 的位置
-        if(index != string::npos){
-            size_t index_n = str.find('\t',index+2);//找到 制表符的位置
-            if(index_n != string::npos){
-                str.replace(index,index_n - index,"");
-            }
-            else if(index<str.length()){
-                str.replace(index,str.length()-index,"");
-            }
-            else{
-                break;
-            }
+        if(str.find("//")!=string::npos)
+        {
+            size_t pos = str.find("//");
+            size_t end = str.find("\n",pos);//从pos位置开始寻找
+            size_t len = end - pos;
+            str.erase(pos,len);//删除pos位置开始后长度为len的字符串
         }
-        else break;
-    }while(1);
-
-    //接下来找/*和*/的注释
-    do
-    {
-        index = str.find("/*");
-        if(index != string::npos){
-            size_t index_n = str.find("*/",index+2);
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n+2 - index,"");
-            }
-            else break;
+        else if(str.find("/*")!=string::npos)
+        {
+            size_t pos = str.find("/*");
+            size_t end = str.find("*/",pos);
+            string temp("*/");
+            size_t len = end - pos + temp.length();
+            str.erase(pos,len);
         }
-        else break;
-    }while(1);
+        else
+        {
+            break;
+        }
+    }
 }
 
 //要求是用制表符进行首行推进，而不是用四个空格。
