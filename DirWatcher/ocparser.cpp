@@ -28,7 +28,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
         ifstream fin(srcFile.filePath.c_str());//文件输入流
         string str;
         string temp;
-        int pos = 0;
+        size_t pos = 0;
         while(getline(fin,temp,'\n'))
         {
             str.append(temp+"\r\n\t");
@@ -48,7 +48,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
             ifstream m_fin(srcFile.mFilePath.c_str());//文件输入流，p是代码路径
             string m_str;
             string m_temp;
-            int m_pos = 0;
+            size_t m_pos = 0;
             while(getline(m_fin,m_temp,'\n'))
             {
                 m_str.append(m_temp+"\r\n\t");
@@ -74,7 +74,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
         ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
         string str;
         string temp;
-        int pos = 0;
+        size_t pos = 0;
         while(getline(fin,temp,'\n'))
         {
             str.append(temp+"\r\n\t");
@@ -94,7 +94,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
             ifstream header_fin(srcFile.headerFilePath.c_str());//文件输入流，p是代码路径
             string header_str;
             string header_temp;
-            int header_pos = 0;
+            size_t header_pos = 0;
             while(getline(header_fin,header_temp,'\n'))
             {
                 header_str.append(header_temp+"\r\n\t");
@@ -433,7 +433,7 @@ void OCParser::display(SrcFileModel fileModel)
 /**
  fI , nI - fI 取得是fI 到 nI-1下标的子串
  */
-int OCParser::find(string& str,string s,int& pos){
+int OCParser::find(string& str,string s,size_t& pos){
     int type = judge(s);
     size_t fI,nI;//firstIndex,nextIndex
     string temp = "";
@@ -525,10 +525,10 @@ int OCParser::find(string& str,string s,int& pos){
                     theclass.classname = cn;
 
                     size_t cur_index = lBlock;//current_index
-                    vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
+                    vector<size_t> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
                     string temp = "";
                     //排除所有作用域内的字符串
-                    for(vector<int>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
+                    for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
                     {
                         size_t index = *vit+1;
                         size_t length = *(vit+1)-*(vit)-1;
@@ -588,29 +588,29 @@ int OCParser::find(string& str,string s,int& pos){
 string OCParser::findClassName(const string& classline,size_t &begin)
 {
     ignorespacetab(classline,begin);
-    int CNS = begin;//classname_start
+    size_t CNS = begin;//classname_start
     ignorealnum(classline,begin);
-    int CNE = begin;//classname_end
+    size_t CNE = begin;//classname_end
     return classline.substr(CNS,CNE-CNS);
 }
 
-string OCParser::findExtendsName(const string& str,int pos)
+string OCParser::findExtendsName(const string& str,size_t pos)
 {
     size_t es = str.find(":",pos);//extends_start
     if( es != string::npos )
     {
         es += 1;
         ignorespacetab(str,es);
-        int ens = es;//extendsname_start
+        size_t ens = es;//extendsname_start
         ignorealnum(str,es);
-        int ene = es;//extendsname_end;
+        size_t ene = es;//extendsname_end;
 
         return str.substr(ens,ene-ens);
     }
     return "";
 }
 
-const vector<string> OCParser::findDelegatesName(const string& str,int pos)
+const vector<string> OCParser::findDelegatesName(const string& str,size_t pos)
 {
     vector<string> delegates;
     size_t ds = str.find("<",pos);//delegates_start
@@ -627,7 +627,7 @@ const vector<string> OCParser::findDelegatesName(const string& str,int pos)
     return delegates;
 }
 
-const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName(const string& str,int pos)
+const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName(const string& str,size_t pos)
 {
     map<string,vector<string>> propertiesAndFunctionDeclaresMap;
     vector<string> properties;
@@ -637,8 +637,8 @@ const map<string,vector<string>> OCParser::findPropertiesAndFunctionDeclaresName
     if( ps != string::npos)
     {
         ignorespacetab(str,ps);
-        int ins = ps;//property_start
-        int ine = pe;//property_end
+        size_t ins = ps;//property_start
+        size_t ine = pe;//property_end
 
         while(ps<str.length())
         {
@@ -708,9 +708,9 @@ void OCParser::actionscope_ignore(const string& str,size_t& fI)
     }
 }
 
-vector<int> OCParser::actionscope(const string& str,size_t& fI)
+vector<size_t> OCParser::actionscope(const string& str,size_t& fI)
 {
-    vector<int> index;
+    vector<size_t> index;
     index.push_back(fI-1);
     int lBlock_num = 1;
     while(lBlock_num)

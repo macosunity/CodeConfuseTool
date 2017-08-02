@@ -58,13 +58,13 @@ private:
     void ignorespacetab(const string& str,size_t& fI);//fI停在非空格和制表符处
     void ignorealnum(const string&str ,size_t& fI);//fI停在非数字和字母处
     void display(SrcFileModel fileModel);//用文件输出流输出
-    int find(string& str,string s,int& pos);//在pos处，str找s
+    int find(string& str,string s,size_t& pos);//在pos处，str找s
     string findClassName(const string& str,size_t &begin);//在一个字符串上找类名
-    string findExtendsName(const string& str,int pos);//在一个字符串上找扩展名
-    const vector<string> findDelegatesName(const string& str,int pos);//代理
-    const map<string,vector<string>> findPropertiesAndFunctionDeclaresName(const string& str,int pos);//属性和方法
+    string findExtendsName(const string& str,size_t pos);//在一个字符串上找扩展名
+    const vector<string> findDelegatesName(const string& str,size_t pos);//代理
+    const map<string,vector<string>> findPropertiesAndFunctionDeclaresName(const string& str,size_t pos);//属性和方法
     void actionscope_ignore(const string& str,size_t& fI);//忽略一个大的作用域中的所有作用域
-    vector<int> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
+    vector<size_t> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
 };
 
 #endif // OCPARSER_H

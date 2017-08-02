@@ -21,7 +21,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
         ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
         string str;
         string temp;
-        int pos = 0;
+        size_t pos = 0;
         while(getline(fin,temp,'\n'))
         {
             str.append(temp+"\r\n\t");
@@ -71,7 +71,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             ifstream fHeaderIn(srcFile.headerFilePath.c_str());//文件输入流，p是代码路径
             string str;
             string temp;
-            int pos = 0;
+            size_t pos = 0;
             while(getline(fHeaderIn,temp,'\n'))
             {
                 str.append(temp+"\r\n\t");
@@ -106,7 +106,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
             string str;
             string temp;
-            int pos = 0;
+            size_t pos = 0;
             while(getline(fin,temp,'\n'))
             {
                 str.append(temp+"\r\n\t");
@@ -129,7 +129,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
         ifstream fin(srcFile.filePath.c_str());//文件输入流，p是代码路径
         string str;
         string temp;
-        int pos = 0;
+        size_t pos = 0;
         while(getline(fin,temp,'\n'))
         {
             str.append(temp+"\r\n\t");
@@ -469,10 +469,10 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
     tempC.classname = "GlobalVarsAndFunctions";
     size_t lBlock = str.find('{',0) ;// 找{
     size_t cur_index = lBlock;
-    vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
+    vector<size_t> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
     string temp = "";
     //排除所有作用域内的字符串
-    for(vector<int>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
+    for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
     {
         size_t start_index = *vit+1;
         size_t substr_index = *(vit+1)-*(vit)-1;
@@ -524,7 +524,7 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
 /**
  fI , nI - fI 取得是fI 到 nI-1下标的子串
  */
-int CppParser::findSubStrAtPos(string& str,string s,int& pos)
+int CppParser::findSubStrAtPos(string& str,string s,size_t& pos)
 {
     int type = judge(s);
     size_t fI,nI;//firstIndex,nextIndex
@@ -586,10 +586,10 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                     theclass.extends = en;
 
                     size_t cur_index = lBlock;//current_index
-                    vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
+                    vector<size_t> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
                     string temp = "";
                     //排除所有作用域内的字符串
-                    for(vector<int>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
+                    for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
                     {
                         size_t start_index = *vit+1;
                         size_t substr_index = *(vit+1)-*(vit)-1;
@@ -656,10 +656,10 @@ int CppParser::findSubStrAtPos(string& str,string s,int& pos)
                     theclass.extends = en;
 
                     size_t cur_index = lBlock;//current_index
-                    vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
+                    vector<size_t> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
                     string temp = "";
                     //排除所有作用域内的字符串
-                    for(vector<int>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
+                    for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
                     {
                         size_t start_index = *vit+1;
                         size_t substr_index = *(vit+1)-*(vit)-1;
@@ -731,22 +731,22 @@ bool CppParser::is_str_contain_space(string str)
     return str.find(' ') != string::npos;
 }
 
-int CppParser::findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParser& theclass)
+int CppParser::findFunctionAndVarsOfClass(string& str,string s,size_t& pos,CppParser& theclass)
 {
     size_t fI;//firstIndex
     string temp = "";
     
-    fI = (int)str.find(s+"::",pos);//找到具体类
+    fI = str.find(s+"::",pos);//找到具体类
     size_t lBlock = str.find("{",fI) ;// 找{
     if(fI != string::npos)
     {
         fI += strlen(s.c_str());
         
         size_t cur_index = lBlock;//current_index
-        vector<int> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
+        vector<size_t> vi = actionscope(str,cur_index);//获取函数和数组变量初始化等 { 和 } 的位置
         string temp = "";
         //排除所有作用域内的字符串
-        for(vector<int>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
+        for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
         {
             size_t start_index = *vit+1;
             size_t substr_index = *(vit+1)-*(vit)-1;
@@ -864,9 +864,9 @@ string CppParser::findClassName(const string& classline,size_t &begin)
     }
 
     ignorespacetab(curr_classline,begin);
-    int CNS = begin;//classname_start
+    size_t CNS = begin;//classname_start
     ignorealnum(curr_classline,begin);
-    int CNE = begin;//classname_end
+    size_t CNE = begin;//classname_end
 
     curr_classline = curr_classline.substr(CNS,CNE-CNS);
 
@@ -893,7 +893,7 @@ vector<string> CppParser::split(std::string str,std::string pattern)
     return result;
 }
 
-vector<string> CppParser::findExtendsName(const string& str,int pos)
+vector<string> CppParser::findExtendsName(const string& str,size_t pos)
 {
     vector<string> extends_name;
 
@@ -952,9 +952,9 @@ void CppParser::actionscope_ignore(const string& str,size_t& fI)
 }
 
 
-vector<int> CppParser::actionscope(const string& str,size_t& fI)
+vector<size_t> CppParser::actionscope(const string& str,size_t& fI)
 {
-    vector<int> index;
+    vector<size_t> index;
     index.push_back(fI-1);
     int lBlock_num = 1;
     while(lBlock_num)

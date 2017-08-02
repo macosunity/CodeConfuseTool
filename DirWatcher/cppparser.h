@@ -55,16 +55,16 @@ private:
     void ignorespacetab(const string& str,size_t& fI);//fI停在非空格和制表符处
     void ignorealnum(const string&str ,size_t& fI);//fI停在非数字和字母处
     void display(SrcFileModel fileModel);//用文件输出流输出
-    int findSubStrAtPos(string& str,string s,int& pos);//在pos处，str找s
+    int findSubStrAtPos(string& str,string s,size_t& pos);//在pos处，str找s
     string findClassName(const string& str,size_t &begin);//在一个字符串上找类名
-    vector<string> findExtendsName(const string& str,int pos);//在一个字符串上找扩展名
-    int findFunctionAndVarsOfClass(string& str,string s,int& pos,CppParser& theclass);
+    vector<string> findExtendsName(const string& str,size_t pos);//在一个字符串上找扩展名
+    int findFunctionAndVarsOfClass(string& str,string s,size_t& pos,CppParser& theclass);
 
     int findGlobalClassDeclares(string& str);//寻找全局类声明，和友元类;
 
     int findGlobalVarsAndFunctions(string& str);//寻找全局变量和全局函数
     void actionscope_ignore(const string& str,size_t& fI);//忽略一个大的作用域中的所有作用域
-    vector<int> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
+    vector<size_t> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
     vector<string> split(std::string str,std::string pattern);
 
     bool is_str_contain_space(string str);//是否包含空格
