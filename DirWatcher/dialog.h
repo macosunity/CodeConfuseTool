@@ -42,6 +42,7 @@ public slots:
     void add_next_path(QString path);
     
 private slots:
+    void putAllKeyWords(vector<string> &keysVec);
     bool findMFileWithFileModel(SrcFileModel &fileModel);
     bool findMMFileWithFileModel(SrcFileModel &fileModel);
     bool findCppFileWithFileModel(SrcFileModel &fileModel);

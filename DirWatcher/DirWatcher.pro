@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
-LIBS     += -lsqlite3
+QT       += core gui
 
 #不输出QDebug调试信息
 #DEFINES  += QT_NO_WARNING_OUTPUT\
@@ -39,3 +38,6 @@ HEADERS  += dialog.h \
     stringutil.h \
     database.h \
     classmodel.h
+
+DISTFILES += \
+    reskeys.txt

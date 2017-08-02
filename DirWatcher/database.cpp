@@ -6,15 +6,10 @@
 
 DataBase::DataBase()
 {
-    m_isDbOpen = createConnection();
 }
 
 DataBase::~DataBase()
 {
-    if(m_isDbOpen)
-    {
-        m_db.close();
-    }
 }
 
 void DataBase::clearIdentifyVec()
@@ -25,70 +20,13 @@ void DataBase::clearIdentifyVec()
 //建立一个数据库连接
 bool DataBase::createConnection()
 {
-    //以后就可以用"classes_db"与数据库进行连接了
-
-    //与数据库建立连接
-    if (QSqlDatabase::contains("classes_db"))
-    {
-        m_db = QSqlDatabase::database("classes_db");
-    }
-    else
-    {
-        m_db = QSqlDatabase::addDatabase("QSQLITE", "classes_db");
-    }
-    //设置数据库名
-
-    QString dbFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-
-    QDir *dbDir = new QDir;
-    bool isDbDirExist = dbDir->exists(dbFilePath);
-    if(isDbDirExist)
-    {
-        qDebug() << "文件夹已经存在！" << endl;
-    }
-    else
-    {
-        bool ok = dbDir->mkdir(dbFilePath);
-        if( ok )
-        {
-            qDebug() << "文件夹创建成功！" << endl;
-        }
-    }
-    dbFilePath = dbFilePath.append("/classes_info.db");
-    qDebug() << "数据库地址：" << dbFilePath << endl;
-    m_db.setDatabaseName(dbFilePath);
-    if( !m_db.open())
-    {
-        qDebug() << "无法建立数据库连接";
-        return false;
-    }
-    qDebug() << "建立数据库连接成功！";
     return true;
 }
 
 //创建数据库表
 bool DataBase::createTable()
 {
-    if(!m_db.isOpen())
-    {
-        createConnection();
-    }
-
-    QSqlQuery query(m_db);
-    bool success = query.exec("create table if not exists classes_table("
-                              "[id] varchar PRIMARY KEY,"
-                              "[file_path] varchar,[file_name] varchar,"
-                              "[class_name] varchar,[identify_name] varchar)");
-    if(success)
-    {
-        qDebug() << QObject::tr("数据库表创建成功！\n");
-        return true;
-    }
-    else
-    {
-        qDebug() << QObject::tr("数据库表创建失败！\n");
-        return false;
-    }
+    return true;
 }
 
 inline bool DataBase::is_str_contain_space(string str)
@@ -352,17 +290,5 @@ vector<string> DataBase::queryAll()
 //删除所有记录
 bool DataBase::deleteAll()
 {
-    if(!m_db.isOpen())
-    {
-        createConnection();
-    }
-
-    QSqlQuery query(m_db);
-    query.prepare(QString("delete from classes_table"));
-    if(!query.exec())
-    {
-        qDebug() << "删除记录失败！";
-        return false;
-    }
     return true;
 }

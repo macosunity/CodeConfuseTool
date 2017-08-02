@@ -2,13 +2,8 @@
 #define DATABASE_H
 
 #include <QTextCodec>
-#include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QTime>
-#include <QSqlError>
 #include <QtDebug>
-#include <QSqlDriver>
-#include <QSqlRecord>
 #include <iterator>
 #include <regex>
 #include <string>
@@ -35,8 +30,6 @@ class DataBase
 {
     DECLARE_SINGLETON(DataBase);
 private:
-    bool m_isDbOpen;
-    QSqlDatabase m_db;
     vector<string> sqlcmds;
     vector<string> m_identifyVec;
 public:

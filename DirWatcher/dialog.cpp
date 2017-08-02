@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QCoreApplication>
+#include <QTextStream>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -292,8 +293,23 @@ void Dialog::start_choosing()
     start->setEnabled(true);
     
     vector<string> identifyVec = database->queryAll();
+//    qDebug() << "identifyVec 大小" << identifyVec.size();
     
-    for (vector<string>::iterator iter=identifyVec.begin(); iter != identifyVec.end(); ++iter)
+    vector<string> keysVec;
+    putAllKeyWords(keysVec);
+//    qDebug() << "keysVec 大小" << keysVec.size();
+    
+    vector<string> intersectVec(10000);
+    set_intersection(identifyVec.begin(), identifyVec.end(), keysVec.begin(), keysVec.end(), intersectVec.begin());//交集
+    sort(intersectVec.begin(),intersectVec.end());
+    intersectVec.erase(unique(intersectVec.begin(), intersectVec.end()), intersectVec.end());
+
+    vector<string> resultVec(200000);
+    set_difference(identifyVec.begin(), identifyVec.end(), intersectVec.begin(), intersectVec.end(), resultVec.begin()); //差集
+    sort(resultVec.begin(),resultVec.end());
+    resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());
+
+    for (vector<string>::iterator iter=resultVec.begin(); iter != resultVec.end(); ++iter)
     {
         qDebug() << (*iter).c_str();
     }
@@ -435,4 +451,34 @@ bool Dialog::findHeaderFileWithFileModel(SrcFileModel &fileModel)
 Dialog::~Dialog()
 {
     
+}
+
+void Dialog::putAllKeyWords(vector<string> &keysVec)
+{
+    QDir dir;
+    QString resPath = dir.absolutePath();
+    QDir resDir(resPath);
+    resDir.cdUp();
+    resPath = resDir.absolutePath();
+    resPath = resPath.append("/reskeys.txt");
+    QFile resFile(resPath);
+    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+    
+    QTextStream stream(&resFile);
+    QString line;
+    int n = 1;
+    while (!stream.atEnd())
+    {
+        line = stream.readLine();
+        string keyword = line.toStdString();
+        keysVec.push_back(keyword);
+        ++n;
+        
+//        qDebug() << keyword.c_str();
+    }
+    
+    resFile.close();
 }
