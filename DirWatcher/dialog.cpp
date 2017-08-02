@@ -101,7 +101,7 @@ Dialog::Dialog(QString file_storage,
     setLayout(all);
     setWindowTitle("项目代码混淆工具");
     setWindowFlags(Qt::Window);
-    setGeometry(400,400,1024,632);
+    setGeometry(400,400,800,490);
 }
 
 void Dialog::choose_path()
