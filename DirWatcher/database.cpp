@@ -136,7 +136,17 @@ inline bool DataBase::is_var_or_function(string str)
 
 inline bool DataBase::is_allow_identify_name(string str)
 {
-    return (str.find('(') == string::npos && str.find(')') == string::npos);
+    regex reg("[_[:alpha:]][_[:alnum:]]*");
+    
+    string judge_str = trim(str);
+    if (regex_match(str, reg))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 inline string& DataBase::ltrim(string &str)
@@ -159,20 +169,66 @@ inline string& DataBase::trim(string &str)
     return str;
 }
 
-inline void DataBase::deleteChar(string& str,char c)
+inline void DataBase::deleteSpecialChar(string& str)
 {
-    if(c == '*')
+    str = trim(str);
+    
+    if(str.find('{') != string::npos)
     {
         size_t index_s = 0;
         while(index_s<str.length())
         {
-            index_s = str.find(c,index_s);//找 '#' 的位置
+            index_s = str.find('{',index_s);//找 '{' 的位置
             if(index_s != string::npos)
             {
                 str.erase(index_s);
             }
         }
-        return;
+    }
+    
+    if(str.find('*') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('*',index_s);//找 '*' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    if(str.find('~') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('~',index_s);//找 '~' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    if(str.find('&') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('&',index_s);//找 '&' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    size_t bracket_left_index = str.find('[');
+    if (bracket_left_index != string::npos)
+    {
+        str = str.substr(0, bracket_left_index);
     }
 }
 
@@ -181,10 +237,6 @@ bool DataBase::insertRecord(ClassModel classModel)
 {
     QUuid id = QUuid::createUuid();
     QString strId = id.toString();
-
-//    string sql = "insert into classes_table values('" + strId.toStdString() + "','" + classModel.filePath + "','" + classModel.fileName+ "','"  + classModel.className+ "','" + classModel.identifyName+"')";
-//    qDebug() << sql.c_str() << endl;
-    
     
     if (is_var_or_function(classModel.identifyName))
     {
@@ -213,9 +265,9 @@ bool DataBase::insertRecord(ClassModel classModel)
                     identify_str = identify_str.substr(first_brackets_index+1, identify_str.length()-first_brackets_index);
                 }
                 
+                deleteSpecialChar(identify_str);
                 if (is_allow_identify_name(identify_str))
                 {
-                    deleteChar(identify_str, '*');
                     m_identifyVec.push_back(trim(identify_str));
                 }
             }
@@ -238,9 +290,9 @@ bool DataBase::insertRecord(ClassModel classModel)
                     identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
                 }
                 
+                deleteSpecialChar(identify_str);
                 if (is_allow_identify_name(identify_str))
                 {
-                    deleteChar(identify_str, '*');
                     m_identifyVec.push_back(trim(identify_str));
                 }
             }
@@ -258,9 +310,9 @@ bool DataBase::insertRecord(ClassModel classModel)
                     identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
                 }
                 
+                deleteSpecialChar(identify_str);
                 if (is_allow_identify_name(identify_str))
                 {
-                    deleteChar(identify_str, '*');
                     m_identifyVec.push_back(trim(identify_str));
                 }
             }
@@ -279,9 +331,9 @@ bool DataBase::insertRecord(ClassModel classModel)
                 identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
             }
             
+            deleteSpecialChar(identify_str);
             if (is_allow_identify_name(identify_str))
             {
-                deleteChar(identify_str, '*');
                 m_identifyVec.push_back(trim(identify_str));
             }
         }

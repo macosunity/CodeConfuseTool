@@ -249,34 +249,7 @@ void OCParser::R(string& str)
         else break;
     }while(1);
 
-    do
-    {
-        index = str.find("//");//找到 // 的位置
-        if(index != string::npos)
-        {
-            size_t index_n = str.find("\n",index+2);//找到 回车的位置
-            if(index_n != string::npos)
-            {
-                str.replace(index,index_n + 2 - index,"");
-            }
-            else if(index<str.length())
-            {
-                str.replace(index,str.length()-index + 1,"");
-            }
-            else
-            {
-                break;
-            }
-        }
-        else break;
-    }while(1);
-}
-
-//删除注释注意语法要正确。否则会删除一些有用的信息。
-//这里的语法正确是有首行推进
-//依据//和制表符来判别注释
-void OCParser::D(string& str)
-{
+    
     while(1)
     {
         if(str.find("//")!=string::npos)
@@ -565,8 +538,6 @@ int OCParser::find(string& str,string s,int& pos){
                         }
                         temp += str.substr(index, length);
                     }
-                    D(temp);//删除注释
-//                    D(temp,'=');//删除 = 号 和 ; 号之间的信息，包括=号，不包括;号
                     vector<string> vs = divideByTab(temp);//根据制表符分解字符串
                     size_t sem_index;//分号下标
                     //根据分号来区分函数和变量

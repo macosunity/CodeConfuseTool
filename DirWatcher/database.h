@@ -9,7 +9,9 @@
 #include <QtDebug>
 #include <QSqlDriver>
 #include <QSqlRecord>
-#include<iterator>
+#include <iterator>
+#include <regex>
+#include <string>
 #include "classmodel.h"
 
 using namespace std;
@@ -50,7 +52,7 @@ public:
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);
     inline string& trim(string &s); //去除空格和换行
-    inline void deleteChar(string& str,char c);
+    inline void deleteSpecialChar(string& str);
     bool createConnection();  //创建一个连接
     bool createTable();       //创建数据库表
     bool insertRecord(ClassModel classModel);      //新增数据
