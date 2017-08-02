@@ -286,57 +286,15 @@ bool DataBase::insertRecord(ClassModel classModel)
             }
         }
     }
-//    if(!m_db.isOpen())
-//    {
-//        createConnection();
-//    }
-
-//    QSqlQuery query(m_db);
-//    query.prepare("insert into classes_table values(:id,:file_path,:file_name,:class_name,:identify_name,:file_type,:identify_type)");
-//
-//    query.bindValue(":id", strId);
-//    query.bindValue(":file_path", classModel.filePath.c_str());
-//    query.bindValue(":file_name", classModel.fileName.c_str());
-//    query.bindValue(":class_name", classModel.className.c_str());
-//    query.bindValue(":identify_name", classModel.identifyName.c_str());
-//    query.bindValue(":file_type", classModel.fileType);
-//    query.bindValue(":identify_type", classModel.identifyType);
-//
-//    bool success=query.exec();
-//    if(!success)
-//    {
-//        QSqlError lastError = query.lastError();
-//        qDebug() << lastError.driverText() << QString(QObject::tr("插入失败"));
-//        return false;
-//    }
     return true;
 }
 
 //查询所有信息
 vector<string> DataBase::queryAll()
 {
+    sort(m_identifyVec.begin(),m_identifyVec.end());
+    m_identifyVec.erase(unique(m_identifyVec.begin(), m_identifyVec.end()), m_identifyVec.end());
     return m_identifyVec;
-//    if(!m_db.isOpen())
-//    {
-//        createConnection();
-//    }
-//
-//    QSqlQuery query(m_db);
-//    query.prepare("select distinct(identify_name) from classes_table");
-//    if(!query.exec())
-//    {
-//        qDebug()<<query.lastError();
-//    }
-//    else
-//    {
-//        while(query.next())
-//        {
-//            qDebug() << query.value(0).toString() << " ";
-//            qDebug() << "\n";
-//        }
-//    }
-    
-//    return true;
 }
 
 //删除所有记录
