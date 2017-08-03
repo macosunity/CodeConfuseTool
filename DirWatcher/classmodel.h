@@ -12,6 +12,7 @@ public:
     string identifyName;
     
     bool isObjectiveC;
+    bool isPropertyName;
 
     ClassModel();
 };

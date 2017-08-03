@@ -78,8 +78,10 @@ inline bool DataBase::is_allow_identify_name(string str)
     StringUtil stringUtil;
     regex reg("[_[:alpha:]][_[:alnum:]]*");
     
+    regex upper_underline_reg("[_[:upper:]]*");
+    
     string judge_str = trim(str);
-    if (regex_match(str, reg) && !stringUtil.StartWith(str, "initWith") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_"))
+    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "initWith") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "kCF"))
     {
         return true;
     }
@@ -172,6 +174,103 @@ inline void DataBase::deleteSpecialChar(string& str)
     }
 }
 
+bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
+{
+    string identify_str = classModel.identifyName;
+    
+    size_t operator_index = identify_str.find(" operator");
+    size_t operator_index2 = identify_str.find("::operator");
+    size_t method_index = identify_str.find('+');
+    size_t method_index2 = identify_str.find('-');
+    
+    size_t property_index = identify_str.find("@property");
+    if ( (method_index != string::npos || method_index2 != string::npos) &&
+        (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
+    {
+        qDebug() << "发现方法:" << identify_str.c_str();
+        StringUtil stringUtil;
+        
+        if (stringUtil.StartWith(identify_str, "set"))
+        {
+            return false;
+        }
+        
+        size_t first_colon_index = identify_str.find_first_of(':');
+        if (first_colon_index != string::npos)
+        {
+            identify_str = identify_str.substr(0, first_colon_index);
+        }
+        
+        size_t first_brackets_index = identify_str.find_last_of(')');
+        if (first_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(first_brackets_index+1, identify_str.length()-first_brackets_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            m_modelVec.push_back(classModel);
+            m_identifyVec.push_back(trim(identify_str));
+        }
+    }
+    else if(property_index != string::npos)//Objective C Property
+    {
+        qDebug() << "发现属性:" << identify_str.c_str();
+        size_t block_index = identify_str.find_first_of('^');
+        if (block_index != string::npos)
+        {
+            identify_str = identify_str.substr(block_index+1, identify_str.length()-block_index);
+            size_t first_brackets_index = identify_str.find_first_of(')');
+            if (first_brackets_index != string::npos)
+            {
+                identify_str = identify_str.substr(0, first_brackets_index);
+            }
+        }
+        
+        size_t last_space_index = identify_str.find_last_of(' ');
+        if (last_space_index != string::npos)
+        {
+            identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            string property_str = trim(identify_str);
+            m_identifyVec.push_back(property_str);
+            
+            classModel.identifyName = property_str;
+            classModel.isPropertyName = true;
+            m_modelVec.push_back(classModel);
+        }
+    }
+    else
+    {
+        qDebug() << "发现其他1:" << identify_str.c_str();
+        size_t last_brackets_index = identify_str.find_first_of('(');
+        if (last_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(0, last_brackets_index);
+        }
+        
+        size_t last_space_index = identify_str.find_last_of(' ');
+        if (last_space_index != string::npos)
+        {
+            identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            m_modelVec.push_back(classModel);
+            m_identifyVec.push_back(trim(identify_str));
+        }
+    }
+    
+    return true;
+}
+
 //向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {
@@ -180,92 +279,16 @@ bool DataBase::insertRecord(ClassModel classModel)
     
     if (is_var_or_function(classModel.identifyName))
     {
-        string identify_str = classModel.identifyName;
         
         if (classModel.isObjectiveC)
         {
-            size_t operator_index = identify_str.find(" operator");
-            size_t operator_index2 = identify_str.find("::operator");
-            size_t method_index = identify_str.find('+');
-            size_t method_index2 = identify_str.find('-');
-            
-            size_t property_index = identify_str.find("@property");
-            if ( (method_index != string::npos || method_index2 != string::npos) &&
-                 (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
-            {
-                StringUtil stringUtil;
-                
-                if (stringUtil.StartWith(identify_str, "set"))
-                {
-                    return false;
-                }
-                
-                size_t first_colon_index = identify_str.find_first_of(':');
-                if (first_colon_index != string::npos)
-                {
-                    identify_str = identify_str.substr(0, first_colon_index);
-                }
-                
-                size_t first_brackets_index = identify_str.find_last_of(')');
-                if (first_brackets_index != string::npos)
-                {
-                    identify_str = identify_str.substr(first_brackets_index+1, identify_str.length()-first_brackets_index);
-                }
-                
-                deleteSpecialChar(identify_str);
-                if (is_allow_identify_name(identify_str))
-                {
-                    m_identifyVec.push_back(trim(identify_str));
-                }
-            }
-            else if(property_index != string::npos)//Objective C Property
-            {
-                size_t block_index = identify_str.find_first_of('^');
-                if (block_index != string::npos)
-                {
-                    identify_str = identify_str.substr(block_index+1, identify_str.length()-block_index);
-                    size_t first_brackets_index = identify_str.find_first_of(')');
-                    if (first_brackets_index != string::npos)
-                    {
-                        identify_str = identify_str.substr(0, first_brackets_index);
-                    }
-                }
-                
-                size_t last_space_index = identify_str.find_last_of(' ');
-                if (last_space_index != string::npos)
-                {
-                    identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
-                }
-                
-                deleteSpecialChar(identify_str);
-                if (is_allow_identify_name(identify_str))
-                {
-                    m_identifyVec.push_back(trim(identify_str));
-                }
-            }
-            else
-            {
-                size_t last_brackets_index = identify_str.find_first_of('(');
-                if (last_brackets_index != string::npos)
-                {
-                    identify_str = identify_str.substr(0, last_brackets_index);
-                }
-                
-                size_t last_space_index = identify_str.find_last_of(' ');
-                if (last_space_index != string::npos)
-                {
-                    identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
-                }
-                
-                deleteSpecialChar(identify_str);
-                if (is_allow_identify_name(identify_str))
-                {
-                    m_identifyVec.push_back(trim(identify_str));
-                }
-            }
+            handleObjectiveCIdentify(classModel);
         }
         else
         {
+            string identify_str = classModel.identifyName;
+
+            qDebug() << "发现其他2:" << identify_str.c_str();
             size_t last_brackets_index = identify_str.find_last_of('(');
             if (last_brackets_index != string::npos)
             {
@@ -281,9 +304,15 @@ bool DataBase::insertRecord(ClassModel classModel)
             deleteSpecialChar(identify_str);
             if (is_allow_identify_name(identify_str))
             {
+                m_modelVec.push_back(classModel);
                 m_identifyVec.push_back(trim(identify_str));
             }
         }
+    }
+    else
+    {
+        handleObjectiveCIdentify(classModel);
+        qDebug() << "发现我擦:" << classModel.identifyName.c_str();
     }
     
     //类名
@@ -302,6 +331,11 @@ vector<string> DataBase::queryAll()
     sort(m_identifyVec.begin(),m_identifyVec.end());
     m_identifyVec.erase(unique(m_identifyVec.begin(), m_identifyVec.end()), m_identifyVec.end());
     return m_identifyVec;
+}
+
+vector<ClassModel> DataBase::queryAllModel()
+{
+    return m_modelVec;
 }
 
 //删除所有记录

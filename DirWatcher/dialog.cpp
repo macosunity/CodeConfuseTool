@@ -343,7 +343,7 @@ void Dialog::start_choosing()
     {
         disorderIdentifyVec.push_back(*it);
     }
-
+    
     ResultDialog *pResultDlg = new ResultDialog(this);
     pResultDlg->setModal(true);
     pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec);
@@ -491,12 +491,15 @@ Dialog::~Dialog()
 void Dialog::putAllKeyWords(vector<string> &keysVec)
 {
     QDir dir;
-    QString resPath = QCoreApplication::applicationDirPath();
+    QString resPath = dir.absolutePath();
+    QDir resDir(resPath);
+    resDir.cdUp();
+    resPath = resDir.absolutePath();
+    qDebug() << resPath;
     resPath = resPath.append("/reskeys.txt");
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        edit_line->setText(resPath);
         QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
     

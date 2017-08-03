@@ -7,4 +7,5 @@ ClassModel::ClassModel()
     className = "";   //类名词
     identifyName = "";
     isObjectiveC = false;
+    isPropertyName = false;
 }

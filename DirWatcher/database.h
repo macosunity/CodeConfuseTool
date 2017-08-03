@@ -32,12 +32,14 @@ class DataBase
 private:
     vector<string> sqlcmds;
     vector<string> m_identifyVec;
+    vector<ClassModel> m_modelVec;
 public:
     DataBase();
     ~DataBase();
     
     void clearIdentifyVec();
     
+    bool handleObjectiveCIdentify(ClassModel classModel);
     inline bool is_allow_identify_name(string str);
     inline bool is_var_or_function(string str);
     inline bool is_str_contain_chars(string str);
@@ -50,6 +52,8 @@ public:
     bool createTable();       //创建数据库表
     bool insertRecord(ClassModel classModel);      //新增数据
     vector<string> queryAll();          //查询所有信息
+    
+    vector<ClassModel> queryAllModel();
     bool deleteAll();         //删除所有信息
 };
 
