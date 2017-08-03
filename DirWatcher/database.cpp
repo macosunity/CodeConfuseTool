@@ -3,6 +3,7 @@
 #include <QUuid>
 #include <QDesktopServices>
 #include <QDir>
+#include "stringutil.h"
 
 DataBase::DataBase()
 {
@@ -74,10 +75,11 @@ inline bool DataBase::is_var_or_function(string str)
 
 inline bool DataBase::is_allow_identify_name(string str)
 {
+    StringUtil stringUtil;
     regex reg("[_[:alpha:]][_[:alnum:]]*");
     
     string judge_str = trim(str);
-    if (regex_match(str, reg))
+    if (regex_match(str, reg) && !stringUtil.StartWith(str, "initWith") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_"))
     {
         return true;
     }
@@ -191,6 +193,13 @@ bool DataBase::insertRecord(ClassModel classModel)
             if ( (method_index != string::npos || method_index2 != string::npos) &&
                  (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
             {
+                StringUtil stringUtil;
+                
+                if (stringUtil.StartWith(identify_str, "set"))
+                {
+                    return false;
+                }
+                
                 size_t first_colon_index = identify_str.find_first_of(':');
                 if (first_colon_index != string::npos)
                 {
@@ -276,6 +285,14 @@ bool DataBase::insertRecord(ClassModel classModel)
             }
         }
     }
+    
+    //类名
+    if (is_allow_identify_name(classModel.className))
+    {
+        string identify_str = trim(classModel.className);
+        m_identifyVec.push_back(identify_str);
+    }
+
     return true;
 }
 

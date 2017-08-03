@@ -20,9 +20,6 @@ int main(int argc, char *argv[])
     Dialog w( file_storage_default_name ,
               dir_storage_default_name   );
     w.show();
-
-    DataBase database;
-    database.createTable();
     
     return a.exec();
 }

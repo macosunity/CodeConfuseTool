@@ -17,6 +17,8 @@
 #include "ocparser.h"
 #include "database.h"
 
+#define random(a,b) (rand()%(b-a+1)+a)
+
 void Dialog::readFileList(const char *basePath)
 {
     DIR *dir;
@@ -293,11 +295,9 @@ void Dialog::start_choosing()
     start->setEnabled(true);
     
     vector<string> identifyVec = database->queryAll();
-//    qDebug() << "identifyVec 大小" << identifyVec.size();
     
     vector<string> keysVec;
     putAllKeyWords(keysVec);
-//    qDebug() << "keysVec 大小" << keysVec.size();
     
     vector<string> intersectVec(10000);
     set_intersection(identifyVec.begin(), identifyVec.end(), keysVec.begin(), keysVec.end(), intersectVec.begin());//交集
@@ -309,9 +309,44 @@ void Dialog::start_choosing()
     sort(resultVec.begin(),resultVec.end());
     resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());
 
-    for (vector<string>::iterator iter=resultVec.begin(); iter != resultVec.end(); ++iter)
+    
+    const string alpha[] = {"A","B","C", "D", "E","F", "G", "H", "I", "J", "K", "L", "M", "N", "O","P","Q","R","S","T","U","V","W","X","Y","Z",
+        "a","b","c", "d", "e","f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p","q","r","s","t","u","v","w","x","y","z","s","t"};
+    const string numeric[] = {"0","1","2","3","4","5","6","7","8","9","0","5","3"};
+    const string underline = "_";
+    
+    srand((unsigned)time(NULL));
+    unordered_set<string> strset;
+    string ss = "";
+    while(strset.size() < resultVec.size())
     {
-        qDebug() << (*iter).c_str();
+        ss = "";
+        int alphaLength = 52;
+        int numericLength = 11;
+        for(int i = 0; i < 22; i++)
+        {
+            int index = random(1, (alphaLength + numericLength));
+            if(index < alphaLength){
+                ss.append(alpha[index]);
+            } else {
+                ss.append(numeric[index - alphaLength]);
+            }
+        }
+        ss = "_"+ss;
+        strset.insert(ss);
+    }
+    
+    vector<string> disorderIdentifyVec;
+    for (unordered_set<string>::iterator it=strset.begin(); it!=strset.end(); it++)
+    {
+        disorderIdentifyVec.push_back(*it);
+    }
+    
+    qDebug() << "resultVec size is" << resultVec.size();
+    qDebug() << "disorderIdentifyVec size is" << disorderIdentifyVec.size();
+    for (size_t i=1; i<resultVec.size(); ++i)
+    {
+        qDebug() << "#define " << resultVec[i].c_str() << " " << disorderIdentifyVec[i].c_str();
     }
 }
 
@@ -476,9 +511,9 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
         string keyword = line.toStdString();
         keysVec.push_back(keyword);
         ++n;
-        
-//        qDebug() << keyword.c_str();
     }
+    
+    sort(keysVec.begin(), keysVec.end());
     
     resFile.close();
 }
