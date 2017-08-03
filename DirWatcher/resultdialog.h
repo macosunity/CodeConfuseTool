@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <vector>
 #include <string>
-#include <unordered_set>
 
 using namespace std;
 
@@ -22,7 +21,7 @@ protected:
 public:
     ResultDialog(QWidget *parent = 0);
     ~ResultDialog();
-    void setConfuseResult(vector<string> resultVec);
+    void setConfuseResult(vector<string> resultVec, vector<string> disorderIdentifyVec);
     
 private slots:
     void hideDialog();
