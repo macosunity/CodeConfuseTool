@@ -221,6 +221,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
         deleteSpecialChar(identify_str);
         if (is_allow_identify_name(identify_str))
         {
+            //qDebug() << identify_str.c_str() << endl;
             m_modelVec.push_back(classModel);
             m_identifyVec.push_back(trim(identify_str));
         }
@@ -252,6 +253,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
             string property_str = trim(identify_str);
             m_identifyVec.push_back(property_str);
             
+            //qDebug() << property_str.c_str() << endl;
             classModel.identifyName = property_str;
             classModel.isPropertyName = true;
             m_modelVec.push_back(classModel);
@@ -289,9 +291,9 @@ bool DataBase::insertRecord(ClassModel classModel)
     QUuid id = QUuid::createUuid();
     QString strId = id.toString();
     
+    StringUtil su;
     if (is_var_or_function(classModel.identifyName))
     {
-        
         if (classModel.isObjectiveC)
         {
             handleObjectiveCIdentify(classModel);

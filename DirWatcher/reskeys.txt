@@ -10510,3 +10510,4 @@ encoding
 insertSubview
 isEditing
 atIndex
+cost

@@ -13,7 +13,6 @@
 #include <QListWidget>
 #include <vector>
 #include <string>
-#include <unordered_set>
 #include "fileviewer.h"
 #include "srcfilemodel.h"
 
