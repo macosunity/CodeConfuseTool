@@ -1,4 +1,3 @@
-A
 ABAddressBook
 ABAddressFormatting
 ABGroup
@@ -1783,7 +1782,6 @@ VTVideoEncoderList
 Versions
 VideoToolbox
 ViewController
-W
 WKAccessibilityImageRegion
 WKBackForwardList
 WKBackForwardListItem
@@ -1824,10 +1822,6 @@ WatchKit
 WebKit
 WebKitAvailability
 WebKitLegacy
-X
-Y
-Z
-a
 abbreviation
 abbreviationDictionary
 abbreviationForDate
@@ -10478,6 +10472,7 @@ UIViewAutoresizingFlexibleBottomMargin
 CATransform3DIdentity
 CATransform3DMakeRotation
 NSSearchPathForDirectoriesInDomains
+typeof
 __typeof
 completion
 SecItemAdd
@@ -10498,3 +10493,20 @@ UIViewContentModeCenter
 UIViewAutoresizingFlexibleRightMargin
 setDateFormat
 CCCrypt
+isMemberOfClass
+isKindOfClass
+conformsToProtocol
+respondsToSelector
+delay
+options
+_delegate
+saturation
+alpha
+brightness
+initialize
+longLongValue
+superclass
+encoding
+insertSubview
+isEditing
+atIndex

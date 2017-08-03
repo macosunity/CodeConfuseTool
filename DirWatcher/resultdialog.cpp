@@ -62,9 +62,9 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
         resultStr.append("#ifndef ").append(identify_str.c_str()).append("\n");
         resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append("\n");
         resultStr.append("#endif").append("\n");
-//        
-//        if (is_identify_property(resultVec[i]))
-//        {
+        
+        if (is_identify_property(resultVec[i]))
+        {
             string _property_str = "_" + identify_str;
             resultStr.append("#ifndef ").append(_property_str.c_str()).append("\n");
             resultStr.append("#define ").append(_property_str.c_str()).append(" _").append(disorderIdentifyVec[i].c_str()).append("\n");
@@ -78,7 +78,7 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
             resultStr.append("#ifndef ").append(set_property_str.c_str()).append("\n");
             resultStr.append("#define ").append(set_property_str.c_str()).append(" set").append(disorderIdentifyVec[i].c_str()).append("\n");
             resultStr.append("#endif").append("\n");
-//        }
+        }
     }
     
     edit_result->setText(resultStr);

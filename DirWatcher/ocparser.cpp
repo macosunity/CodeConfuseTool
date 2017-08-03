@@ -480,7 +480,7 @@ int OCParser::find(string& str,string s,size_t& pos){
             {
                 fI += strlen("@interface")+1;
                 OCParser theclass;//C类
-                size_t lBlock = str.find('{',fI) ;// 找{
+                size_t lBlock = str.find("@end",fI) ;// 找{
                 if(lBlock != string::npos)
                 {
                     ++lBlock;

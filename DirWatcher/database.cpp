@@ -75,13 +75,18 @@ inline bool DataBase::is_var_or_function(string str)
 
 inline bool DataBase::is_allow_identify_name(string str)
 {
+    if (str.length() == 1)
+    {
+        return false;
+    }
+    
     StringUtil stringUtil;
     regex reg("[_[:alpha:]][_[:alnum:]]*");
     
     regex upper_underline_reg("[_[:upper:]]*");
     
     string judge_str = trim(str);
-    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "initWith") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "kCF"))
+    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "initWith") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CC_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "CM") && !stringUtil.StartWith(str, "CT") && !stringUtil.StartWith(str, "CF") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "AV") && !stringUtil.StartWith(str, "kCF") && !stringUtil.StartWith(str, "kCT") && !stringUtil.StartWith(str, "isEqual") && !stringUtil.StartWith(str, "UI") && !stringUtil.StartWith(str, "Sec") && !stringUtil.StartWith(str, "error") && !stringUtil.EndWith(str, "error") && !stringUtil.StartWith(str, "unsigned"))
     {
         return true;
     }
@@ -178,6 +183,12 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
 {
     string identify_str = classModel.identifyName;
     
+    size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
+    if (UI1 != string::npos)
+    {
+        identify_str = identify_str.substr(0, UI1);
+    }
+    
     size_t operator_index = identify_str.find(" operator");
     size_t operator_index2 = identify_str.find("::operator");
     size_t method_index = identify_str.find('+');
@@ -187,7 +198,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
     if ( (method_index != string::npos || method_index2 != string::npos) &&
         (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
     {
-        qDebug() << "发现方法:" << identify_str.c_str();
+        //qDebug() << "发现方法:" << identify_str.c_str();
         StringUtil stringUtil;
         
         if (stringUtil.StartWith(identify_str, "set"))
@@ -216,7 +227,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
     }
     else if(property_index != string::npos)//Objective C Property
     {
-        qDebug() << "发现属性:" << identify_str.c_str();
+        //qDebug() << "发现属性:" << identify_str.c_str();
         size_t block_index = identify_str.find_first_of('^');
         if (block_index != string::npos)
         {
@@ -226,6 +237,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
             {
                 identify_str = identify_str.substr(0, first_brackets_index);
             }
+            return false;
         }
         
         size_t last_space_index = identify_str.find_last_of(' ');
@@ -247,7 +259,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
     }
     else
     {
-        qDebug() << "发现其他1:" << identify_str.c_str();
+        //qDebug() << "发现其他1:" << identify_str.c_str();
         size_t last_brackets_index = identify_str.find_first_of('(');
         if (last_brackets_index != string::npos)
         {
@@ -288,7 +300,7 @@ bool DataBase::insertRecord(ClassModel classModel)
         {
             string identify_str = classModel.identifyName;
 
-            qDebug() << "发现其他2:" << identify_str.c_str();
+            //qDebug() << "发现其他2:" << identify_str.c_str();
             size_t last_brackets_index = identify_str.find_last_of('(');
             if (last_brackets_index != string::npos)
             {
@@ -312,7 +324,7 @@ bool DataBase::insertRecord(ClassModel classModel)
     else
     {
         handleObjectiveCIdentify(classModel);
-        qDebug() << "发现我擦:" << classModel.identifyName.c_str();
+        //qDebug() << "发现我擦:" << classModel.identifyName.c_str();
     }
     
     //类名
