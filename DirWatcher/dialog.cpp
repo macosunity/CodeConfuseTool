@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QCoreApplication>
 #include <QTextStream>
+#include <QTextEdit>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +17,7 @@
 #include "cppparser.h"
 #include "ocparser.h"
 #include "database.h"
+#include "resultdialog.h"
 
 #define random(a,b) (rand()%(b-a+1)+a)
 
@@ -299,7 +301,7 @@ void Dialog::start_choosing()
     vector<string> keysVec;
     putAllKeyWords(keysVec);
     
-    vector<string> intersectVec(10000);
+    vector<string> intersectVec(12000);
     set_intersection(identifyVec.begin(), identifyVec.end(), keysVec.begin(), keysVec.end(), intersectVec.begin());//交集
     sort(intersectVec.begin(),intersectVec.end());
     intersectVec.erase(unique(intersectVec.begin(), intersectVec.end()), intersectVec.end());
@@ -341,13 +343,11 @@ void Dialog::start_choosing()
     {
         disorderIdentifyVec.push_back(*it);
     }
-    
-    qDebug() << "resultVec size is" << resultVec.size();
-    qDebug() << "disorderIdentifyVec size is" << disorderIdentifyVec.size();
-    for (size_t i=1; i<resultVec.size(); ++i)
-    {
-        qDebug() << "#define " << resultVec[i].c_str() << " " << disorderIdentifyVec[i].c_str();
-    }
+
+    ResultDialog *pResultDlg = new ResultDialog(this);
+    pResultDlg->setModal(true);
+    pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec);
+    pResultDlg->show();
 }
 
 bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
@@ -495,6 +495,7 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     QDir resDir(resPath);
     resDir.cdUp();
     resPath = resDir.absolutePath();
+    qDebug() << resPath;
     resPath = resPath.append("/reskeys.txt");
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
