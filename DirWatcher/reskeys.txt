@@ -10518,3 +10518,11 @@ change
 isIdleTimerDisabled
 adler32
 crc32
+mutableCopy
+withObject
+afterDelay
+finally
+MBProgressHUD
+setThumbImage
+viewController
+isRecording
