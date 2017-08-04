@@ -9628,6 +9628,7 @@ transportControlsSpeed
 transportControlsSupported
 transportType
 trashItemAtURL
+trigger
 triggers
 trueHeading
 truncateFileAtOffset
@@ -10510,3 +10511,7 @@ insertSubview
 isEditing
 atIndex
 cost
+ofObject
+content
+notification
+change

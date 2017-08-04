@@ -247,11 +247,15 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
             int index = is_property_method_same(method_str, false);
             if (index == -1)
             {
-                //qDebug() << "handle 发现方法:" << classModel.identifyName.c_str() << identify_str.c_str();
-                m_identifyVec.push_back(method_str);
-                classModel.identifyName = method_str;
-                classModel.isMethodName = true;
-                m_modelVec.push_back(classModel);
+                if (is_allow_identify_name(classModel.className))
+                {
+                    //qDebug() << "handle 发现方法:" << classModel.identifyName.c_str() << identify_str.c_str();
+                    m_identifyVec.push_back(method_str);
+                    
+                    classModel.identifyName = method_str;
+                    classModel.isMethodName = true;
+                    m_modelVec.push_back(classModel);
+                }
             }
             else
             {
@@ -317,12 +321,15 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
             int index = is_property_method_same(property_str, true);
             if (index == -1)
             {
-                m_identifyVec.push_back(property_str);
-                
-                //qDebug() << "handle 发现属性:" << classModel.identifyName.c_str()  << property_str.c_str() << endl;
-                classModel.identifyName = property_str;
-                classModel.isPropertyName = true;
-                m_modelVec.push_back(classModel);
+                if (is_allow_identify_name(classModel.className))
+                {
+                    //qDebug() << "handle 发现属性:" << classModel.identifyName.c_str()  << property_str.c_str() << endl;
+                    m_identifyVec.push_back(property_str);
+                    
+                    classModel.identifyName = property_str;
+                    classModel.isPropertyName = true;
+                    m_modelVec.push_back(classModel);
+                }
             }
             else
             {
