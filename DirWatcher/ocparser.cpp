@@ -387,6 +387,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
                 model.identifyName = varName;
+                model.identifyOriginName = varName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
 
@@ -403,21 +404,43 @@ void OCParser::display(SrcFileModel fileModel)
             {
                 string propertyName = b->substr(pos,b->length()-pos);
                 
-                string dotPropertyAccessString = "." + propertyName;
-                size_t dotPropertyAccessIndex = fileModel.fileImpleParseString.find(dotPropertyAccessString);
-                
-                if(dotPropertyAccessIndex != string::npos)
-                {
-                    continue;
-                }
-                
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
-                model.identifyName = propertyName;
+                model.identifyName = handleObjectiveCIdentify(propertyName, model);
+                model.identifyOriginName = propertyName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
                 model.isPropertyName = true;
+                
+//                string dotPropertyAccessString = "." + model.identifyName + " ";
+//                size_t dotPropertyAccessIndex = fileModel.fileImpleParseString.find(dotPropertyAccessString);
+//                
+//                string dotPropertyAccessStringAssign = "." + model.identifyName + "=";
+//                size_t dotPropertyAccessAssignIndex = fileModel.fileImpleParseString.find(dotPropertyAccessStringAssign);
+//                
+//                string dotPropertyAccessStringEnd = "." + model.identifyName + ";";
+//                size_t dotPropertyAccessEndIndex = fileModel.fileImpleParseString.find(dotPropertyAccessStringEnd);
+//                
+//                string _propertyAccessString = "_" + model.identifyName + " ";
+//                size_t _propertyAccessIndex = fileModel.fileImpleParseString.find(_propertyAccessString);
+//                
+//                string _propertyAccessStringAssign = "_" + model.identifyName + "=";
+//                size_t _propertyAccessAssignIndex = fileModel.fileImpleParseString.find(_propertyAccessStringAssign);
+//                
+//                string _propertyAccessStringEnd = "_" + model.identifyName + ";";
+//                size_t _propertyAccessEndIndex = fileModel.fileImpleParseString.find(_propertyAccessStringEnd);
+//
+//                
+//                if(dotPropertyAccessIndex != string::npos
+//                   || dotPropertyAccessAssignIndex != string::npos
+//                   || dotPropertyAccessEndIndex != string::npos
+//                   || _propertyAccessIndex != string::npos
+//                   || _propertyAccessAssignIndex != string::npos
+//                   || _propertyAccessEndIndex != string::npos)
+//                {
+//                    continue;
+//                }
 
                 database->insertRecord(model);
             }
@@ -434,6 +457,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
                 model.identifyName = functionName;
+                model.identifyOriginName = functionName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
 
@@ -747,4 +771,186 @@ vector<size_t> OCParser::actionscope(const string& str,size_t& fI)
         ++fI;
     }
     return index;
+}
+
+string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model)
+{
+    StringUtil stringUtil;
+    
+    string identify_str = identifyName;
+    
+    size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
+    if (UI1 != string::npos)
+    {
+        identify_str = identify_str.substr(0, UI1);
+    }
+    
+    size_t operator_index = identify_str.find(" operator");
+    size_t operator_index2 = identify_str.find("::operator");
+    size_t method_index = identify_str.find('+');
+    size_t method_index2 = identify_str.find('-');
+    
+    size_t property_index = identify_str.find("@property");
+    
+    if ( (method_index != string::npos || method_index2 != string::npos) &&
+        (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
+    {
+        size_t first_colon_index = identify_str.find_first_of(':');
+        if (first_colon_index != string::npos)
+        {
+            identify_str = identify_str.substr(0, first_colon_index);
+        }
+        
+        size_t first_brackets_index = identify_str.find_last_of(')');
+        if (first_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(first_brackets_index+1, identify_str.length()-first_brackets_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        identify_str = trim(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            model.isMethodName = true;
+            return identify_str;
+        }
+    }
+    else if(property_index != string::npos)//Objective C Property
+    {
+        size_t block_index = identify_str.find_first_of('^');
+        if (block_index != string::npos)
+        {
+            identify_str = identify_str.substr(block_index+1, identify_str.length()-block_index);
+            size_t first_brackets_index = identify_str.find_first_of(')');
+            if (first_brackets_index != string::npos)
+            {
+                identify_str = identify_str.substr(0, first_brackets_index);
+            }
+            return "";
+        }
+        
+        size_t last_space_index = identify_str.find_last_of(' ');
+        if (last_space_index != string::npos)
+        {
+            identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        identify_str = trim(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            model.isPropertyName = true;
+            return identify_str;
+        }
+    }
+    else
+    {
+        size_t last_brackets_index = identify_str.find_first_of('(');
+        if (last_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(0, last_brackets_index);
+        }
+        
+        size_t last_space_index = identify_str.find_last_of(' ');
+        if (last_space_index != string::npos)
+        {
+            identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
+        }
+        
+        deleteSpecialChar(identify_str);
+        identify_str = trim(identify_str);
+        if (is_allow_identify_name(identify_str))
+        {
+            return identify_str;
+        }
+    }
+    
+    return "";
+}
+
+
+inline bool OCParser::is_allow_identify_name(string str)
+{
+    if (str.length() == 1)
+    {
+        return false;
+    }
+    
+    StringUtil stringUtil;
+    regex reg("[_[:alpha:]][_[:alnum:]]*");
+    
+    regex upper_underline_reg("[_[:upper:]]*");
+    
+    string judge_str = trim(str);
+    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "_") && !stringUtil.StartWith(str, "init") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CC_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "CM") && !stringUtil.StartWith(str, "CT") && !stringUtil.StartWith(str, "CF") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "is") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "AV") && !stringUtil.StartWith(str, "kCF") && !stringUtil.StartWith(str, "kCT") && !stringUtil.StartWith(str, "isEqual") && !stringUtil.StartWith(str, "UI") && !stringUtil.StartWith(str, "Sec") && !stringUtil.StartWith(str, "error") && !stringUtil.EndWith(str, "error") && !stringUtil.StartWith(str, "unsigned"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+inline void OCParser::deleteSpecialChar(string& str)
+{
+    str = trim(str);
+    
+    if(str.find('{') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('{',index_s);//找 '{' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    if(str.find('*') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('*',index_s);//找 '*' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    if(str.find('~') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('~',index_s);//找 '~' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    if(str.find('&') != string::npos)
+    {
+        size_t index_s = 0;
+        while(index_s<str.length())
+        {
+            index_s = str.find('&',index_s);//找 '&' 的位置
+            if(index_s != string::npos)
+            {
+                str.erase(index_s);
+            }
+        }
+    }
+    
+    size_t bracket_left_index = str.find('[');
+    if (bracket_left_index != string::npos)
+    {
+        str = str.substr(0, bracket_left_index);
+    }
 }

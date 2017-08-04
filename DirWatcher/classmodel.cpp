@@ -6,6 +6,7 @@ ClassModel::ClassModel()
     filePath = ""; //文件路径
     className = "";   //类名词
     identifyName = "";
+    identifyOriginName = "";
     isObjectiveC = false;
     isPropertyName = false;
     isMethodName = false;

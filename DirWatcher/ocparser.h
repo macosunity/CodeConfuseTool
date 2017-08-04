@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "srcfilemodel.h"
+#include "classmodel.h"
 using namespace std;
 
 #define OC_INCLUDE     8
@@ -47,7 +48,11 @@ public:
     int parseOCFile(SrcFileModel srcFile);
 
 private:
-
+    
+    inline bool is_allow_identify_name(string str);
+    inline void deleteSpecialChar(string& str);
+    string handleObjectiveCIdentify(string identifyName, ClassModel &model);
+    
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);
     string& trim(string &s); //去除空格和换行

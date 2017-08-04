@@ -388,6 +388,7 @@ void CppParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = classname;
                 model.identifyName = varName;
+                model.identifyOriginName = varName;
                 model.filePath = fileModel.filePath;
 
                 database->insertRecord(model);
@@ -405,6 +406,7 @@ void CppParser::display(SrcFileModel fileModel)
                 model.fileName = fileModel.fileName;
                 model.className = classname;
                 model.identifyName = functionName;
+                model.identifyOriginName = functionName;
                 model.filePath = fileModel.filePath;
 
                 database->insertRecord(model);

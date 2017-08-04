@@ -43,7 +43,12 @@ bool is_identify_property(string identify_str)
     for (vector<ClassModel>::iterator it=modelVec.begin(); it != modelVec.end(); ++it)
     {
         ClassModel model = *it;
-        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.identifyName.find("readonly") == string::npos)
+//        if (model.identifyOriginName.find("login") != string::npos)
+//        {
+//            qDebug() << "卢卡斯监督管理课： " << model.identifyOriginName.c_str() << endl;
+//        }
+        
+        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.identifyOriginName.find("readonly") == string::npos)
         {
             return true;
         }
