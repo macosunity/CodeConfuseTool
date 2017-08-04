@@ -54,6 +54,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
                 m_str.append(m_temp+"\r\n\t");
             }
             R(m_str);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
+            srcFile.fileImpleParseString = m_str;
             //注释里面出现include和import的话会出事囧
             while(find(m_str,"#include",m_pos)){}//连续读取代码中的include名
             while(find(m_str,"#import",m_pos)){}//连续读取代码中的import名
@@ -80,6 +81,7 @@ int OCParser::parseOCFile(SrcFileModel srcFile)
             str.append(temp+"\r\n\t");
         }
         R(str);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
+        srcFile.fileImpleParseString = str;
         //注释里面出现include和import的话会出事囧
         while(find(str,"#include",pos)){}//连续读取代码中的include名
         while(find(str,"#import",pos)){}//连续读取代码中的import名
@@ -396,9 +398,19 @@ void OCParser::display(SrcFileModel fileModel)
             pos = 0;
             trim(*b);
             ignorespacetab(*b,pos);
+            
             if(pos != b->length())
             {
                 string propertyName = b->substr(pos,b->length()-pos);
+                
+                string dotPropertyAccessString = "." + propertyName;
+                size_t dotPropertyAccessIndex = fileModel.fileImpleParseString.find(dotPropertyAccessString);
+                
+                if(dotPropertyAccessIndex != string::npos)
+                {
+                    continue;
+                }
+                
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;

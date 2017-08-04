@@ -2,6 +2,8 @@
 
 SrcFileModel::SrcFileModel()
 {
+    fileImpleParseString = "";
+    
     fileName = "";
     filePath = "";
 

@@ -8,6 +8,8 @@ using namespace std;
 class SrcFileModel
 {
 public:
+    string fileImpleParseString;
+    
     string fileName;
     string filePath;
     string headerFileName;

@@ -10515,3 +10515,6 @@ ofObject
 content
 notification
 change
+isIdleTimerDisabled
+adler32
+crc32
