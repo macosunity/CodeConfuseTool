@@ -405,6 +405,7 @@ void OCParser::display(SrcFileModel fileModel)
                 model.identifyName = propertyName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
+                model.isPropertyName = true;
 
                 database->insertRecord(model);
             }

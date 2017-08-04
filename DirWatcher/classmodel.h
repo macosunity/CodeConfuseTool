@@ -13,6 +13,7 @@ public:
     
     bool isObjectiveC;
     bool isPropertyName;
+    bool isMethodName;
 
     ClassModel();
 };

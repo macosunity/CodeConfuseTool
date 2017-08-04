@@ -8,4 +8,5 @@ ClassModel::ClassModel()
     identifyName = "";
     isObjectiveC = false;
     isPropertyName = false;
+    isMethodName = false;
 }

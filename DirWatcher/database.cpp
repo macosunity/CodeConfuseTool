@@ -18,16 +18,39 @@ void DataBase::clearIdentifyVec()
     vector<string>().swap(m_identifyVec);
 }
 
-//建立一个数据库连接
-bool DataBase::createConnection()
+//找到属性和方法名字相同，则全部删除
+size_t is_property_method_same(string identify_str, bool isProperty)
 {
-    return true;
-}
-
-//创建数据库表
-bool DataBase::createTable()
-{
-    return true;
+    DataBase *database = DataBase::Instance();
+    
+    vector<ClassModel> modelVec = database->queryAllModel();
+    
+    StringUtil stringUtil;
+    
+    if (isProperty)
+    {
+        for (size_t i=0; i<modelVec.size(); i++)
+        {
+            ClassModel model = modelVec[i];
+            if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.isMethodName)
+            {
+                return i;
+            }
+        }
+    }
+    else
+    {
+        for (size_t i=0; i<modelVec.size(); i++)
+        {
+            ClassModel model = modelVec[i];
+            if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.isPropertyName)
+            {
+                return i;
+            }
+        }
+    }
+    
+    return -1;
 }
 
 inline bool DataBase::is_str_contain_space(string str)
@@ -181,6 +204,8 @@ inline void DataBase::deleteSpecialChar(string& str)
 
 bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
 {
+    StringUtil stringUtil;
+    
     string identify_str = classModel.identifyName;
     
     size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
@@ -198,9 +223,6 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
     if ( (method_index != string::npos || method_index2 != string::npos) &&
         (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
     {
-        //qDebug() << "发现方法:" << identify_str.c_str();
-        StringUtil stringUtil;
-        
         if (stringUtil.StartWith(identify_str, "set"))
         {
             return false;
@@ -221,14 +243,54 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
         deleteSpecialChar(identify_str);
         if (is_allow_identify_name(identify_str))
         {
-            //qDebug() << identify_str.c_str() << endl;
-            m_modelVec.push_back(classModel);
-            m_identifyVec.push_back(trim(identify_str));
+            string method_str = trim(identify_str);
+            int index = is_property_method_same(method_str, false);
+            if (index == -1)
+            {
+                //qDebug() << "handle 发现方法:" << classModel.identifyName.c_str() << identify_str.c_str();
+                m_identifyVec.push_back(method_str);
+                classModel.identifyName = method_str;
+                classModel.isMethodName = true;
+                m_modelVec.push_back(classModel);
+            }
+            else
+            {
+                vector<string>::iterator it = m_identifyVec.begin()+index;
+                m_identifyVec.erase(it);
+                
+                vector<ClassModel>::iterator modelIt = m_modelVec.begin()+index;
+                m_modelVec.erase(modelIt);
+                
+                for(vector<string>::iterator id_it=m_identifyVec.begin();id_it!=m_identifyVec.end();)
+                {
+                    string iden = *id_it;
+                    if(stringUtil.StartWith(iden, method_str) && iden.length() == method_str.length())
+                    {
+                        id_it=m_identifyVec.erase(id_it);
+                    }
+                    else
+                    {
+                        ++id_it;
+                    }
+                }
+                
+                for(vector<ClassModel>::iterator model_it=m_modelVec.begin();model_it!=m_modelVec.end();)
+                {
+                    ClassModel model = *model_it;
+                    if(stringUtil.StartWith(model.identifyName, method_str) && model.identifyName.length() == method_str.length())
+                    {
+                        model_it=m_modelVec.erase(model_it);
+                    }
+                    else
+                    {
+                        ++model_it;
+                    }
+                }
+            }
         }
     }
     else if(property_index != string::npos)//Objective C Property
     {
-        //qDebug() << "发现属性:" << identify_str.c_str();
         size_t block_index = identify_str.find_first_of('^');
         if (block_index != string::npos)
         {
@@ -251,17 +313,55 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
         if (is_allow_identify_name(identify_str))
         {
             string property_str = trim(identify_str);
-            m_identifyVec.push_back(property_str);
             
-            //qDebug() << property_str.c_str() << endl;
-            classModel.identifyName = property_str;
-            classModel.isPropertyName = true;
-            m_modelVec.push_back(classModel);
+            int index = is_property_method_same(property_str, true);
+            if (index == -1)
+            {
+                m_identifyVec.push_back(property_str);
+                
+                //qDebug() << "handle 发现属性:" << classModel.identifyName.c_str()  << property_str.c_str() << endl;
+                classModel.identifyName = property_str;
+                classModel.isPropertyName = true;
+                m_modelVec.push_back(classModel);
+            }
+            else
+            {
+                vector<string>::iterator it = m_identifyVec.begin()+index;
+                m_identifyVec.erase(it);
+                
+                vector<ClassModel>::iterator modelIt = m_modelVec.begin()+index;
+                m_modelVec.erase(modelIt);
+                
+                for(vector<string>::iterator id_it=m_identifyVec.begin();id_it!=m_identifyVec.end();)
+                {
+                    string iden = *id_it;
+                    if(stringUtil.StartWith(iden, property_str) && iden.length() == property_str.length())
+                    {
+                        id_it=m_identifyVec.erase(id_it);
+                    }
+                    else
+                    {
+                        ++id_it;
+                    }
+                }
+                
+                for(vector<ClassModel>::iterator model_it=m_modelVec.begin();model_it!=m_modelVec.end();)
+                {
+                    ClassModel model = *model_it;
+                    if(stringUtil.StartWith(model.identifyName, property_str) && model.identifyName.length() == property_str.length())
+                    {
+                        model_it=m_modelVec.erase(model_it);
+                    }
+                    else
+                    {
+                        ++model_it;
+                    }
+                }
+            }
         }
     }
     else
     {
-        //qDebug() << "发现其他1:" << identify_str.c_str();
         size_t last_brackets_index = identify_str.find_first_of('(');
         if (last_brackets_index != string::npos)
         {
@@ -277,8 +377,7 @@ bool DataBase::handleObjectiveCIdentify(ClassModel classModel)
         deleteSpecialChar(identify_str);
         if (is_allow_identify_name(identify_str))
         {
-            m_modelVec.push_back(classModel);
-            m_identifyVec.push_back(trim(identify_str));
+//            qDebug() << "发现其他1:" << classModel.identifyName.c_str() << identify_str.c_str();
         }
     }
     
@@ -302,7 +401,6 @@ bool DataBase::insertRecord(ClassModel classModel)
         {
             string identify_str = classModel.identifyName;
 
-            //qDebug() << "发现其他2:" << identify_str.c_str();
             size_t last_brackets_index = identify_str.find_last_of('(');
             if (last_brackets_index != string::npos)
             {
@@ -318,6 +416,7 @@ bool DataBase::insertRecord(ClassModel classModel)
             deleteSpecialChar(identify_str);
             if (is_allow_identify_name(identify_str))
             {
+                //qDebug() << "发现其他2:" << classModel.identifyName.c_str() << identify_str.c_str();
                 m_modelVec.push_back(classModel);
                 m_identifyVec.push_back(trim(identify_str));
             }
@@ -326,7 +425,6 @@ bool DataBase::insertRecord(ClassModel classModel)
     else
     {
         handleObjectiveCIdentify(classModel);
-        //qDebug() << "发现我擦:" << classModel.identifyName.c_str();
     }
     
     //类名
