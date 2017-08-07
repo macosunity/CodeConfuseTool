@@ -778,11 +778,21 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
     
     string identify_str = classModel.identifyName;
     
+    size_t NS1 = identify_str.find("NS_AVAILABLE_IOS");
+    if (NS1 != string::npos)
+    {
+        identify_str = identify_str.substr(0, NS1);
+//        qDebug() << identify_str.c_str() << endl;
+    }
+    
     size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
     if (UI1 != string::npos)
     {
         identify_str = identify_str.substr(0, UI1);
+//        qDebug() << identify_str.c_str() << endl;
     }
+    
+    identify_str = trim(identify_str);
     
     size_t operator_index = identify_str.find(" operator");
     size_t operator_index2 = identify_str.find("::operator");
@@ -841,6 +851,7 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
         if (last_space_index != string::npos)
         {
             identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
+            qDebug() << identify_str.c_str() << endl;
         }
         
         stringUtil.deleteSpecialChar(identify_str);
