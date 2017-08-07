@@ -490,6 +490,7 @@ Dialog::~Dialog()
 
 void Dialog::putAllKeyWords(vector<string> &keysVec)
 {
+#ifdef DEBUG
     QDir dir;
     QString resPath = dir.absolutePath();
     QDir resDir(resPath);
@@ -502,6 +503,16 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     {
         QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
+#else
+    QDir dir;
+    QString resPath = QCoreApplication::applicationDirPath();
+    resPath = resPath.append("/reskeys.txt");
+    QFile resFile(resPath);
+    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+#endif
     
     QTextStream stream(&resFile);
     QString line;

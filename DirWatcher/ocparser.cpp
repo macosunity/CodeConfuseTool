@@ -783,6 +783,13 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
 //        qDebug() << identify_str.c_str() << endl;
     }
     
+    size_t ATTR = identify_str.find("__attribute__");
+    if (ATTR != string::npos)
+    {
+        identify_str = identify_str.substr(0, ATTR);
+//        qDebug() << identify_str.c_str() << endl;
+    }
+    
     size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
     if (UI1 != string::npos)
     {
