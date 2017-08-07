@@ -49,9 +49,12 @@ public:
 
 private:
     
+    //如果已经存在属性名称，则忽略同名的函数名称
+    inline bool is_property_name_exist(string functionName, vector<string> propertyList);
+    
     inline bool is_allow_identify_name(string str);
     inline void deleteSpecialChar(string& str);
-    string handleObjectiveCIdentify(string identifyName, ClassModel &model);
+    bool handleObjectiveCIdentify(ClassModel model);
     
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);

@@ -43,13 +43,9 @@ bool is_identify_property(string identify_str)
     for (vector<ClassModel>::iterator it=modelVec.begin(); it != modelVec.end(); ++it)
     {
         ClassModel model = *it;
-//        if (model.identifyOriginName.find("login") != string::npos)
-//        {
-//            qDebug() << "卢卡斯监督管理课： " << model.identifyOriginName.c_str() << endl;
-//        }
-        
-        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.identifyOriginName.find("readonly") == string::npos)
+        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length())
         {
+//            qDebug() << model.identifyName.c_str() << " (who's origin is): " << model.identifyOriginName.c_str() << endl;
             return true;
         }
     }
@@ -65,26 +61,9 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
     {
         string identify_str = resultVec[i];
         
-        resultStr.append("#ifndef ").append(identify_str.c_str()).append("\n");
         resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append("\n");
-        resultStr.append("#endif").append("\n");
         
-        if (is_identify_property(resultVec[i]))
-        {
-            string _property_str = "_" + identify_str;
-            resultStr.append("#ifndef ").append(_property_str.c_str()).append("\n");
-            resultStr.append("#define ").append(_property_str.c_str()).append(" _").append(disorderIdentifyVec[i].c_str()).append("\n");
-            resultStr.append("#endif").append("\n");
-            
-            string firstCharStr = identify_str.substr(0,1);
-            stringUtil.Toupper(firstCharStr);
-            string upperFirstCaseString = identify_str.replace(0, 1, firstCharStr);
-            string set_property_str = "set" + identify_str;
-            
-            resultStr.append("#ifndef ").append(set_property_str.c_str()).append("\n");
-            resultStr.append("#define ").append(set_property_str.c_str()).append(" set").append(disorderIdentifyVec[i].c_str()).append("\n");
-            resultStr.append("#endif").append("\n");
-        }
+//        is_identify_property(identify_str);
     }
     
     edit_result->setText(resultStr);

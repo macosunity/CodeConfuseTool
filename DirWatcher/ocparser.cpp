@@ -345,6 +345,19 @@ inline string& OCParser::trim(string &str)
     return str;
 }
 
+inline bool OCParser::is_property_name_exist(string functionName, vector<string> propertyList)
+{
+    StringUtil stringUtil;
+    for(size_t i=0; i<propertyList.size(); i++)
+    {
+        if(stringUtil.StartWith(propertyList[i], functionName) && propertyList[i].length() == functionName.length())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void OCParser::display(SrcFileModel fileModel)
 {
     DataBase *database = DataBase::Instance();
@@ -390,8 +403,12 @@ void OCParser::display(SrcFileModel fileModel)
                 model.identifyOriginName = varName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
-
-                database->insertRecord(model);
+                
+                if (handleObjectiveCIdentify(model))
+                {
+                    qDebug() << "找到OC变量： " << varName.c_str() << endl;
+                    database->insertRecord(model);
+                }
             }
         }
         for(b = i->properties.begin(); b != i->properties.end(); ++b)
@@ -399,50 +416,23 @@ void OCParser::display(SrcFileModel fileModel)
             pos = 0;
             trim(*b);
             ignorespacetab(*b,pos);
-            
             if(pos != b->length())
             {
                 string propertyName = b->substr(pos,b->length()-pos);
-                
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
-                model.identifyName = handleObjectiveCIdentify(propertyName, model);
+                model.identifyName = propertyName;
                 model.identifyOriginName = propertyName;
                 model.filePath = fileModel.filePath;
                 model.isObjectiveC = true;
-                model.isPropertyName = true;
                 
-//                string dotPropertyAccessString = "." + model.identifyName + " ";
-//                size_t dotPropertyAccessIndex = fileModel.fileImpleParseString.find(dotPropertyAccessString);
-//                
-//                string dotPropertyAccessStringAssign = "." + model.identifyName + "=";
-//                size_t dotPropertyAccessAssignIndex = fileModel.fileImpleParseString.find(dotPropertyAccessStringAssign);
-//                
-//                string dotPropertyAccessStringEnd = "." + model.identifyName + ";";
-//                size_t dotPropertyAccessEndIndex = fileModel.fileImpleParseString.find(dotPropertyAccessStringEnd);
-//                
-//                string _propertyAccessString = "_" + model.identifyName + " ";
-//                size_t _propertyAccessIndex = fileModel.fileImpleParseString.find(_propertyAccessString);
-//                
-//                string _propertyAccessStringAssign = "_" + model.identifyName + "=";
-//                size_t _propertyAccessAssignIndex = fileModel.fileImpleParseString.find(_propertyAccessStringAssign);
-//                
-//                string _propertyAccessStringEnd = "_" + model.identifyName + ";";
-//                size_t _propertyAccessEndIndex = fileModel.fileImpleParseString.find(_propertyAccessStringEnd);
-//
-//                
-//                if(dotPropertyAccessIndex != string::npos
-//                   || dotPropertyAccessAssignIndex != string::npos
-//                   || dotPropertyAccessEndIndex != string::npos
-//                   || _propertyAccessIndex != string::npos
-//                   || _propertyAccessAssignIndex != string::npos
-//                   || _propertyAccessEndIndex != string::npos)
-//                {
-//                    continue;
-//                }
+                if (handleObjectiveCIdentify(model))
+                {
+                    qDebug() << "找到OC属性： " << propertyName.c_str() << endl;
+                    database->insertRecord(model);
+                }
 
-                database->insertRecord(model);
             }
         }
         for(b = i->function.begin(); b != i->function.end(); ++b)
@@ -450,18 +440,26 @@ void OCParser::display(SrcFileModel fileModel)
             pos = 0;
             trim(*b);
             ignorespacetab(*b,pos);
+            
             if(pos != b->length())
             {
                 string functionName = b->substr(pos,b->length()-pos);
-                ClassModel model;
-                model.fileName = fileModel.fileName;
-                model.className = oc_class_name;
-                model.identifyName = functionName;
-                model.identifyOriginName = functionName;
-                model.filePath = fileModel.filePath;
-                model.isObjectiveC = true;
+                if(!is_property_name_exist(functionName, i->properties))
+                {
+                    ClassModel model;
+                    model.fileName = fileModel.fileName;
+                    model.className = oc_class_name;
+                    model.identifyName = functionName;
+                    model.identifyOriginName = functionName;
+                    model.filePath = fileModel.filePath;
+                    model.isObjectiveC = true;
 
-                database->insertRecord(model);
+                    if (handleObjectiveCIdentify(model))
+                    {
+                        qDebug() << "找到OC方法： " << functionName.c_str() << endl;
+                        database->insertRecord(model);
+                    }
+                }
             }
         }
     }
@@ -773,11 +771,12 @@ vector<size_t> OCParser::actionscope(const string& str,size_t& fI)
     return index;
 }
 
-string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model)
+
+bool OCParser::handleObjectiveCIdentify(ClassModel classModel)
 {
     StringUtil stringUtil;
     
-    string identify_str = identifyName;
+    string identify_str = classModel.identifyName;
     
     size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
     if (UI1 != string::npos)
@@ -791,10 +790,14 @@ string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model
     size_t method_index2 = identify_str.find('-');
     
     size_t property_index = identify_str.find("@property");
-    
     if ( (method_index != string::npos || method_index2 != string::npos) &&
         (operator_index==string::npos && operator_index2==string::npos) )//Objective C Method
     {
+        if (stringUtil.StartWith(identify_str, "set"))
+        {
+            return false;
+        }
+        
         size_t first_colon_index = identify_str.find_first_of(':');
         if (first_colon_index != string::npos)
         {
@@ -807,12 +810,17 @@ string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model
             identify_str = identify_str.substr(first_brackets_index+1, identify_str.length()-first_brackets_index);
         }
         
-        deleteSpecialChar(identify_str);
-        identify_str = trim(identify_str);
-        if (is_allow_identify_name(identify_str))
+        stringUtil.deleteSpecialChar(identify_str);
+        if (stringUtil.is_allow_identify_name(identify_str))
         {
-            model.isMethodName = true;
-            return identify_str;
+            string method_str = trim(identify_str);
+            if (stringUtil.is_allow_identify_name(classModel.className))
+            {
+                classModel.identifyName = method_str;
+                classModel.isMethodName = true;
+                
+                return true;
+            }
         }
     }
     else if(property_index != string::npos)//Objective C Property
@@ -826,7 +834,7 @@ string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model
             {
                 identify_str = identify_str.substr(0, first_brackets_index);
             }
-            return "";
+            return false;
         }
         
         size_t last_space_index = identify_str.find_last_of(' ');
@@ -835,12 +843,17 @@ string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model
             identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
         }
         
-        deleteSpecialChar(identify_str);
-        identify_str = trim(identify_str);
-        if (is_allow_identify_name(identify_str))
+        stringUtil.deleteSpecialChar(identify_str);
+        qDebug() << classModel.identifyName.c_str() << "after delete is: " << identify_str.c_str();
+        if (stringUtil.is_allow_identify_name(identify_str))
         {
-            model.isPropertyName = true;
-            return identify_str;
+            string property_str = trim(identify_str);
+            if (stringUtil.is_allow_identify_name(classModel.className))
+            {
+                classModel.identifyName = property_str;
+                classModel.isPropertyName = true;
+                return true;
+            }
         }
     }
     else
@@ -857,100 +870,12 @@ string OCParser::handleObjectiveCIdentify(string identifyName, ClassModel &model
             identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
         }
         
-        deleteSpecialChar(identify_str);
-        identify_str = trim(identify_str);
-        if (is_allow_identify_name(identify_str))
+        stringUtil.deleteSpecialChar(identify_str);
+        if (stringUtil.is_allow_identify_name(identify_str))
         {
-            return identify_str;
+//            qDebug() << "发现其他1:" << classModel.identifyName.c_str() << identify_str.c_str();
         }
     }
     
-    return "";
-}
-
-
-inline bool OCParser::is_allow_identify_name(string str)
-{
-    if (str.length() == 1)
-    {
-        return false;
-    }
-    
-    StringUtil stringUtil;
-    regex reg("[_[:alpha:]][_[:alnum:]]*");
-    
-    regex upper_underline_reg("[_[:upper:]]*");
-    
-    string judge_str = trim(str);
-    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "_") && !stringUtil.StartWith(str, "init") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CC_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "CM") && !stringUtil.StartWith(str, "CT") && !stringUtil.StartWith(str, "CF") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "is") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "AV") && !stringUtil.StartWith(str, "kCF") && !stringUtil.StartWith(str, "kCT") && !stringUtil.StartWith(str, "isEqual") && !stringUtil.StartWith(str, "UI") && !stringUtil.StartWith(str, "Sec") && !stringUtil.StartWith(str, "error") && !stringUtil.EndWith(str, "error") && !stringUtil.StartWith(str, "unsigned"))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-inline void OCParser::deleteSpecialChar(string& str)
-{
-    str = trim(str);
-    
-    if(str.find('{') != string::npos)
-    {
-        size_t index_s = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find('{',index_s);//找 '{' 的位置
-            if(index_s != string::npos)
-            {
-                str.erase(index_s);
-            }
-        }
-    }
-    
-    if(str.find('*') != string::npos)
-    {
-        size_t index_s = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find('*',index_s);//找 '*' 的位置
-            if(index_s != string::npos)
-            {
-                str.erase(index_s);
-            }
-        }
-    }
-    
-    if(str.find('~') != string::npos)
-    {
-        size_t index_s = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find('~',index_s);//找 '~' 的位置
-            if(index_s != string::npos)
-            {
-                str.erase(index_s);
-            }
-        }
-    }
-    
-    if(str.find('&') != string::npos)
-    {
-        size_t index_s = 0;
-        while(index_s<str.length())
-        {
-            index_s = str.find('&',index_s);//找 '&' 的位置
-            if(index_s != string::npos)
-            {
-                str.erase(index_s);
-            }
-        }
-    }
-    
-    size_t bracket_left_index = str.find('[');
-    if (bracket_left_index != string::npos)
-    {
-        str = str.substr(0, bracket_left_index);
-    }
+    return false;
 }
