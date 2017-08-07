@@ -10546,3 +10546,6 @@ __unsafe_unretained
 __autoreleasing
 readonly
 nonatomic
+contact
+owner
+round
