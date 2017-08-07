@@ -606,8 +606,6 @@ int OCParser::find(string& str,string s,size_t& pos){
             {
                 return OC_NOTFOUND;
             }
-
-
         }
             break;
         case OC_VARIABLE:
