@@ -43,9 +43,8 @@ bool is_identify_property(string identify_str)
     for (vector<ClassModel>::iterator it=modelVec.begin(); it != modelVec.end(); ++it)
     {
         ClassModel model = *it;
-        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length())
+        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isPropertyName && model.identifyName.find("readonly") == string::npos)
         {
-//            qDebug() << model.identifyName.c_str() << " (who's origin is): " << model.identifyOriginName.c_str() << endl;
             return true;
         }
     }
@@ -63,7 +62,18 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
         
         resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append("\n");
         
-//        is_identify_property(identify_str);
+        if (is_identify_property(resultVec[i]))
+        {
+            string _property_str = "_" + identify_str;
+            resultStr.append("#define ").append(_property_str.c_str()).append(" _").append(disorderIdentifyVec[i].c_str()).append("\n");
+            
+            string firstCharStr = identify_str.substr(0,1);
+            stringUtil.Toupper(firstCharStr);
+            string upperFirstCaseString = identify_str.replace(0, 1, firstCharStr);
+            string set_property_str = "set" + identify_str;
+            
+            resultStr.append("#define ").append(set_property_str.c_str()).append(" set").append(disorderIdentifyVec[i].c_str()).append("\n");
+        }
     }
     
     edit_result->setText(resultStr);
