@@ -54,7 +54,7 @@ private:
     
     inline bool is_allow_identify_name(string str);
     inline void deleteSpecialChar(string& str);
-    bool handleObjectiveCIdentify(ClassModel model);
+    bool handleObjectiveCIdentify(ClassModel &model);
     
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);

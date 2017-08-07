@@ -60,14 +60,14 @@ bool DataBase::insertRecord(ClassModel classModel)
     QString strId = id.toString();
     
     StringUtil su;
-    if (su.is_var_or_function(classModel.identifyName))
+    if (classModel.isObjectiveC)
     {
-        if (classModel.isObjectiveC)
-        {
-            m_modelVec.push_back(classModel);
-            m_identifyVec.push_back(classModel.identifyName);
-        }
-        else
+        m_modelVec.push_back(classModel);
+        m_identifyVec.push_back(classModel.identifyName);
+    }
+    else
+    {
+        if (su.is_var_or_function(classModel.identifyName))
         {
             string identify_str = classModel.identifyName;
 

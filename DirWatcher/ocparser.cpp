@@ -772,7 +772,7 @@ vector<size_t> OCParser::actionscope(const string& str,size_t& fI)
 }
 
 
-bool OCParser::handleObjectiveCIdentify(ClassModel classModel)
+bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
 {
     StringUtil stringUtil;
     
@@ -844,7 +844,6 @@ bool OCParser::handleObjectiveCIdentify(ClassModel classModel)
         }
         
         stringUtil.deleteSpecialChar(identify_str);
-        qDebug() << classModel.identifyName.c_str() << "after delete is: " << identify_str.c_str();
         if (stringUtil.is_allow_identify_name(identify_str))
         {
             string property_str = trim(identify_str);
