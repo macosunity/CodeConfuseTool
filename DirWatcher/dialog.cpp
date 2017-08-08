@@ -158,6 +158,7 @@ void Dialog::start_choosing()
             continue;
         }
         
+#warning 有的C++头文件是.hpp的
         if(stringUtil.EndWith(file.fileName, ".h"))
         {
             file.headerFilePath = file.filePath;

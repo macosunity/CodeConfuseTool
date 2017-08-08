@@ -50,6 +50,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             while(findSubStrAtPos(str_cpp,"#include",pos)){}//连续读取代码中的include名
 
             R(str_cpp);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
+            qDebug() << "pasing file :" << srcFile.filePath.c_str() << endl;
             for(vector<CppParser>::iterator b = _classes.begin(); b!=_classes.end(); ++b)
             {
                 while(findFunctionAndVarsOfClass(str_cpp, b->classname,pos, *b)){}//连续读取代码中的类
