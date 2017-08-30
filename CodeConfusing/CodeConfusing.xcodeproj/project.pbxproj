@@ -1,0 +1,803 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+		5E618435888B9D49F8540165 = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Qmake";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/ -f CodeConfusing.xcodeproj/qt_makeqmake.mak";
+			showEnvVarsInLog = "0";
+		};
+		4F19086CD1DB2064049DDC84 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/main.cpp";
+			name = "main.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		8028DAA34E72D0CB45F22F2E = {
+			fileRef = "4F19086CD1DB2064049DDC84";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		91568640EE119174316D336E = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/dialog.cpp";
+			name = "dialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		29C1EDC862426E23F1D96787 = {
+			fileRef = "91568640EE119174316D336E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		42FBC6575661F2F6FD06F59E = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/fileviewer.cpp";
+			name = "fileviewer.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		89E6C3A3C5982E80D0D384AD = {
+			fileRef = "42FBC6575661F2F6FD06F59E";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		4F08CA84AC1F44ECDF60C281 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/cppparser.cpp";
+			name = "cppparser.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		A53FEE77DE204C9A132409C9 = {
+			fileRef = "4F08CA84AC1F44ECDF60C281";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DE1D6D04712F102DD14A77A4 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/ocparser.cpp";
+			name = "ocparser.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		BD82C951557CD355B3376DE4 = {
+			fileRef = "DE1D6D04712F102DD14A77A4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		EDAAFE51B9A10539BF9B6F42 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/srcfilemodel.cpp";
+			name = "srcfilemodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		DD97FD9E04E515B26E4794DC = {
+			fileRef = "EDAAFE51B9A10539BF9B6F42";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E0677E228D0570817DC7CE47 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/stringutil.cpp";
+			name = "stringutil.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		4D771B793498B8EEC3929086 = {
+			fileRef = "E0677E228D0570817DC7CE47";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		8AAFFDE1CA223E8157249182 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/database.cpp";
+			name = "database.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		0216BA04BA4F4E9C5E36ED77 = {
+			fileRef = "8AAFFDE1CA223E8157249182";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		1290BA1C4A887A83D0BD2E23 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/classmodel.cpp";
+			name = "classmodel.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		9EF60D88C8897468975BA06A = {
+			fileRef = "1290BA1C4A887A83D0BD2E23";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C225B9FC0A4A9433C4A68A8D = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/resultdialog.cpp";
+			name = "resultdialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		60F2A82EBB8537194443F826 = {
+			fileRef = "C225B9FC0A4A9433C4A68A8D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		14C46AA1AD2E004138B5900D = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/tmp/moc_dialog.cpp";
+			name = "moc_dialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		FA7FC03B0EDB9437FC8438AA = {
+			fileRef = "14C46AA1AD2E004138B5900D";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		CA6DA740864677A20032FF50 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/tmp/moc_fileviewer.cpp";
+			name = "moc_fileviewer.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		5EF4DEB4F6C4F7BDF75486F7 = {
+			fileRef = "CA6DA740864677A20032FF50";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F2E632DBD6440CC37F842F01 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/tmp/moc_resultdialog.cpp";
+			name = "moc_resultdialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		ECC21B1D12385EB61D35CE3D = {
+			fileRef = "F2E632DBD6440CC37F842F01";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		15B4220729AE246BC3EE4A0C = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/dialog.h";
+			name = "dialog.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		CBDFEADBB4817407AE6A287A = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/fileviewer.h";
+			name = "fileviewer.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		8EE8C5E228933727D1791695 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/cppparser.h";
+			name = "cppparser.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		2810022050AB0BD65A589160 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/ocparser.h";
+			name = "ocparser.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		16A879BFCF8039E0B5D83ACE = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/srcfilemodel.h";
+			name = "srcfilemodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		C25071E8E63C79C012C373CA = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/stringutil.h";
+			name = "stringutil.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		EDF906454F45E72F0A60EB4E = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/database.h";
+			name = "database.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		9651698FBBDDDD7441910185 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/classmodel.h";
+			name = "classmodel.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		991983988E741FC16CF5FA98 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/resultdialog.h";
+			name = "resultdialog.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		847F095144DCB941B979C85E = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/CodeConfusing.pro";
+			name = "CodeConfusing.pro";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		A402CC1405EA0C8CAB34F536 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/.qmake.stash";
+			name = ".qmake.stash";
+			sourceTree = "<absolute>";
+		};
+		97ACABA70CBE04ABB8193266 = {
+			isa = PBXFileReference;
+			path = "/Users/apple/Qt/5.9.1/clang_64/mkspecs/features/data/dummy.cpp";
+			name = "dummy.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		81700C53CE9A00F271B94E8E = {
+			fileRef = "97ACABA70CBE04ABB8193266";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		25B08E2869634E9BCBA333A2 = {
+			isa = PBXGroup;
+			children = (
+				"06B5975EF2AC94907AE54DB5");
+			name = "Generated Sources";
+			sourceTree = "<group>";
+		};
+		06B5975EF2AC94907AE54DB5 = {
+			isa = PBXGroup;
+			children = (
+				"14C46AA1AD2E004138B5900D",
+				"CA6DA740864677A20032FF50",
+				"F2E632DBD6440CC37F842F01");
+			name = "tmp";
+			sourceTree = "<group>";
+		};
+		2EB56BE3C2D93CDAB0C52E67 = {
+			isa = PBXGroup;
+			children = (
+				"4F19086CD1DB2064049DDC84",
+				"91568640EE119174316D336E",
+				"42FBC6575661F2F6FD06F59E",
+				"4F08CA84AC1F44ECDF60C281",
+				"DE1D6D04712F102DD14A77A4",
+				"EDAAFE51B9A10539BF9B6F42",
+				"E0677E228D0570817DC7CE47",
+				"8AAFFDE1CA223E8157249182",
+				"1290BA1C4A887A83D0BD2E23",
+				"C225B9FC0A4A9433C4A68A8D",
+				"15B4220729AE246BC3EE4A0C",
+				"CBDFEADBB4817407AE6A287A",
+				"8EE8C5E228933727D1791695",
+				"2810022050AB0BD65A589160",
+				"16A879BFCF8039E0B5D83ACE",
+				"C25071E8E63C79C012C373CA",
+				"EDF906454F45E72F0A60EB4E",
+				"9651698FBBDDDD7441910185",
+				"991983988E741FC16CF5FA98");
+			name = "Sources";
+			sourceTree = "<group>";
+		};
+		B8254625CFD509ED2A24A166 = {
+			isa = PBXGroup;
+			children = (
+				"97ACABA70CBE04ABB8193266");
+			name = "Sources [moc_predefs]";
+			sourceTree = "<group>";
+		};
+		74B182DB50CB5611B5C1C297 = {
+			isa = PBXGroup;
+			children = (
+				"847F095144DCB941B979C85E",
+				"A402CC1405EA0C8CAB34F536");
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EF0942E79C014DCEC8976BC = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Preprocessors";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/ -f CodeConfusing.xcodeproj/qt_preprocess.mak";
+			showEnvVarsInLog = "0";
+		};
+		F7E50F631C51CD5B5DC0BC43 = {
+			buildActionMask = 2147483647;
+			files = (
+				"8028DAA34E72D0CB45F22F2E",
+				"29C1EDC862426E23F1D96787",
+				"89E6C3A3C5982E80D0D384AD",
+				"A53FEE77DE204C9A132409C9",
+				"BD82C951557CD355B3376DE4",
+				"DD97FD9E04E515B26E4794DC",
+				"4D771B793498B8EEC3929086",
+				"0216BA04BA4F4E9C5E36ED77",
+				"9EF60D88C8897468975BA06A",
+				"60F2A82EBB8537194443F826",
+				"FA7FC03B0EDB9437FC8438AA",
+				"5EF4DEB4F6C4F7BDF75486F7",
+				"ECC21B1D12385EB61D35CE3D",
+				"81700C53CE9A00F271B94E8E");
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Compile Sources";
+		};
+		8CC0A9F4BC44F08FE2C51FF9 = {
+			isa = PBXFileReference;
+			name = "QtWidgets.framework";
+			path = "/Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		8C9CA777ABD673540DA8E484 = {
+			fileRef = "8CC0A9F4BC44F08FE2C51FF9";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E54B6F1E1A46CB37F877C270 = {
+			isa = PBXFileReference;
+			name = "QtGui.framework";
+			path = "/Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		1B1D1FE165FF8BC4841EDACB = {
+			fileRef = "E54B6F1E1A46CB37F877C270";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		43B5E9E434FB96756DF65FBB = {
+			isa = PBXFileReference;
+			name = "QtCore.framework";
+			path = "/Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		16E9046C974C42209D049092 = {
+			fileRef = "43B5E9E434FB96756DF65FBB";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		2B774D8E4178765CE52EAAF5 = {
+			isa = PBXFileReference;
+			name = "DiskArbitration.framework";
+			path = "/System/Library/Frameworks/DiskArbitration.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		A99B2AA0F9CBBDD12BA126A4 = {
+			fileRef = "2B774D8E4178765CE52EAAF5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A1A67BEAA744704B29168D39 = {
+			isa = PBXFileReference;
+			name = "IOKit.framework";
+			path = "/System/Library/Frameworks/IOKit.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		8D267F2E4776F0ECA2F49DC8 = {
+			fileRef = "A1A67BEAA744704B29168D39";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D4B32C2222F82AC56BADEB21 = {
+			isa = PBXFileReference;
+			name = "OpenGL.framework";
+			path = "/System/Library/Frameworks/OpenGL.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		8771A8C96E9C391044035D99 = {
+			fileRef = "D4B32C2222F82AC56BADEB21";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8D9815BDB5BD9F90D2BC05C5 = {
+			isa = PBXFileReference;
+			name = "AGL.framework";
+			path = "/System/Library/Frameworks/AGL.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		E45E51A644D5FC9F942ECE55 = {
+			fileRef = "8D9815BDB5BD9F90D2BC05C5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		AF39DD055C3EF8226FBE929D = {
+			children = (
+				"8CC0A9F4BC44F08FE2C51FF9",
+				"E54B6F1E1A46CB37F877C270",
+				"43B5E9E434FB96756DF65FBB",
+				"2B774D8E4178765CE52EAAF5",
+				"A1A67BEAA744704B29168D39",
+				"D4B32C2222F82AC56BADEB21",
+				"8D9815BDB5BD9F90D2BC05C5");
+			isa = PBXGroup;
+			name = "Frameworks";
+			sourceTree = "<group>";
+		};
+		D1C883685E82D5676953459A = {
+			buildActionMask = 2147483647;
+			files = (
+				"8C9CA777ABD673540DA8E484",
+				"1B1D1FE165FF8BC4841EDACB",
+				"16E9046C974C42209D049092",
+				"A99B2AA0F9CBBDD12BA126A4",
+				"8D267F2E4776F0ECA2F49DC8",
+				"8771A8C96E9C391044035D99",
+				"E45E51A644D5FC9F942ECE55");
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Link Binary With Libraries";
+		};
+		30414803F31797EB689AE508 = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Copy Bundle Resources";
+		};
+		99542592E9780B9225F24AA8 = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1C8C9CE72A79D3685C9C0B9 = {
+			isa = PBXFileReference;
+			includeInIndex = 0;
+			explicitFileType = "wrapper.application";
+			path = "CodeConfusing.app";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE0A091FDBFB3E9C31B7A1BD = {
+			children = (
+				"A1C8C9CE72A79D3685C9C0B9");
+			isa = PBXGroup;
+			name = "Products";
+			sourceTree = "<group>";
+		};
+		E8C543AB96796ECAA2E65C57 = {
+			children = (
+				"2EB56BE3C2D93CDAB0C52E67",
+				"25B08E2869634E9BCBA333A2",
+				"74B182DB50CB5611B5C1C297",
+				"B8254625CFD509ED2A24A166",
+				"AF39DD055C3EF8226FBE929D",
+				"FE0A091FDBFB3E9C31B7A1BD");
+			isa = PBXGroup;
+			name = "CodeConfusing";
+			sourceTree = "<group>";
+		};
+		69671BB7F2BB3E0F633054DC = {
+			buildPhases = (
+				"5E618435888B9D49F8540165",
+				"7EF0942E79C014DCEC8976BC");
+			dependencies = (
+				);
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXAggregateTarget;
+			buildRules = (
+);
+			productName = "Qt Preprocess";
+			name = "Qt Preprocess";
+		};
+		53D151D16B5F2D086D314709 = {
+			isa = PBXTargetDependency;
+			target = "69671BB7F2BB3E0F633054DC";
+		};
+		DBC6955A152F59676E211207 = {
+			buildPhases = (
+				"F7E50F631C51CD5B5DC0BC43",
+				"D1C883685E82D5676953459A",
+				"30414803F31797EB689AE508",
+				"99542592E9780B9225F24AA8");
+			dependencies = (
+				"53D151D16B5F2D086D314709");
+			productReference = "A1C8C9CE72A79D3685C9C0B9";
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXNativeTarget;
+			buildRules = (
+);
+			productType = "com.apple.product-type.application";
+			name = "CodeConfusing";
+			productName = "CodeConfusing";
+		};
+		3AA6C32AC930069E80220CF1 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=macosx*]" = "x86_64";
+				COPY_PHASE_STRIP = "NO";
+				DEVELOPMENT_TEAM = "AD83S5EY65";
+				ENABLE_BITCODE = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "YES";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				ONLY_ACTIVE_ARCH = "YES";
+				PRODUCT_NAME = "CodeConfusing";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "macosx";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "Info.plist";
+				SYMROOT = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				MACOSX_DEPLOYMENT_TARGET = "10.10";
+				HEADER_SEARCH_PATHS = (
+					".",
+					"../../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/lib/QtGui.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers",
+					"tmp",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/mkspecs/macx-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/apple/Qt/5.9.1/clang_64/lib",
+					"/System/Library/Frameworks/");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/apple/Qt/5.9.1/clang_64/lib",
+					"/Users/apple/Qt/5.9.1/clang_64/lib");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQT_NO_DEBUG",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-O2",
+					"-std=gnu++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQT_NO_DEBUG",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-stdlib=libc++",
+						"-headerpad_max_install_names",
+						"-Wl,-rpath,@executable_path/Frameworks",
+						"-Wl,-rpath,/Users/apple/Qt/5.9.1/clang_64/lib",
+						"-F/Users/apple/Qt/5.9.1/clang_64/lib");
+				ARCHS = "x86_64";
+				OBJROOT = "tmp/";
+			};
+			name = "Debug";
+		};
+		77418F46922677BB04ED38DD = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=macosx*]" = "x86_64";
+				COPY_PHASE_STRIP = "NO";
+				DEVELOPMENT_TEAM = "AD83S5EY65";
+				ENABLE_BITCODE = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "YES";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				ONLY_ACTIVE_ARCH = "YES";
+				PRODUCT_NAME = "CodeConfusing";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "macosx";
+				PRODUCT_NAME = "CodeConfusing";
+			};
+			name = "Debug";
+		};
+		339EE1B2CC4FC24589A0EA95 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=macosx*]" = "x86_64";
+				COPY_PHASE_STRIP = "YES";
+				DEVELOPMENT_TEAM = "AD83S5EY65";
+				ENABLE_BITCODE = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "NO";
+				PRODUCT_NAME = "CodeConfusing";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "macosx";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "Info.plist";
+				SYMROOT = "/Users/apple/code_confusing/CodeConfusingTool/CodeConfusing/";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				MACOSX_DEPLOYMENT_TARGET = "10.10";
+				HEADER_SEARCH_PATHS = (
+					".",
+					"../../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/lib/QtGui.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers",
+					"tmp",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers",
+					"../../../Qt/5.9.1/clang_64/mkspecs/macx-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/apple/Qt/5.9.1/clang_64/lib",
+					"/System/Library/Frameworks/");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/apple/Qt/5.9.1/clang_64/lib",
+					"/Users/apple/Qt/5.9.1/clang_64/lib");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQT_NO_DEBUG",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-O2",
+					"-std=gnu++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQT_NO_DEBUG",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-stdlib=libc++",
+						"-headerpad_max_install_names",
+						"-Wl,-rpath,@executable_path/Frameworks",
+						"-Wl,-rpath,/Users/apple/Qt/5.9.1/clang_64/lib",
+						"-F/Users/apple/Qt/5.9.1/clang_64/lib");
+				ARCHS = "x86_64";
+				OBJROOT = "tmp/";
+			};
+			name = "Release";
+		};
+		6666AA5E688052234F6758D8 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = "NO";
+				"ARCHS[sdk=macosx*]" = "x86_64";
+				COPY_PHASE_STRIP = "YES";
+				DEVELOPMENT_TEAM = "AD83S5EY65";
+				ENABLE_BITCODE = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "NO";
+				PRODUCT_NAME = "CodeConfusing";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "macosx";
+				PRODUCT_NAME = "CodeConfusing";
+			};
+			name = "Release";
+		};
+		DAC4C1AA5EDEA1C85E9CA5E6 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"3AA6C32AC930069E80220CF1",
+				"339EE1B2CC4FC24589A0EA95");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6CC3B5D2136C7CD6A5CF5A59 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"77418F46922677BB04ED38DD",
+				"6666AA5E688052234F6758D8");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6DB9C3763D02B1415CD9D565 = {
+			hasScannedForEncodings = 1;
+			compatibilityVersion = "Xcode 3.2";
+			isa = PBXProject;
+			mainGroup = "E8C543AB96796ECAA2E65C57";
+			productRefGroup = "FE0A091FDBFB3E9C31B7A1BD";
+			buildConfigurationList = "DAC4C1AA5EDEA1C85E9CA5E6";
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"DBC6955A152F59676E211207",
+				"69671BB7F2BB3E0F633054DC");
+			attributes = {
+				TargetAttributes = {
+				};
+			};
+		};
+	};
+	rootObject = "6DB9C3763D02B1415CD9D565";
+}
