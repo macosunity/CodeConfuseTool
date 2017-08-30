@@ -56,9 +56,6 @@ size_t is_property_method_same(string identify_str, bool isProperty)
 //向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {
-    QUuid id = QUuid::createUuid();
-    QString strId = id.toString();
-    
     StringUtil su;
     if (classModel.isObjectiveC)
     {
