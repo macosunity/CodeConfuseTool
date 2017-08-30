@@ -39,8 +39,6 @@ public:
     
     void clearIdentifyVec();
     
-    bool createConnection();  //创建一个连接
-    bool createTable();       //创建数据库表
     bool insertRecord(ClassModel classModel);      //新增数据
     vector<string> queryAll();          //查询所有信息
     
