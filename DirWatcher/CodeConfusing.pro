@@ -16,9 +16,11 @@ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.10
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = DirWatcher
+TARGET = CodeConfusing
 TEMPLATE = app
 
+OBJECTS_DIR  = tmp
+MOC_DIR      = tmp
 
 SOURCES += main.cpp\
         dialog.cpp \
@@ -28,7 +30,8 @@ SOURCES += main.cpp\
     srcfilemodel.cpp \
     stringutil.cpp \
     database.cpp \
-    classmodel.cpp
+    classmodel.cpp \
+    resultdialog.cpp
 
 HEADERS  += dialog.h \
     fileviewer.h \
@@ -37,7 +40,8 @@ HEADERS  += dialog.h \
     srcfilemodel.h \
     stringutil.h \
     database.h \
-    classmodel.h
+    classmodel.h \
+    resultdialog.h
 
 DISTFILES += \
     reskeys.txt
