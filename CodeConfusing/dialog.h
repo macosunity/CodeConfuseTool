@@ -33,6 +33,7 @@ private:
     QString file_storage;
     QString dir_storage;
     vector<SrcFileModel> fileList;
+    vector<SrcFileModel> xibAndsb;
     
 public:
     Dialog(QString file_storage, QString dir_storage, QWidget *parent = 0);

@@ -9,7 +9,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Created by Qt/QMake</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.LittleDrawingBoard.CodeConfusing</string>
+	<string>com.fkd.CodeConfusing</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

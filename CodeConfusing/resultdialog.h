@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <vector>
 #include <string>
+#include "srcfilemodel.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ protected:
 public:
     ResultDialog(QWidget *parent = 0);
     ~ResultDialog();
-    void setConfuseResult(vector<string> resultVec, vector<string> disorderIdentifyVec);
+    void setConfuseResult(vector<string> resultVec, vector<string> disorderIdentifyVec, vector<SrcFileModel> xibAndsb);
     
 private slots:
     void hideDialog();

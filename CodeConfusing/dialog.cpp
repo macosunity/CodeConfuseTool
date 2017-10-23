@@ -19,6 +19,8 @@
 #include "database.h"
 #include "resultdialog.h"
 
+#define DEBUG
+
 #define random(a,b) (rand()%(b-a+1)+a)
 
 void Dialog::readFileList(const char *basePath)
@@ -148,12 +150,15 @@ void Dialog::start_choosing()
     char *pathStr = ba.data();
     readFileList(pathStr);
 
+    bool isIOSProject = false;
+    
     StringUtil stringUtil;
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
 
-        if (file.isParsed)
+        QString QfilePath = QString(file.filePath.c_str());
+        if (file.isParsed || QfilePath.contains("Pods/"))
         {
             continue;
         }
@@ -195,6 +200,12 @@ void Dialog::start_choosing()
                 
                 CppParser cppParser;
                 cppParser.parseCppFile(file);
+                
+                SrcFileModel xibfile;
+                xibfile.fileName = file.mmFileName;
+                xibfile.filePath = file.mmFilePath;
+                
+                xibAndsb.push_back(xibfile);
             }
             
             if(file.mFilePath.length() > 0)
@@ -209,6 +220,12 @@ void Dialog::start_choosing()
                 
                 OCParser ocParser;
                 ocParser.parseOCFile(file);
+                
+                SrcFileModel xibfile;
+                xibfile.fileName = file.mFileName;
+                xibfile.filePath = file.mFilePath;
+                
+                xibAndsb.push_back(xibfile);
             }
         }
         else if(stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc"))
@@ -261,6 +278,13 @@ void Dialog::start_choosing()
 
             OCParser ocParser;
             ocParser.parseOCFile(file);
+            
+            
+            SrcFileModel xibfile;
+            xibfile.fileName = file.fileName;
+            xibfile.filePath = file.filePath;
+            
+            xibAndsb.push_back(xibfile);
         }
         else if(stringUtil.EndWith(file.fileName, ".mm"))
         {
@@ -282,6 +306,44 @@ void Dialog::start_choosing()
         else
         {
             //跳过其他文件
+            
+            if (stringUtil.EndWith(file.fileName, ".storyboard"))
+            {
+                isIOSProject = true;
+                
+                SrcFileModel sbfile;
+                sbfile.fileName = file.fileName;
+                sbfile.filePath = file.filePath;
+                
+                xibAndsb.push_back(sbfile);
+            }
+            
+            if (stringUtil.EndWith(file.fileName, ".xib"))
+            {
+                isIOSProject = true;
+                
+                SrcFileModel xibfile;
+                xibfile.fileName = file.fileName;
+                xibfile.filePath = file.filePath;
+                
+                xibAndsb.push_back(xibfile);
+            }
+            
+            if (stringUtil.EndWith(file.fileName, ".pbxproj"))
+            {
+                SrcFileModel xibfile;
+                xibfile.fileName = file.fileName;
+                xibfile.filePath = file.filePath;
+                
+                xibAndsb.push_back(xibfile);
+            }
+        }
+        
+        
+        if (isIOSProject && (i == fileList.size()-1) )
+        {
+            QString parseInfoString = QString("正在混淆xib和storyboard...");
+            list->addItem(parseInfoString);
         }
 
         list->update();
@@ -313,29 +375,54 @@ void Dialog::start_choosing()
     resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());
 
     
-    const string alpha[] = {"A","B","C", "D", "E","F", "G", "H", "I", "J", "K", "L", "M", "N", "O","P","Q","R","S","T","U","V","W","X","Y","Z",
-        "a","b","c", "d", "e","f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p","q","r","s","t","u","v","w","x","y","z","s","t"};
-    const string numeric[] = {"0","1","2","3","4","5","6","7","8","9","0","5","3"};
-    const string underline = "_";
+    
+#ifdef DEBUG
+    QDir dir;
+    QString resPath = dir.absolutePath();
+    QDir resDir(resPath);
+    resDir.cdUp();
+    resPath = resDir.absolutePath();
+    qDebug() << resPath;
+    resPath = resPath.append("/DICT.txt");
+    QFile resFile(resPath);
+    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+#else
+    QDir dir;
+    QString resPath = QCoreApplication::applicationDirPath();
+    resPath = resPath.append("/DICT.txt");
+    qDebug() << resPath;
+    QFile resFile(resPath);
+    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+#endif
+    
+    vector<string> wordsVec;
+    
+    QTextStream stream(&resFile);
+    QString line;
+    int n = 1;
+    while (!stream.atEnd())
+    {
+        line = stream.readLine();
+        string keyword = line.toStdString();
+        wordsVec.push_back(keyword);
+        ++n;
+    }
     
     srand((unsigned)time(NULL));
     unordered_set<string> strset;
     string ss = "";
     while(strset.size() < resultVec.size())
     {
-        ss = "";
-        int alphaLength = 52;
-        int numericLength = 11;
-        for(int i = 0; i < 22; i++)
-        {
-            int index = random(1, (alphaLength + numericLength));
-            if(index < alphaLength){
-                ss.append(alpha[index]);
-            } else {
-                ss.append(numeric[index - alphaLength]);
-            }
-        }
-        ss = "_"+ss;
+        int index = random(1, wordsVec.size()-1);
+
+        ss = wordsVec[index];
+        qDebug() << ss.c_str() << endl;
         strset.insert(ss);
     }
     
@@ -347,7 +434,7 @@ void Dialog::start_choosing()
     
     ResultDialog *pResultDlg = new ResultDialog(this);
     pResultDlg->setModal(true);
-    pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec);
+    pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec, xibAndsb);
     pResultDlg->show();
 }
 
@@ -508,6 +595,7 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     QDir dir;
     QString resPath = QCoreApplication::applicationDirPath();
     resPath = resPath.append("/reskeys.txt");
+    qDebug() << resPath;
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {

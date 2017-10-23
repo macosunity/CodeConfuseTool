@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DBC6955A152F59676E211207"
+               BlueprintIdentifier = "AAC53F366E1907CBB58EACC3"
                BuildableName = "CodeConfusing.app"
                BlueprintName = "CodeConfusing"
                ReferencedContainer = "container:CodeConfusing.xcodeproj">
@@ -26,6 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
          <TestableReference
@@ -42,7 +43,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBC6955A152F59676E211207"
+            BlueprintIdentifier = "AAC53F366E1907CBB58EACC3"
             BuildableName = "CodeConfusing.app"
             BlueprintName = "CodeConfusing"
             ReferencedContainer = "container:CodeConfusing.xcodeproj">
@@ -61,6 +62,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -71,7 +73,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBC6955A152F59676E211207"
+            BlueprintIdentifier = "AAC53F366E1907CBB58EACC3"
             BuildableName = "CodeConfusing.app"
             BlueprintName = "CodeConfusing"
             ReferencedContainer = "container:CodeConfusing.xcodeproj">
@@ -97,7 +99,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBC6955A152F59676E211207"
+            BlueprintIdentifier = "AAC53F366E1907CBB58EACC3"
             BuildableName = "CodeConfusing.app"
             BlueprintName = "CodeConfusing"
             ReferencedContainer = "container:CodeConfusing.xcodeproj">
