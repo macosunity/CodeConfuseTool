@@ -84,7 +84,6 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
             string id_str = identify_str;
             string res_str = disorderIdentifyVec[i];
             
-            //
             for (size_t x=0; x<xibAndsb.size(); x++)
             {
                 SrcFileModel file = xibAndsb[x];
@@ -97,12 +96,10 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
                 }
                 
                 string sedReplaceStr = "sed -i " + filename + ".bak " + "'s/\"" + id_str +"\"/\"" + res_str +"\"/g' " + file.filePath;
-//                qDebug() << sedReplaceStr.c_str() << endl;
                 
                 system(sedReplaceStr.c_str());
             }
             
-//            @"WLDetailMessageCell"
             
             resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append("\n");
 
@@ -111,9 +108,7 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
             
             string firstCharStr = identify_str.substr(0,1);
             stringUtil.Toupper(firstCharStr);
-//            qDebug() << "firstCharStr" << firstCharStr.c_str();
             string upperFirstCaseString = identify_str.replace(0, 1, firstCharStr);
-//            qDebug() << "upperFirstCaseString" << upperFirstCaseString.c_str();
             string set_property_str = "set" + upperFirstCaseString;
             
             string redefineString = disorderIdentifyVec[i];
@@ -179,7 +174,6 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
                     if (stringUtil.EndWith(filename, ".pbxproj"))
                     {
                         sedReplaceStr = "sed -i " + filename + ".bak " + "'s/" + identify_str + ".xib/" + nextStr + ".xib/g' " + file.filePath;
-//                        qDebug() << "special: " << sedReplaceStr.c_str() << endl;
                         
                         system(sedReplaceStr.c_str());
                         continue;
@@ -237,21 +231,13 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
                 string filename = file.fileName;
                 
                 if (stringUtil.EndWith(filename, ".xib") && stringUtil.StartWith(filename, identify_str))
-                {
-                    qDebug() << "identify is: " <<  identify_str.c_str() << endl;
-                    qDebug() << "resultStr is: " << nextStr.c_str() << endl;
-                    qDebug() <<  "filename is: " << filename.c_str() << endl;
-                    
-                    string filenameNew = nextStr + ".xib";
+                {                    string filenameNew = nextStr + ".xib";
                     string filePathBack = file.filePath;
                     
                     string filePathNew = file.filePath.replace(file.filePath.find(filename), filename.length(), filenameNew);
-                    qDebug() << "old path: " << filePathBack.c_str() << endl;
-                    qDebug() << "new path:" << filePathNew.c_str() << endl;
                     string renameFileStr = "mv " + filePathBack + " " + filePathNew;
                     
                     system(renameFileStr.c_str());
-                    qDebug() << "rename xib file: " <<  renameFileStr.c_str() << endl;
                 }
             }
         }
