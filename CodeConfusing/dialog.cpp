@@ -121,6 +121,225 @@ void Dialog::add_next_path(QString path)
     list->insertItem(0, path);
 }
 
+bool Dialog::is_identify_class(string identify_str)
+{
+    DataBase *database = DataBase::Instance();
+    
+    vector<ClassModel> modelVec = database->queryAllModel();
+    
+    StringUtil stringUtil;
+    for (vector<ClassModel>::iterator it=modelVec.begin(); it != modelVec.end(); ++it)
+    {
+        ClassModel model = *it;
+        if (stringUtil.StartWith(model.className, identify_str) && model.className.length() == identify_str.length())
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+
+bool Dialog::is_identify_property(string identify_str)
+{
+    DataBase *database = DataBase::Instance();
+    
+    vector<ClassModel> modelVec = database->queryAllModel();
+    
+    StringUtil stringUtil;
+    for (vector<ClassModel>::iterator it=modelVec.begin(); it != modelVec.end(); ++it)
+    {
+        ClassModel model = *it;
+        if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isPropertyName && model.identifyName.find("readonly") == string::npos)
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+void Dialog::pre_process_files(vector<string> resultVec, vector<string> disorderIdentifyVec, vector<SrcFileModel> xibAndsb)
+{
+    StringUtil stringUtil;
+    for (size_t i=1; i<resultVec.size(); ++i)
+    {
+        string identify_str = resultVec[i];
+        
+        
+        if (is_identify_property(resultVec[i]))
+        {
+            string id_str = identify_str;
+            string res_str = disorderIdentifyVec[i];
+            
+            QString infoString = QString("正在将文件中的属性");
+            infoString.append(id_str.c_str()).append("替换为混淆后的字符串...");
+            list->addItem(infoString);
+            
+            list->update();
+            list->repaint();
+            list->scrollToBottom();
+            QCoreApplication::processEvents();
+
+            for (size_t x=0; x<xibAndsb.size(); x++)
+            {
+                SrcFileModel file = xibAndsb[x];
+                
+                string filename = file.fileName;
+                
+                if (stringUtil.EndWith(filename, ".m") || stringUtil.EndWith(filename, ".mm"))
+                {
+                    continue;
+                }
+                
+                string sedReplaceStr = "sed -i " + filename + ".bak " + "'s/\"" + id_str +"\"/\"" + res_str +"\"/g' " + file.filePath;
+                
+                system(sedReplaceStr.c_str());
+            }
+        }
+        else
+        {
+            string start = "";
+            string end = "";
+            
+            bool isFirstLetterUpper = false;
+            char firstLetter = identify_str[0];
+            if (isupper(firstLetter))
+            {
+                isFirstLetterUpper = true;
+            }
+            
+            if (identify_str.length() >= 4)
+            {
+                start = identify_str.substr(0, 3);
+            }
+            else
+            {
+                start = identify_str.substr(0, identify_str.length()-1);
+            }
+            
+            if (identify_str.length() >= 6)
+            {
+                end = identify_str.substr(identify_str.length()-4, 3);
+            }
+            else
+            {
+                string back = identify_str;
+                reverse(back.begin(),back.end());
+                end = back;
+            }
+            
+            if (isFirstLetterUpper)
+            {
+                string startFirstCharStr = start.substr(0,1);
+                stringUtil.Toupper(startFirstCharStr);
+                start = start.replace(0, 1, startFirstCharStr);
+            }
+                        
+            if (is_identify_class(identify_str))
+            {
+                QString infoString = QString("正在将文件中的类名");
+                infoString.append(identify_str.c_str()).append("替换为混淆后的名称...");
+                list->addItem(infoString);
+                
+                list->update();
+                list->repaint();
+                list->scrollToBottom();
+                QCoreApplication::processEvents();
+                
+                string redefineStr = disorderIdentifyVec[i];
+                for (size_t j=0; j<xibAndsb.size(); j++)
+                {
+                    SrcFileModel file = xibAndsb[j];
+                    
+                    string nextStr = start+redefineStr+end;
+                    
+                    string filename = file.fileName;
+                    
+                    string sedReplaceStr = "sed -i " + filename + ".bak " + "'s/\"" + identify_str +"\"/\"" + nextStr +"\"/g' " + file.filePath;
+                    if (stringUtil.EndWith(filename, ".pbxproj"))
+                    {
+                        sedReplaceStr = "sed -i " + filename + ".bak " + "'s/" + identify_str + ".xib/" + nextStr + ".xib/g' " + file.filePath;
+                        
+                        system(sedReplaceStr.c_str());
+                        continue;
+                    }
+                    
+                    system(sedReplaceStr.c_str());
+                }
+            }
+        }
+    }
+    
+    for (size_t i=1; i<resultVec.size(); ++i)
+    {
+        string identify_str = resultVec[i];
+        
+        string start = "";
+        string end = "";
+        
+        bool isFirstLetterUpper = false;
+        char firstLetter = identify_str[0];
+        if (isupper(firstLetter))
+        {
+            isFirstLetterUpper = true;
+        }
+        
+        if (identify_str.length() >= 4)
+        {
+            start = identify_str.substr(0, 3);
+        }
+        else
+        {
+            start = identify_str.substr(0, identify_str.length()-1);
+        }
+        
+        if (identify_str.length() >= 6)
+        {
+            end = identify_str.substr(identify_str.length()-4, 3);
+        }
+        else
+        {
+            string back = identify_str;
+            reverse(back.begin(),back.end());
+            end = back;
+        }
+        
+        if (is_identify_class(identify_str))
+        {
+            QString infoString = QString("正在将xib和storyboard中的类名");
+            infoString.append(identify_str.c_str()).append("替换为混淆后的名称...");
+            list->addItem(infoString);
+            
+            list->update();
+            list->repaint();
+            list->scrollToBottom();
+            QCoreApplication::processEvents();
+            
+            string redefineStr = disorderIdentifyVec[i];
+            for (size_t j=0; j<xibAndsb.size(); j++)
+            {
+                SrcFileModel file = xibAndsb[j];
+                
+                string nextStr = start+redefineStr+end;
+                
+                string filename = file.fileName;
+                
+                if (stringUtil.EndWith(filename, ".xib") && stringUtil.StartWith(filename, identify_str))
+                {                    string filenameNew = nextStr + ".xib";
+                    string filePathBack = file.filePath;
+                    
+                    string filePathNew = file.filePath.replace(file.filePath.find(filename), filename.length(), filenameNew);
+                    string renameFileStr = "mv " + filePathBack + " " + filePathNew;
+                    
+                    system(renameFileStr.c_str());
+                }
+            }
+        }
+    }
+}
+
 void Dialog::start_choosing()
 {
     start->setEnabled(false);
@@ -149,8 +368,6 @@ void Dialog::start_choosing()
     QByteArray ba = path.toUtf8();
     char *pathStr = ba.data();
     readFileList(pathStr);
-
-    bool isIOSProject = false;
     
     StringUtil stringUtil;
     for(size_t i=0; i<fileList.size(); i++)
@@ -309,8 +526,6 @@ void Dialog::start_choosing()
             
             if (stringUtil.EndWith(file.fileName, ".storyboard"))
             {
-                isIOSProject = true;
-                
                 SrcFileModel sbfile;
                 sbfile.fileName = file.fileName;
                 sbfile.filePath = file.filePath;
@@ -320,8 +535,6 @@ void Dialog::start_choosing()
             
             if (stringUtil.EndWith(file.fileName, ".xib"))
             {
-                isIOSProject = true;
-                
                 SrcFileModel xibfile;
                 xibfile.fileName = file.fileName;
                 xibfile.filePath = file.filePath;
@@ -339,25 +552,11 @@ void Dialog::start_choosing()
             }
         }
         
-        
-        if (isIOSProject && (i == fileList.size()-1) )
-        {
-            QString parseInfoString = QString("正在混淆xib和storyboard...");
-            list->addItem(parseInfoString);
-        }
-
         list->update();
         list->repaint();
         list->scrollToBottom();
         QCoreApplication::processEvents();
     }
-
-    list->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    list->setSelectionBehavior(QAbstractItemView::SelectItems);
-    list->setSelectionMode(QAbstractItemView::SingleSelection);
-    list->setDragEnabled(true);
-
-    start->setEnabled(true);
     
     vector<string> identifyVec = database->queryAll();
     
@@ -432,9 +631,21 @@ void Dialog::start_choosing()
         disorderIdentifyVec.push_back(*it);
     }
     
+    //预处理文件
+    pre_process_files(resultVec, disorderIdentifyVec, xibAndsb);
+    
+    
+    //启用list
+    list->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    list->setSelectionBehavior(QAbstractItemView::SelectItems);
+    list->setSelectionMode(QAbstractItemView::SingleSelection);
+    list->setDragEnabled(true);
+    
+    start->setEnabled(true);
+    
     ResultDialog *pResultDlg = new ResultDialog(this);
     pResultDlg->setModal(true);
-    pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec, xibAndsb);
+    pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec);
     pResultDlg->show();
 }
 

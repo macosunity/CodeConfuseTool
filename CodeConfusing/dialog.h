@@ -52,6 +52,11 @@ private slots:
     void readFileList(const char *basePath);
     void choose_path();
     void start_choosing();
+    
+    
+    bool is_identify_property(string identify_str);
+    void pre_process_files(vector<string> resultVec, vector<string> disorderIdentifyVec, vector<SrcFileModel> xibAndsb);
+    bool is_identify_class(string identify_str);
 };
 
 #endif // DIALOG_H
