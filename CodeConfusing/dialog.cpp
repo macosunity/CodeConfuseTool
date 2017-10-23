@@ -19,8 +19,6 @@
 #include "database.h"
 #include "resultdialog.h"
 
-#define DEBUG
-
 #define random(a,b) (rand()%(b-a+1)+a)
 
 void Dialog::readFileList(const char *basePath)
@@ -173,8 +171,8 @@ void Dialog::pre_process_files(vector<string> resultVec, vector<string> disorder
             string id_str = identify_str;
             string res_str = disorderIdentifyVec[i];
             
-            QString infoString = QString("正在将文件中的属性");
-            infoString.append(id_str.c_str()).append("替换为混淆后的字符串...");
+            QString infoString = QString("正在处理文件中的属性");
+            infoString.append(id_str.c_str());
             list->addItem(infoString);
             
             list->update();
@@ -239,8 +237,8 @@ void Dialog::pre_process_files(vector<string> resultVec, vector<string> disorder
                         
             if (is_identify_class(identify_str))
             {
-                QString infoString = QString("正在将文件中的类名");
-                infoString.append(identify_str.c_str()).append("替换为混淆后的名称...");
+                QString infoString = QString("正在处理文件中的类名");
+                infoString.append(identify_str.c_str());
                 list->addItem(infoString);
                 
                 list->update();
