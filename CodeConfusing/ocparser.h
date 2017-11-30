@@ -14,6 +14,7 @@
 #include <QDebug>
 #include "srcfilemodel.h"
 #include "classmodel.h"
+
 using namespace std;
 
 #define OC_INCLUDE     8

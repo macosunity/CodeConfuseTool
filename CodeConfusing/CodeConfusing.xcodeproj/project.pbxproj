@@ -24,8 +24,8 @@
 /* Begin PBXBuildFile section */
 		101346612BF2A255A40E9AF1 /* stringutil.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0653474CBBE6E300131DD7AE /* stringutil.cpp */; settings = {ATTRIBUTES = (); }; };
 		16E9046C974C42209D049092 /* QtCore.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 43B5E9E434FB96756DF65FBB /* QtCore.framework */; };
-		189759551F99CFB000EE81F0 /* reskeys.txt in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 189759541F99CFB000EE81F0 /* reskeys.txt */; };
-		18C22A571F99E14400575710 /* DICT.TXT in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18C22A561F99E14400575710 /* DICT.TXT */; };
+		18B977591FCFD46700BA43BB /* DICT.TXT in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18B977571FCFD46700BA43BB /* DICT.TXT */; };
+		18B9775A1FCFD46700BA43BB /* reskeys.txt in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18B977581FCFD46700BA43BB /* reskeys.txt */; };
 		1B1D1FE165FF8BC4841EDACB /* QtGui.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = E54B6F1E1A46CB37F877C270 /* QtGui.framework */; };
 		2A0166D3270BD2177481DB9D /* database.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C5C3FE26DB2007EB728B0717 /* database.cpp */; settings = {ATTRIBUTES = (); }; };
 		2A054E35803FD69B008BE256 /* cppparser.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7732BCDFB12DE876872CCA6B /* cppparser.cpp */; settings = {ATTRIBUTES = (); }; };
@@ -48,7 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		189759531F99CE8200EE81F0 /* PBXContainerItemProxy */ = {
+		18B7E0331FCFD0F400ED728A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6DB9C3763D02B1415CD9D565 /* Project object */;
 			proxyType = 1;
@@ -73,8 +73,8 @@
 /* Begin PBXFileReference section */
 		0653474CBBE6E300131DD7AE /* stringutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringutil.cpp; path = /Users/apple/CodeConfusingTool/CodeConfusing/stringutil.cpp; sourceTree = "<absolute>"; };
 		08BB4BA3CD6481973024F87B /* resultdialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = resultdialog.h; path = /Users/apple/CodeConfusingTool/CodeConfusing/resultdialog.h; sourceTree = "<absolute>"; };
-		189759541F99CFB000EE81F0 /* reskeys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = reskeys.txt; sourceTree = "<group>"; };
-		18C22A561F99E14400575710 /* DICT.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DICT.TXT; sourceTree = "<group>"; };
+		18B977571FCFD46700BA43BB /* DICT.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DICT.TXT; sourceTree = "<group>"; };
+		18B977581FCFD46700BA43BB /* reskeys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = reskeys.txt; sourceTree = "<group>"; };
 		1A7B89C1E82AC3978E54DFE0 /* classmodel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = classmodel.h; path = /Users/apple/CodeConfusingTool/CodeConfusing/classmodel.h; sourceTree = "<absolute>"; };
 		2B774D8E4178765CE52EAAF5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
 		2F0ACCE2F689FE1EA6491E2D /* classmodel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = classmodel.cpp; path = /Users/apple/CodeConfusingTool/CodeConfusing/classmodel.cpp; sourceTree = "<absolute>"; };
@@ -148,8 +148,8 @@
 		2EB56BE3C2D93CDAB0C52E67 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				189759541F99CFB000EE81F0 /* reskeys.txt */,
-				18C22A561F99E14400575710 /* DICT.TXT */,
+				18B977571FCFD46700BA43BB /* DICT.TXT */,
+				18B977581FCFD46700BA43BB /* reskeys.txt */,
 				88497F67E267279C3222448A /* main.cpp */,
 				6F5156C45A95669CDB400E42 /* dialog.cpp */,
 				606935A7FE89B66C7CFF8C58 /* fileviewer.cpp */,
@@ -256,6 +256,7 @@
 				TargetAttributes = {
 					AAC53F366E1907CBB58EACC3 = {
 						DevelopmentTeam = 5HA9XSZZ3J;
+						ProvisioningStyle = Automatic;
 					};
 					E7DD289902E4185AB3F804D1 = {
 						DevelopmentTeam = 5HA9XSZZ3J;
@@ -264,7 +265,7 @@
 			};
 			buildConfigurationList = DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "CodeConfusing" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = en;
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
@@ -285,8 +286,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18C22A571F99E14400575710 /* DICT.TXT in Copy Bundle Resources */,
-				189759551F99CFB000EE81F0 /* reskeys.txt in Copy Bundle Resources */,
+				18B977591FCFD46700BA43BB /* DICT.TXT in Copy Bundle Resources */,
+				18B9775A1FCFD46700BA43BB /* reskeys.txt in Copy Bundle Resources */,
 			);
 			name = "Copy Bundle Resources";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,7 +348,7 @@
 		8DD8F47AB1F9F68E605E8F30 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E7DD289902E4185AB3F804D1 /* Qt Preprocess */;
-			targetProxy = 189759531F99CE8200EE81F0 /* PBXContainerItemProxy */;
+			targetProxy = 18B7E0331FCFD0F400ED728A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -507,10 +508,12 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				"ARCHS[sdk=macosx*]" = x86_64;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 5HA9XSZZ3J;
 				ENABLE_BITCODE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = CodeConfusing;
 				QT_LIBRARY_SUFFIX = "";
 				SDKROOT = macosx;
@@ -522,11 +525,13 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				"ARCHS[sdk=macosx*]" = x86_64;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 5HA9XSZZ3J;
 				ENABLE_BITCODE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = CodeConfusing;
 				QT_LIBRARY_SUFFIX = _debug;

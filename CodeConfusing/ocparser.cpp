@@ -873,10 +873,10 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
     }
     else
     {
-        size_t last_brackets_index = identify_str.find_first_of('(');
-        if (last_brackets_index != string::npos)
+        size_t first_brackets_index = identify_str.find_first_of('(');
+        if (first_brackets_index != string::npos)
         {
-            identify_str = identify_str.substr(0, last_brackets_index);
+            identify_str = identify_str.substr(0, first_brackets_index);
         }
         
         size_t last_space_index = identify_str.find_last_of(' ');

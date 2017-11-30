@@ -261,7 +261,33 @@ void CppParser::R(string& str)
             break;
         }
     }
-
+    
+    do
+    {
+        index = (int)str.find("class\t");//消除,后面的换行
+        if(index != string::npos)
+        {
+            str.replace(index,6,"class ");
+        }
+        else
+        {
+            break;
+        }
+    }while(1);
+    
+    
+    do
+    {
+        index = (int)str.find("friend\t");//消除,后面的换行
+        if(index != string::npos)
+        {
+            str.replace(index,7,"friend ");
+        }
+        else
+        {
+            break;
+        }
+    }while(1);
     
     do
     {
@@ -364,6 +390,8 @@ void CppParser::display(SrcFileModel fileModel)
     {
         //类名
         string classname = i->classname;
+        
+        qDebug() << "类名：" << classname.c_str() << endl;
         if(i->extends.size() != 0)
         {
             for(b = i->extends.begin(); b != i->extends.end(); ++b)
@@ -391,8 +419,12 @@ void CppParser::display(SrcFileModel fileModel)
                 model.identifyName = varName;
                 model.identifyOriginName = varName;
                 model.filePath = fileModel.filePath;
-
-                database->insertRecord(model);
+                
+                if (handleCppIdentify(model))
+                {
+                    qDebug() << "find var： " << model.identifyName.c_str() << endl;
+                    database->insertRecord(model);
+                }
             }
         }
         for(b = i->function.begin(); b != i->function.end(); ++b)
@@ -410,7 +442,11 @@ void CppParser::display(SrcFileModel fileModel)
                 model.identifyOriginName = functionName;
                 model.filePath = fileModel.filePath;
 
-                database->insertRecord(model);
+                if (handleCppIdentify(model))
+                {
+                    qDebug() << "find function： " << model.identifyName.c_str() << endl;
+                    database->insertRecord(model);
+                }
             }
         }
     }
@@ -982,3 +1018,65 @@ vector<size_t> CppParser::actionscope(const string& str,size_t& fI)
     }
     return index;
 }
+
+bool CppParser::handleCppIdentify(ClassModel &classModel)
+{
+    StringUtil stringUtil;
+    
+    string identify_str = classModel.identifyName;
+    
+    identify_str = trim(identify_str);
+    
+    size_t class_colonIndex = identify_str.find("::");
+    
+    if (class_colonIndex != string::npos)// Cpp Function
+    {
+        size_t first_brackets_index = identify_str.find_first_of('(');
+        if (first_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(class_colonIndex+2, first_brackets_index-class_colonIndex-2);
+        }
+        
+        stringUtil.deleteSpecialChar(identify_str);
+        
+        if (stringUtil.is_allow_identify_name_c_cpp(identify_str))
+        {
+            string method_str = trim(identify_str);
+            if (stringUtil.is_allow_identify_name(classModel.className))
+            {
+                classModel.identifyName = method_str;
+                
+                return true;
+            }
+        }
+    }
+    else
+    {
+        size_t first_brackets_index = identify_str.find_first_of('(');
+        if (first_brackets_index != string::npos)
+        {
+            identify_str = identify_str.substr(0, first_brackets_index);
+        }
+        
+        size_t last_space_index = identify_str.find_last_of(' ');
+        if (last_space_index != string::npos)
+        {
+            identify_str = identify_str.substr(last_space_index+1, identify_str.length()-last_space_index-1);
+        }
+        
+        stringUtil.deleteSpecialChar(identify_str);
+        if (stringUtil.is_allow_identify_name_c_cpp(identify_str))
+        {
+            string method_str = trim(identify_str);
+            if (stringUtil.is_allow_identify_name(classModel.className))
+            {
+                classModel.identifyName = method_str;
+                
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+

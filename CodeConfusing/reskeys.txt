@@ -10549,3 +10549,6 @@ nonatomic
 contact
 owner
 round
+sprintf
+sockaddr_in
+BYTE

@@ -57,41 +57,17 @@ size_t is_property_method_same(string identify_str, bool isProperty)
 bool DataBase::insertRecord(ClassModel classModel)
 {
     StringUtil su;
-    if (classModel.isObjectiveC)
-    {
-        m_modelVec.push_back(classModel);
-        m_identifyVec.push_back(classModel.identifyName);
-    }
-    else
-    {
-        if (su.is_var_or_function(classModel.identifyName))
-        {
-            string identify_str = classModel.identifyName;
-
-            size_t last_brackets_index = identify_str.find_last_of('(');
-            if (last_brackets_index != string::npos)
-            {
-                identify_str = identify_str.substr(0, last_brackets_index);
-            }
-            
-            size_t last_space_index = identify_str.find_last_of(' ');
-            if (last_space_index != string::npos)
-            {
-                identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
-            }
-            
-            su.deleteSpecialChar(identify_str);
-            if (su.is_allow_identify_name(identify_str))
-            {
-                m_modelVec.push_back(classModel);
-                m_identifyVec.push_back(su.trim(identify_str));
-            }
-        }
-    }
+    m_modelVec.push_back(classModel);
+    m_identifyVec.push_back(classModel.identifyName);
     
     //类名
-    if (su.is_allow_identify_name(classModel.className))
+    if (classModel.isObjectiveC)
     {
+        if (su.is_allow_identify_name(classModel.className)) {
+            m_identifyVec.push_back(su.trim(classModel.className));
+        }
+    }
+    else {
         m_identifyVec.push_back(su.trim(classModel.className));
     }
 

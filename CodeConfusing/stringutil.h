@@ -14,6 +14,7 @@ public:
     StringUtil();
     
     bool is_allow_identify_name(string str);
+    bool is_allow_identify_name_c_cpp(string str);
     bool is_var_or_function(string str);
     inline bool is_str_contain_chars(string str);
     inline bool is_str_contain_space(string str);

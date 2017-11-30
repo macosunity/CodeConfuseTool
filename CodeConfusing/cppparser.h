@@ -11,6 +11,8 @@
 #include <QMessageBox>
 #include "srcfilemodel.h"
 #include "stringutil.h"
+#include "classmodel.h"
+
 using namespace std;
 
 #define INCLUDE                 10
@@ -68,6 +70,8 @@ private:
     vector<string> split(std::string str,std::string pattern);
 
     bool is_str_contain_space(string str);//是否包含空格
+    
+    bool handleCppIdentify(ClassModel &classModel);
 };
 
 

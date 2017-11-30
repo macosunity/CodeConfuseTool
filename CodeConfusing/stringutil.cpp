@@ -195,3 +195,26 @@ bool StringUtil::is_allow_identify_name(string str)
         return false;
     }
 }
+
+bool StringUtil::is_allow_identify_name_c_cpp(string str)
+{
+    if (str.length() == 1)
+    {
+        return false;
+    }
+    
+    StringUtil stringUtil;
+    regex reg("[_[:alpha:]][_[:alnum:]]*");
+    
+    regex upper_underline_reg("[_[:digit:][:upper:]]*");
+    
+    string judge_str = stringUtil.trim(str);
+    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
