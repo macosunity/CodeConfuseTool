@@ -102,8 +102,7 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
         }
         else
         {
-            string start = "";
-            string end = "";
+            string upperFirstIdentify = identify_str;
             
             bool isFirstLetterUpper = false;
             char firstLetter = identify_str[0];
@@ -112,34 +111,14 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
                 isFirstLetterUpper = true;
             }
             
-            if (identify_str.length() >= 4)
+            if (!isFirstLetterUpper)
             {
-                start = identify_str.substr(0, 3);
-            }
-            else
-            {
-                start = identify_str.substr(0, identify_str.length()-1);
-            }
-            
-            if (identify_str.length() >= 6)
-            {
-                end = identify_str.substr(identify_str.length()-4, 3);
-            }
-            else
-            {
-                string back = identify_str;
-                reverse(back.begin(),back.end());
-                end = back;
-            }
-            
-            if (isFirstLetterUpper)
-            {
-                string startFirstCharStr = start.substr(0,1);
+                string startFirstCharStr = identify_str.substr(0,1);
                 stringUtil.Toupper(startFirstCharStr);
-                start = start.replace(0, 1, startFirstCharStr);
+                upperFirstIdentify = identify_str.replace(0, 1, startFirstCharStr);
             }
             
-            resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(start.c_str()).append(disorderIdentifyVec[i].c_str()).append(end.c_str()).append("\n");
+            resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append(upperFirstIdentify.c_str()).append("\n");
         }
     }
     

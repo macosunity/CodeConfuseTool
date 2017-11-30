@@ -440,6 +440,9 @@ void Dialog::start_choosing()
 
         ss = wordsVec[index];
         qDebug() << ss.c_str() << endl;
+        string ssFirstCharStr = ss.substr(0,1);
+        stringUtil.Toupper(ssFirstCharStr);
+        ss = ss.replace(0, 1, ssFirstCharStr);
         strset.insert(ss);
     }
     
