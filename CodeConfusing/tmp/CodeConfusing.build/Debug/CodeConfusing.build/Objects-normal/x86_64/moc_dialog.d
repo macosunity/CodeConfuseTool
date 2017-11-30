@@ -134,6 +134,8 @@ dependencies: \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qtabbar.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qrubberband.h \
+  ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
+  ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
   fileviewer.h \
   ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QLabel \
   ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \

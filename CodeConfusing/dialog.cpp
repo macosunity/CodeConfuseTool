@@ -86,6 +86,7 @@ Dialog::Dialog(QString file_storage,
     choose = new QPushButton("请选择项目文件夹");
     start = new QPushButton("开始混淆");
     edit_line = new QLineEdit();
+    cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码(不勾选时只混淆C和C++代码)", this);
     
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     
@@ -94,17 +95,22 @@ Dialog::Dialog(QString file_storage,
 
     connect(choose, SIGNAL(clicked(bool)), SLOT(choose_path()));
     connect(start, SIGNAL(clicked(bool)), SLOT(start_choosing()));
+    connect(cb_isconfuse_objc, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     
-    QHBoxLayout *input = new QHBoxLayout();
-    input->addWidget(edit_line);
-    input->addWidget(choose);
+    QHBoxLayout *inputLayout = new QHBoxLayout();
+    inputLayout->addWidget(edit_line);
+    inputLayout->addWidget(choose);
     
-    QVBoxLayout *all = new QVBoxLayout();
-    all->addLayout(input);
-    all->addWidget(list);
-    all->addWidget(start);
+    QHBoxLayout *checksLayout = new QHBoxLayout();
+    checksLayout->addWidget(cb_isconfuse_objc);
     
-    setLayout(all);
+    QVBoxLayout *allLayout = new QVBoxLayout();
+    allLayout->addLayout(inputLayout);
+    allLayout->addLayout(checksLayout);
+    allLayout->addWidget(list);
+    allLayout->addWidget(start);
+    
+    setLayout(allLayout);
     setWindowTitle("项目代码混淆工具");
     setWindowFlags(Qt::Window);
     setGeometry(400,400,800,490);
@@ -158,6 +164,24 @@ bool Dialog::is_identify_property(string identify_str)
     }
     
     return false;
+}
+
+void Dialog::onStateChanged(int state)
+{
+    if (state == Qt::Checked) // "选中"
+    {
+        is_confuse_objc = true;
+        qDebug() << "选中: " << state << endl;
+    }
+    else if(state == Qt::PartiallyChecked) // "半选"
+    {
+        qDebug() << "半选: " << state << endl;
+    }
+    else // 未选中 - Qt::Unchecked
+    {
+        is_confuse_objc = false;
+        qDebug() << "未选中: " << state << endl;
+    }
 }
 
 void Dialog::start_choosing()
@@ -223,7 +247,7 @@ void Dialog::start_choosing()
                 cppParser.parseCppFile(file);
             }
             
-            if(file.mmFilePath.length() > 0)
+            if(is_confuse_objc && file.mmFilePath.length() > 0)
             {
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
@@ -246,7 +270,7 @@ void Dialog::start_choosing()
                 xibAndsb.push_back(xibfile);
             }
             
-            if(file.mFilePath.length() > 0)
+            if(is_confuse_objc && file.mFilePath.length() > 0)
             {
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
@@ -298,7 +322,7 @@ void Dialog::start_choosing()
             CppParser cppParser;
             cppParser.parseCppFile(file);
         }
-        else if(stringUtil.EndWith(file.fileName, ".m"))
+        else if(is_confuse_objc && stringUtil.EndWith(file.fileName, ".m"))
         {
             file.mFileName = file.fileName;
             file.mFilePath = file.filePath;
@@ -324,7 +348,7 @@ void Dialog::start_choosing()
             
             xibAndsb.push_back(xibfile);
         }
-        else if(stringUtil.EndWith(file.fileName, ".mm"))
+        else if(is_confuse_objc && stringUtil.EndWith(file.fileName, ".mm"))
         {
             findHeaderFileWithFileModel(file);
 

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Dialog_t {
-    QByteArrayData data[22];
-    char stringdata0[310];
+    QByteArrayData data[24];
+    char stringdata0[331];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -49,10 +49,12 @@ QT_MOC_LITERAL(14, 203, 11), // "const char*"
 QT_MOC_LITERAL(15, 215, 8), // "basePath"
 QT_MOC_LITERAL(16, 224, 11), // "choose_path"
 QT_MOC_LITERAL(17, 236, 14), // "start_choosing"
-QT_MOC_LITERAL(18, 251, 20), // "is_identify_property"
-QT_MOC_LITERAL(19, 272, 6), // "string"
-QT_MOC_LITERAL(20, 279, 12), // "identify_str"
-QT_MOC_LITERAL(21, 292, 17) // "is_identify_class"
+QT_MOC_LITERAL(18, 251, 14), // "onStateChanged"
+QT_MOC_LITERAL(19, 266, 5), // "state"
+QT_MOC_LITERAL(20, 272, 20), // "is_identify_property"
+QT_MOC_LITERAL(21, 293, 6), // "string"
+QT_MOC_LITERAL(22, 300, 12), // "identify_str"
+QT_MOC_LITERAL(23, 313, 17) // "is_identify_class"
 
     },
     "Dialog\0add_next_path\0\0path\0putAllKeyWords\0"
@@ -61,8 +63,9 @@ QT_MOC_LITERAL(21, 292, 17) // "is_identify_class"
     "findCppFileWithFileModel\0"
     "findHeaderFileWithFileModel\0readFileList\0"
     "const char*\0basePath\0choose_path\0"
-    "start_choosing\0is_identify_property\0"
-    "string\0identify_str\0is_identify_class"
+    "start_choosing\0onStateChanged\0state\0"
+    "is_identify_property\0string\0identify_str\0"
+    "is_identify_class"
 };
 #undef QT_MOC_LITERAL
 
@@ -72,7 +75,7 @@ static const uint qt_meta_data_Dialog[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -80,17 +83,18 @@ static const uint qt_meta_data_Dialog[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   69,    2, 0x0a /* Public */,
-       4,    1,   72,    2, 0x08 /* Private */,
-       7,    1,   75,    2, 0x08 /* Private */,
-      10,    1,   78,    2, 0x08 /* Private */,
-      11,    1,   81,    2, 0x08 /* Private */,
-      12,    1,   84,    2, 0x08 /* Private */,
-      13,    1,   87,    2, 0x08 /* Private */,
-      16,    0,   90,    2, 0x08 /* Private */,
-      17,    0,   91,    2, 0x08 /* Private */,
-      18,    1,   92,    2, 0x08 /* Private */,
-      21,    1,   95,    2, 0x08 /* Private */,
+       1,    1,   74,    2, 0x0a /* Public */,
+       4,    1,   77,    2, 0x08 /* Private */,
+       7,    1,   80,    2, 0x08 /* Private */,
+      10,    1,   83,    2, 0x08 /* Private */,
+      11,    1,   86,    2, 0x08 /* Private */,
+      12,    1,   89,    2, 0x08 /* Private */,
+      13,    1,   92,    2, 0x08 /* Private */,
+      16,    0,   95,    2, 0x08 /* Private */,
+      17,    0,   96,    2, 0x08 /* Private */,
+      18,    1,   97,    2, 0x08 /* Private */,
+      20,    1,  100,    2, 0x08 /* Private */,
+      23,    1,  103,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -102,8 +106,9 @@ static const uint qt_meta_data_Dialog[] = {
     QMetaType::Void, 0x80000000 | 14,   15,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Bool, 0x80000000 | 19,   20,
-    QMetaType::Bool, 0x80000000 | 19,   20,
+    QMetaType::Void, QMetaType::Int,   19,
+    QMetaType::Bool, 0x80000000 | 21,   22,
+    QMetaType::Bool, 0x80000000 | 21,   22,
 
        0        // eod
 };
@@ -127,9 +132,10 @@ void Dialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 6: _t->readFileList((*reinterpret_cast< const char*(*)>(_a[1]))); break;
         case 7: _t->choose_path(); break;
         case 8: _t->start_choosing(); break;
-        case 9: { bool _r = _t->is_identify_property((*reinterpret_cast< string(*)>(_a[1])));
+        case 9: _t->onStateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 10: { bool _r = _t->is_identify_property((*reinterpret_cast< string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 10: { bool _r = _t->is_identify_class((*reinterpret_cast< string(*)>(_a[1])));
+        case 11: { bool _r = _t->is_identify_class((*reinterpret_cast< string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -161,13 +167,13 @@ int Dialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }

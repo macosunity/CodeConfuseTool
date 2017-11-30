@@ -11,6 +11,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QCheckBox>
 #include <vector>
 #include <string>
 #include <unordered_set>
@@ -27,6 +28,7 @@ private:
     QPushButton *add;
     QPushButton *start;
     QPushButton *choose;
+    QCheckBox *cb_isconfuse_objc;
     QLineEdit *edit_line;
     QPushButton *del;
     
@@ -34,6 +36,8 @@ private:
     QString dir_storage;
     vector<SrcFileModel> fileList;
     vector<SrcFileModel> xibAndsb;
+    
+    bool is_confuse_objc;
     
 public:
     Dialog(QString file_storage, QString dir_storage, QWidget *parent = 0);
@@ -52,7 +56,7 @@ private slots:
     void readFileList(const char *basePath);
     void choose_path();
     void start_choosing();
-    
+    void onStateChanged(int state);
     
     bool is_identify_property(string identify_str);
     bool is_identify_class(string identify_str);
