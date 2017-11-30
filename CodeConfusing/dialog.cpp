@@ -195,6 +195,7 @@ void Dialog::start_choosing()
         SrcFileModel file = fileList.at(i);
 
         QString QfilePath = QString(file.filePath.c_str());
+        //过滤掉已经解析过的文件，还有Pods文件
         if (file.isParsed || QfilePath.contains("Pods/"))
         {
             continue;
@@ -285,17 +286,17 @@ void Dialog::start_choosing()
         }
         else if(stringUtil.EndWith(file.fileName, ".c"))
         {
-//            findHeaderFileWithFileModel(file);
-//
-//            file.cFileName = file.fileName;
-//            file.cFilePath = file.filePath;
-//
-//            QString parseInfoString = QString("正在分析:");
-//            parseInfoString = parseInfoString.append(file.filePath.c_str());
-//            list->addItem(parseInfoString);
-//
-//            CppParser cppParser;
-//            cppParser.parseCppFile(file);
+            findHeaderFileWithFileModel(file);
+
+            file.cFileName = file.fileName;
+            file.cFilePath = file.filePath;
+
+            QString parseInfoString = QString("正在分析:");
+            parseInfoString = parseInfoString.append(file.filePath.c_str());
+            list->addItem(parseInfoString);
+
+            CppParser cppParser;
+            cppParser.parseCppFile(file);
         }
         else if(stringUtil.EndWith(file.fileName, ".m"))
         {
@@ -343,33 +344,6 @@ void Dialog::start_choosing()
         else
         {
             //跳过其他文件
-            
-            if (stringUtil.EndWith(file.fileName, ".storyboard"))
-            {
-                SrcFileModel sbfile;
-                sbfile.fileName = file.fileName;
-                sbfile.filePath = file.filePath;
-                
-                xibAndsb.push_back(sbfile);
-            }
-            
-            if (stringUtil.EndWith(file.fileName, ".xib"))
-            {
-                SrcFileModel xibfile;
-                xibfile.fileName = file.fileName;
-                xibfile.filePath = file.filePath;
-                
-                xibAndsb.push_back(xibfile);
-            }
-            
-            if (stringUtil.EndWith(file.fileName, ".pbxproj"))
-            {
-                SrcFileModel xibfile;
-                xibfile.fileName = file.fileName;
-                xibfile.filePath = file.filePath;
-                
-                xibAndsb.push_back(xibfile);
-            }
         }
         
         list->update();
