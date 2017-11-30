@@ -89,7 +89,7 @@ dependencies: /Users/apple/CodeConfusingTool/CodeConfusing/cppparser.cpp \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qsizepolicy.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers/qcursor.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers/qkeysequence.h \
-  srcfilemodel.h stringutil.h database.h \
+  srcfilemodel.h stringutil.h classmodel.h database.h \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QTextCodec \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtextcodec.h \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QTime \
@@ -98,5 +98,4 @@ dependencies: /Users/apple/CodeConfusingTool/CodeConfusing/cppparser.cpp \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdebug.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qset.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcontiguouscache.h \
-  classmodel.h \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDebug

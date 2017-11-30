@@ -452,7 +452,12 @@ bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-        if(stringUtil.EndWith(file.filePath, "/"+cppFileName) || stringUtil.EndWith(file.filePath, "/"+ccFileName) || stringUtil.EndWith(file.filePath, "/"+cxxFileName))
+        string filePath = file.filePath;
+        stringUtil.Tolower(filePath);
+        stringUtil.Tolower(cppFileName);
+        stringUtil.Tolower(ccFileName);
+        stringUtil.Tolower(cxxFileName);
+        if(stringUtil.EndWith(filePath, "/"+cppFileName) || stringUtil.EndWith(filePath, "/"+ccFileName) || stringUtil.EndWith(filePath, "/"+cxxFileName))
         {
             QFile qfile(file.filePath.c_str());
             QFileInfo fi = QFileInfo(qfile);

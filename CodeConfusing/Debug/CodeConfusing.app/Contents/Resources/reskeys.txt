@@ -10552,3 +10552,5 @@ round
 sprintf
 sockaddr_in
 BYTE
+defined
+define

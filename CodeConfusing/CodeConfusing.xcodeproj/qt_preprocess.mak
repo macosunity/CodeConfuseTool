@@ -81,6 +81,7 @@ tmp/moc_resultdialog.cpp: ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Header
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		srcfilemodel.h \
 		resultdialog.h \
 		tmp/moc_predefs.h \
 		../../Qt/5.9.1/clang_64/bin/moc

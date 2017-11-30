@@ -154,7 +154,7 @@ dependencies: /Users/apple/CodeConfusingTool/CodeConfusing/dialog.cpp \
   ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
   ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers/qtextdocument.h \
-  stringutil.h cppparser.h ocparser.h classmodel.h database.h \
+  stringutil.h cppparser.h classmodel.h ocparser.h database.h \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QTextCodec \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtextcodec.h \
   ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QTime \
