@@ -10554,3 +10554,8 @@ sockaddr_in
 BYTE
 defined
 define
+UInt32
+UInt64
+file
+bytes
+le32toh
