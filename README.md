@@ -1,4 +1,4 @@
-# CodeConfusingTool
+# CodeConfuseTool
 
 C++/Objective C 项目代码混淆工具，主要功能是混淆类名和函数名，使用C++和Qt开发
 
