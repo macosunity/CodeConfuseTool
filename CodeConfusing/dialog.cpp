@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QTextStream>
 #include <QTextEdit>
+#include <QApplication>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -213,6 +214,7 @@ void Dialog::start_choosing()
     char *pathStr = ba.data();
     readFileList(pathStr);
     
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     StringUtil stringUtil;
     for(size_t i=0; i<fileList.size(); i++)
     {
@@ -375,6 +377,7 @@ void Dialog::start_choosing()
         list->scrollToBottom();
         QCoreApplication::processEvents();
     }
+    QApplication::restoreOverrideCursor();
     
     vector<string> identifyVec = database->queryAll();
     
@@ -418,6 +421,7 @@ void Dialog::start_choosing()
     }
 #endif
     
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     vector<string> wordsVec;
     
     QTextStream stream(&resFile);
@@ -429,8 +433,12 @@ void Dialog::start_choosing()
         string keyword = line.toStdString();
         wordsVec.push_back(keyword);
         ++n;
+        
+        QCoreApplication::processEvents();
     }
+    QApplication::restoreOverrideCursor();
     
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     srand((unsigned)time(NULL));
     unordered_set<string> strset;
     string ss = "";
@@ -444,13 +452,20 @@ void Dialog::start_choosing()
         stringUtil.Toupper(ssFirstCharStr);
         ss = ss.replace(0, 1, ssFirstCharStr);
         strset.insert(ss);
+        
+        QCoreApplication::processEvents();
     }
+    QApplication::restoreOverrideCursor();
     
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     vector<string> disorderIdentifyVec;
     for (unordered_set<string>::iterator it=strset.begin(); it!=strset.end(); it++)
     {
         disorderIdentifyVec.push_back(*it);
+        QCoreApplication::processEvents();
     }
+    
+    QApplication::restoreOverrideCursor();
     
     //启用list
     list->setEditTriggers(QAbstractItemView::AllEditTriggers);
@@ -458,12 +473,12 @@ void Dialog::start_choosing()
     list->setSelectionMode(QAbstractItemView::SingleSelection);
     list->setDragEnabled(true);
     
-    start->setEnabled(true);
-    
     ResultDialog *pResultDlg = new ResultDialog(this);
     pResultDlg->setModal(true);
     pResultDlg->setConfuseResult(resultVec, disorderIdentifyVec);
     pResultDlg->show();
+    
+    start->setEnabled(true);
 }
 
 bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
@@ -636,6 +651,7 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     }
 #endif
     
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     QTextStream stream(&resFile);
     QString line;
     int n = 1;
@@ -645,7 +661,10 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
         string keyword = line.toStdString();
         keysVec.push_back(keyword);
         ++n;
+        QCoreApplication::processEvents();
     }
+    
+    QApplication::restoreOverrideCursor();
     
     sort(keysVec.begin(), keysVec.end());
     

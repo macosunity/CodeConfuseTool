@@ -2,6 +2,8 @@
 #include "classmodel.h"
 #include "database.h"
 #include "stringutil.h"
+#include <QCoreApplication>
+#include <QApplication>
 
 ResultDialog::ResultDialog(QWidget *parent)
 :QDialog(parent)
@@ -72,6 +74,7 @@ bool is_identify_class(string identify_str)
 
 void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> disorderIdentifyVec)
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     StringUtil stringUtil;
     QString resultStr = "";
     for (size_t i=1; i<resultVec.size(); ++i)
@@ -120,7 +123,9 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
             
             resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append(upperFirstIdentify.c_str()).append("\n");
         }
+        QCoreApplication::processEvents();
     }
+    QApplication::restoreOverrideCursor();
     
     edit_result->setText(resultStr);
 }
