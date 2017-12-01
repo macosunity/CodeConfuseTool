@@ -50,7 +50,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             while(findSubStrAtPos(str_cpp,"#include",pos)){}//连续读取代码中的include名
 
             R(str_cpp);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
-            qDebug() << "pasing file :" << srcFile.filePath.c_str() << endl;
+//            qDebug() << "pasing file :" << srcFile.filePath.c_str() << endl;
             
             //has_class_declare为false的时候，表示虽然是cpp文件，但是cpp文件中不包含class类声明
             //GlobalClassDeclare这个类是默认用于添加形如"class A;"的类声明语句，不是真实类名
@@ -415,7 +415,7 @@ void CppParser::display(SrcFileModel fileModel)
         //类名
         string classname = i->classname;
         
-        qDebug() << "类名：" << classname.c_str() << endl;
+//        qDebug() << "类名：" << classname.c_str() << endl;
         if(i->extends.size() != 0)
         {
             for(b = i->extends.begin(); b != i->extends.end(); ++b)
@@ -446,7 +446,7 @@ void CppParser::display(SrcFileModel fileModel)
                 
                 if (handleCppIdentify(model))
                 {
-                    qDebug() << "find var in file: " << model.fileName.c_str() << " : "  << model.identifyOriginName.c_str() << endl;
+//                    qDebug() << "find var in file: " << model.fileName.c_str() << " : "  << model.identifyOriginName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }
@@ -468,7 +468,7 @@ void CppParser::display(SrcFileModel fileModel)
 
                 if (handleCppIdentify(model))
                 {
-                    qDebug() << "find function： " << model.fileName.c_str() << " : " << model.identifyOriginName.c_str() << endl;
+//                    qDebug() << "find function： " << model.fileName.c_str() << " : " << model.identifyOriginName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }

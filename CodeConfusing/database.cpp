@@ -63,11 +63,13 @@ bool DataBase::insertRecord(ClassModel classModel)
     //类名
     if (classModel.isObjectiveC)
     {
-        if (su.is_allow_identify_name(classModel.className)) {
+        if (su.is_allow_identify_name(classModel.className))
+        {
             m_identifyVec.push_back(su.trim(classModel.className));
         }
     }
-    else {
+    else
+    {
         m_identifyVec.push_back(su.trim(classModel.className));
     }
 

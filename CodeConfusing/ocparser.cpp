@@ -406,7 +406,7 @@ void OCParser::display(SrcFileModel fileModel)
                 
                 if (handleObjectiveCIdentify(model))
                 {
-                    qDebug() << "找到OC变量： " << varName.c_str() << endl;
+//                    qDebug() << "找到OC变量： " << varName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }
@@ -429,7 +429,7 @@ void OCParser::display(SrcFileModel fileModel)
                 
                 if (handleObjectiveCIdentify(model))
                 {
-                    qDebug() << "找到OC属性： " << propertyName.c_str() << endl;
+//                    qDebug() << "找到OC属性： " << propertyName.c_str() << endl;
                     database->insertRecord(model);
                 }
 
@@ -456,7 +456,7 @@ void OCParser::display(SrcFileModel fileModel)
 
                     if (handleObjectiveCIdentify(model))
                     {
-                        qDebug() << "找到OC方法： " << functionName.c_str() << endl;
+//                        qDebug() << "找到OC方法： " << functionName.c_str() << endl;
                         database->insertRecord(model);
                     }
                 }
@@ -856,7 +856,7 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
         if (last_space_index != string::npos)
         {
             identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
-            qDebug() << identify_str.c_str() << endl;
+//            qDebug() << identify_str.c_str() << endl;
         }
         
         stringUtil.deleteSpecialChar(identify_str);
