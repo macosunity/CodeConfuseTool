@@ -116,4 +116,12 @@ dependencies: \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlocale.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qset.h \
   /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcontiguouscache.h \
-  stringutil.h
+  stringutil.h \
+  ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
+  ../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+  /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcoreevent.h \
+  /Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qeventloop.h \
+  ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QApplication \
+  ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qapplication.h \
+  /Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
+  /Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers/qinputmethod.h

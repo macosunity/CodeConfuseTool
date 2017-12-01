@@ -51,9 +51,21 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
 
             R(str_cpp);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
             qDebug() << "pasing file :" << srcFile.filePath.c_str() << endl;
+            
+            //has_class_declare为false的时候，表示虽然是cpp文件，但是cpp文件中不包含class类声明
+            //GlobalClassDeclare这个类是默认用于添加形如"class A;"的类声明语句，不是真实类名
+            bool has_class_declare = false;
             for(vector<CppParser>::iterator b = _classes.begin(); b!=_classes.end(); ++b)
             {
-                while(findFunctionAndVarsOfClass(str_cpp, b->classname,pos, *b)){}//连续读取代码中的类
+                if (trim(b->classname).length() > 0 && !stringUtil.EndWith(b->classname, "GlobalClassDeclare"))
+                {
+                    has_class_declare = true;
+                    while(findFunctionAndVarsOfClass(str_cpp, b->classname,pos, *b)){}//连续读取代码中的类
+                }
+            }
+            if (!has_class_declare)
+            {
+                findGlobalVarsAndFunctions(str_cpp);
             }
             display(srcFile);
             fin_cpp.close();
@@ -95,9 +107,21 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
             while(findSubStrAtPos(str_cpp,"#include",pos)){}//连续读取代码中的include名
 
             R(str_cpp);//删除全部注释，跟D(temp)不一样的是 D(temp)以\t判断，这个以\r判断
+            
+            //has_class_declare为false的时候，表示虽然是cpp文件，但是cpp文件中不包含class类声明
+            //GlobalClassDeclare这个类是默认用于添加形如"class A;"的类声明语句，不是真实类名
+            bool has_class_declare = false;
             for(vector<CppParser>::iterator b = _classes.begin(); b!=_classes.end(); ++b)
             {
-                while(findFunctionAndVarsOfClass(str_cpp, b->classname,pos, *b)){}//连续读取代码中的类
+                if (trim(b->classname).length() > 0 && !stringUtil.EndWith(b->classname, "GlobalClassDeclare"))
+                {
+                    has_class_declare = true;
+                    while(findFunctionAndVarsOfClass(str_cpp, b->classname,pos, *b)){}//连续读取代码中的类
+                }
+            }
+            if (!has_class_declare)
+            {
+                findGlobalVarsAndFunctions(str_cpp);
             }
             display(srcFile);
             fin_cpp.close();
@@ -422,7 +446,7 @@ void CppParser::display(SrcFileModel fileModel)
                 
                 if (handleCppIdentify(model))
                 {
-                    qDebug() << "find var： " << model.identifyName.c_str() << endl;
+                    qDebug() << "find var in file: " << model.fileName.c_str() << " : "  << model.identifyOriginName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }
@@ -444,7 +468,7 @@ void CppParser::display(SrcFileModel fileModel)
 
                 if (handleCppIdentify(model))
                 {
-                    qDebug() << "find function： " << model.identifyName.c_str() << endl;
+                    qDebug() << "find function： " << model.fileName.c_str() << " : " << model.identifyOriginName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }
@@ -787,6 +811,7 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,size_t& pos,CppPa
         //排除所有作用域内的字符串
         for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
         {
+            qDebug() << "*vit is: " << *vit << endl;
             size_t start_index = *vit+1;
             size_t substr_index = *(vit+1)-*(vit)-1;
             
