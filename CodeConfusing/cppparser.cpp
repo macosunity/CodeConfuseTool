@@ -1050,10 +1050,14 @@ bool CppParser::handleCppIdentify(ClassModel &classModel)
     
     string identify_str = classModel.identifyName;
     
+    string lowercase_idt_str = identify_str;
+    stringUtil.Tolower(lowercase_idt_str);
     //过滤宏定义，复制，还有带分号的语句
-    if(identify_str.find("#define") != string::npos ||
-       identify_str.find("=") != string::npos ||
-       identify_str.find(";") != string::npos)
+    if(lowercase_idt_str.find("#define") != string::npos ||
+       lowercase_idt_str.find("=") != string::npos ||
+       lowercase_idt_str.find(";") != string::npos ||
+       lowercase_idt_str.find("export ") != string::npos ||
+       lowercase_idt_str.find("extern ") != string::npos)
     {
         return false;
     }
