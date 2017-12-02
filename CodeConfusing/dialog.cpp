@@ -384,12 +384,12 @@ void Dialog::start_choosing()
     vector<string> keysVec;
     putAllKeyWords(keysVec);
     
-    vector<string> intersectVec(12000);
+    vector<string> intersectVec(20000);
     set_intersection(identifyVec.begin(), identifyVec.end(), keysVec.begin(), keysVec.end(), intersectVec.begin());//交集
     sort(intersectVec.begin(),intersectVec.end());
     intersectVec.erase(unique(intersectVec.begin(), intersectVec.end()), intersectVec.end());
 
-    vector<string> resultVec(200000);
+    vector<string> resultVec(100000);
     set_difference(identifyVec.begin(), identifyVec.end(), intersectVec.begin(), intersectVec.end(), resultVec.begin()); //差集
     sort(resultVec.begin(),resultVec.end());
     resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());

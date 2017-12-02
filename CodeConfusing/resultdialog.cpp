@@ -117,7 +117,7 @@ void ResultDialog::setConfuseResult(vector<string> resultVec, vector<string> dis
             {
                 string startFirstCharStr = identify_str.substr(0,1);
                 stringUtil.Toupper(startFirstCharStr);
-                upperFirstIdentify = identify_str.replace(0, 1, startFirstCharStr);
+                upperFirstIdentify = upperFirstIdentify.replace(0, 1, startFirstCharStr);
             }
             
             resultStr.append("#define ").append(identify_str.c_str()).append(" ").append(disorderIdentifyVec[i].c_str()).append(upperFirstIdentify.c_str()).append("\n");

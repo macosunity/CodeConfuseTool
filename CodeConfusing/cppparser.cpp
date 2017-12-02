@@ -811,7 +811,7 @@ int CppParser::findFunctionAndVarsOfClass(string& str,string s,size_t& pos,CppPa
         //排除所有作用域内的字符串
         for(vector<size_t>::iterator vit = vi.begin(); vit != vi.end(); vit += 2)
         {
-            qDebug() << "*vit is: " << *vit << endl;
+//            qDebug() << "*vit is: " << *vit << endl;
             size_t start_index = *vit+1;
             size_t substr_index = *(vit+1)-*(vit)-1;
             
@@ -1049,6 +1049,14 @@ bool CppParser::handleCppIdentify(ClassModel &classModel)
     StringUtil stringUtil;
     
     string identify_str = classModel.identifyName;
+    
+    //过滤宏定义，复制，还有带分号的语句
+    if(identify_str.find("#define") != string::npos ||
+       identify_str.find("=") != string::npos ||
+       identify_str.find(";") != string::npos)
+    {
+        return false;
+    }
     
     identify_str = trim(identify_str);
     
