@@ -1056,6 +1056,7 @@ bool CppParser::handleCppIdentify(ClassModel &classModel)
     if(lowercase_idt_str.find("#define") != string::npos ||
        lowercase_idt_str.find("=") != string::npos ||
        lowercase_idt_str.find(";") != string::npos ||
+       lowercase_idt_str.find("),") != string::npos ||
        lowercase_idt_str.find("export ") != string::npos ||
        lowercase_idt_str.find("extern ") != string::npos)
     {
