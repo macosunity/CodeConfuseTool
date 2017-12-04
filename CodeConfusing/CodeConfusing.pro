@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     stringutil.cpp \
     database.cpp \
     classmodel.cpp \
-    resultdialog.cpp
+    resultdialog.cpp \
+    garbagecode.cpp
 
 HEADERS  += dialog.h \
     fileviewer.h \
@@ -41,7 +42,9 @@ HEADERS  += dialog.h \
     stringutil.h \
     database.h \
     classmodel.h \
-    resultdialog.h
+    resultdialog.h \
+    garbagecode.h
 
 DISTFILES += \
-    reskeys.txt
+    reskeys.txt \
+    garbagepiece.json

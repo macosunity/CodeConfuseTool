@@ -6,12 +6,16 @@
 #include <QTextStream>
 #include <QTextEdit>
 #include <QApplication>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <vector>
 
 #include "stringutil.h"
 
@@ -19,10 +23,13 @@
 #include "ocparser.h"
 #include "database.h"
 #include "resultdialog.h"
+#include "garbagecode.h"
 
 #define random(a,b) (rand()%(b-a+1)+a)
 
 #define DEBUG
+
+using namespace std;
 
 void Dialog::readFileList(const char *basePath)
 {
@@ -214,12 +221,116 @@ void Dialog::start_choosing()
     char *pathStr = ba.data();
     readFileList(pathStr);
     
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     StringUtil stringUtil;
+    
+    
+#ifdef DEBUG
+    QDir curr_dir;
+    QString jsonPath = curr_dir.absolutePath();
+    QDir jsonDir(jsonPath);
+    jsonDir.cdUp();
+    jsonPath = jsonDir.absolutePath();
+    qDebug() << jsonPath;
+    jsonPath = jsonPath.append("/garbagepiece.json");
+    
+    QFile jsonFile(jsonPath);
+    if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+#else
+    QString jsonPath = QCoreApplication::applicationDirPath();
+    jsonPath = jsonPath.append("/garbagepiece.json");
+    qDebug() << jsonPath;
+    QFile jsonFile(jsonPath);
+    if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(NULL, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+    }
+#endif
+
+//#ifdef __cplusplus
+//#import "Singleton.hpp"
+//#endif
+    
+#warning 垃圾代码里面不能有return返回值，因为没有检测函数的返回类型，如果想检测可以尝试检测下？？？
+#warning 垃圾代码尽量别使用stdlib之类的库函数
+#warning 垃圾代码尽量别使用长度为1的变量名称。比如A，B，C， 等
+#warning 处理下 空函数 {}
+    
+    QString val = jsonFile.readAll();
+    qDebug() << val << endl;
+    jsonFile.close();
+    
+    vector<string> garbageCodeArr;
+    for (int i=0; i<=1; i++) {
+        
+        QString indexKey = QString(std::to_string(i).c_str());
+        QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
+        QJsonObject jsonObj = doc.object();
+        QJsonValue value = jsonObj.value(indexKey);
+        
+        qDebug() << value << endl;
+        garbageCodeArr.push_back(value.toString().toStdString());
+    }
+    
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
     {
         SrcFileModel file = fileList.at(i);
-
+        
+        QString QfilePath = QString(file.filePath.c_str());
+        //过滤掉已经插入过垃圾代码的cpp文件，还有Pods文件
+        if (file.isParsed || QfilePath.contains("Pods/"))
+        {
+            continue;
+        }
+        
+        if(stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc"))
+        {
+            file.cppFileName = file.fileName;
+            file.cppFilePath = file.filePath;
+            
+            QString cppFilePathString = QString("正在插入垃圾指令:");
+            cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
+            list->addItem(cppFilePathString);
+            qDebug() << cppFilePathString << endl;
+            
+            GarbageCodeTool gct;
+            gct.insertGarbageCode(file, garbageCodeArr[0]);
+        }
+        else if(stringUtil.EndWith(file.fileName, ".c"))
+        {
+            findHeaderFileWithFileModel(file);
+            
+            file.cFileName = file.fileName;
+            file.cFilePath = file.filePath;
+            
+            QString parseInfoString = QString("正在插入垃圾指令:");
+            parseInfoString = parseInfoString.append(file.filePath.c_str());
+            qDebug() << parseInfoString << endl;
+            list->addItem(parseInfoString);
+            
+            GarbageCodeTool gct;
+            gct.insertGarbageCode(file, garbageCodeArr[1]);
+        }
+        else
+        {
+            //跳过其他文件
+        }
+        
+        list->update();
+        list->repaint();
+        list->scrollToBottom();
+        QCoreApplication::processEvents();
+    }
+    QApplication::restoreOverrideCursor();
+    
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    for(size_t i=0; i<fileList.size(); i++)
+    {
+        SrcFileModel file = fileList.at(i);
+        
         QString QfilePath = QString(file.filePath.c_str());
         //过滤掉已经解析过的文件，还有Pods文件
         if (file.isParsed || QfilePath.contains("Pods/"))
@@ -296,7 +407,7 @@ void Dialog::start_choosing()
         {
             file.cppFileName = file.fileName;
             file.cppFilePath = file.filePath;
-
+            
             if(findHeaderFileWithFileModel(file))
             {
                 QString headerFilePathString = QString("正在分析:");
@@ -306,21 +417,21 @@ void Dialog::start_choosing()
             QString cppFilePathString = QString("正在分析:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
-
+            
             CppParser cppParser;
             cppParser.parseCppFile(file);
         }
         else if(stringUtil.EndWith(file.fileName, ".c"))
         {
             findHeaderFileWithFileModel(file);
-
+            
             file.cFileName = file.fileName;
             file.cFilePath = file.filePath;
-
+            
             QString parseInfoString = QString("正在分析:");
             parseInfoString = parseInfoString.append(file.filePath.c_str());
             list->addItem(parseInfoString);
-
+            
             CppParser cppParser;
             cppParser.parseCppFile(file);
         }
@@ -328,18 +439,18 @@ void Dialog::start_choosing()
         {
             file.mFileName = file.fileName;
             file.mFilePath = file.filePath;
-
+            
             if(findHeaderFileWithFileModel(file))
             {
                 QString headerFilePathString = QString("正在分析:");
                 headerFilePathString = headerFilePathString.append(file.headerFilePath.c_str());
                 list->addItem(headerFilePathString);
             }
-
+            
             QString parseInfoString = QString("正在分析:");
             parseInfoString = parseInfoString.append(file.filePath.c_str());
             list->addItem(parseInfoString);
-
+            
             OCParser ocParser;
             ocParser.parseOCFile(file);
             
@@ -353,17 +464,17 @@ void Dialog::start_choosing()
         else if(is_confuse_objc && stringUtil.EndWith(file.fileName, ".mm"))
         {
             findHeaderFileWithFileModel(file);
-
+            
             file.mmFileName = file.fileName;
             file.mmFilePath = file.filePath;
-
+            
             QString parseInfoString = QString("正在分析:");
             parseInfoString = parseInfoString.append(file.filePath.c_str());
             list->addItem(parseInfoString);
-
+            
             OCParser ocParser;
             ocParser.parseOCFile(file);
-
+            
             CppParser cppParser;
             cppParser.parseCppFile(file);
         }
@@ -394,8 +505,7 @@ void Dialog::start_choosing()
     sort(resultVec.begin(),resultVec.end());
     resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());
 
-    
-    
+
 #ifdef DEBUG
     QDir dir;
     QString resPath = dir.absolutePath();

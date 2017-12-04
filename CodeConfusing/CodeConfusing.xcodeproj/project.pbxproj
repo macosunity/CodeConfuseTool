@@ -26,6 +26,8 @@
 		16E9046C974C42209D049092 /* QtCore.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 43B5E9E434FB96756DF65FBB /* QtCore.framework */; };
 		18B977591FCFD46700BA43BB /* DICT.TXT in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18B977571FCFD46700BA43BB /* DICT.TXT */; };
 		18B9775A1FCFD46700BA43BB /* reskeys.txt in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18B977581FCFD46700BA43BB /* reskeys.txt */; };
+		18E1F9BA1FD540C0000EED9A /* garbagecode.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 18E1F9B81FD540C0000EED9A /* garbagecode.cpp */; };
+		18E1F9C21FD55AE7000EED9A /* garbagepiece.json in Copy Bundle Resources */ = {isa = PBXBuildFile; fileRef = 18E1F9C11FD55AE7000EED9A /* garbagepiece.json */; };
 		1B1D1FE165FF8BC4841EDACB /* QtGui.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = E54B6F1E1A46CB37F877C270 /* QtGui.framework */; };
 		2A0166D3270BD2177481DB9D /* database.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C5C3FE26DB2007EB728B0717 /* database.cpp */; settings = {ATTRIBUTES = (); }; };
 		2A054E35803FD69B008BE256 /* cppparser.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7732BCDFB12DE876872CCA6B /* cppparser.cpp */; settings = {ATTRIBUTES = (); }; };
@@ -75,6 +77,9 @@
 		08BB4BA3CD6481973024F87B /* resultdialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = resultdialog.h; path = /Users/apple/CodeConfusingTool/CodeConfusing/resultdialog.h; sourceTree = "<absolute>"; };
 		18B977571FCFD46700BA43BB /* DICT.TXT */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DICT.TXT; sourceTree = "<group>"; };
 		18B977581FCFD46700BA43BB /* reskeys.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = reskeys.txt; sourceTree = "<group>"; };
+		18E1F9B81FD540C0000EED9A /* garbagecode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = garbagecode.cpp; sourceTree = "<group>"; };
+		18E1F9B91FD540C0000EED9A /* garbagecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garbagecode.h; sourceTree = "<group>"; };
+		18E1F9C11FD55AE7000EED9A /* garbagepiece.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = garbagepiece.json; sourceTree = "<group>"; };
 		1A7B89C1E82AC3978E54DFE0 /* classmodel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = classmodel.h; path = /Users/apple/CodeConfusingTool/CodeConfusing/classmodel.h; sourceTree = "<absolute>"; };
 		2B774D8E4178765CE52EAAF5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
 		2F0ACCE2F689FE1EA6491E2D /* classmodel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = classmodel.cpp; path = /Users/apple/CodeConfusingTool/CodeConfusing/classmodel.cpp; sourceTree = "<absolute>"; };
@@ -154,8 +159,9 @@
 				6F5156C45A95669CDB400E42 /* dialog.cpp */,
 				606935A7FE89B66C7CFF8C58 /* fileviewer.cpp */,
 				7732BCDFB12DE876872CCA6B /* cppparser.cpp */,
-				DF0704EB45E03410C45A59AE /* ocparser.cpp */,
+				18E1F9B81FD540C0000EED9A /* garbagecode.cpp */,
 				D80DC840038036E3DF58B448 /* srcfilemodel.cpp */,
+				DF0704EB45E03410C45A59AE /* ocparser.cpp */,
 				0653474CBBE6E300131DD7AE /* stringutil.cpp */,
 				C5C3FE26DB2007EB728B0717 /* database.cpp */,
 				2F0ACCE2F689FE1EA6491E2D /* classmodel.cpp */,
@@ -169,6 +175,8 @@
 				C918E642125AC5859C0281C7 /* database.h */,
 				1A7B89C1E82AC3978E54DFE0 /* classmodel.h */,
 				08BB4BA3CD6481973024F87B /* resultdialog.h */,
+				18E1F9B91FD540C0000EED9A /* garbagecode.h */,
+				18E1F9C11FD55AE7000EED9A /* garbagepiece.json */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -287,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18B977591FCFD46700BA43BB /* DICT.TXT in Copy Bundle Resources */,
+				18E1F9C21FD55AE7000EED9A /* garbagepiece.json in Copy Bundle Resources */,
 				18B9775A1FCFD46700BA43BB /* reskeys.txt in Copy Bundle Resources */,
 			);
 			name = "Copy Bundle Resources";
@@ -325,6 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				466F2017BC951993D88C5CB6 /* main.cpp in Compile Sources */,
+				18E1F9BA1FD540C0000EED9A /* garbagecode.cpp in Compile Sources */,
 				5A1E16C6E07DCCF15903A21F /* dialog.cpp in Compile Sources */,
 				E8DFC1FF0A792B0CDBAA4F86 /* fileviewer.cpp in Compile Sources */,
 				2A054E35803FD69B008BE256 /* cppparser.cpp in Compile Sources */,

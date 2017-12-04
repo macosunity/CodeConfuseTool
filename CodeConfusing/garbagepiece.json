@@ -1,0 +1,5 @@
+{
+    "0":"{\n\tif(Singleton::getInstance()->var>2000){while(1){int left=random()%2000;int right=random()%2100;int my_gba_arr[20]={20,35,1,9,3,21,7,6,42,63,28,90,20,35,8,95,33,26,72,41};int target=10;int absolutePrecision=10;if(left<right){}}}",
+    
+    "1":"{\n\tvolatile int v_var=20;if(v_var>2000){v_var*=200;}"
+}
