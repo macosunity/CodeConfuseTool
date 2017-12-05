@@ -18,41 +18,6 @@ void DataBase::clearIdentifyVec()
     vector<string>().swap(m_identifyVec);
 }
 
-//找到属性和方法名字相同，则全部删除
-size_t is_property_method_same(string identify_str, bool isProperty)
-{
-    DataBase *database = DataBase::Instance();
-    
-    vector<ClassModel> modelVec = database->queryAllModel();
-    
-    StringUtil stringUtil;
-    
-    if (isProperty)
-    {
-        for (size_t i=0; i<modelVec.size(); i++)
-        {
-            ClassModel model = modelVec[i];
-            if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.isMethodName)
-            {
-                return i;
-            }
-        }
-    }
-    else
-    {
-        for (size_t i=0; i<modelVec.size(); i++)
-        {
-            ClassModel model = modelVec[i];
-            if (stringUtil.StartWith(model.identifyName, identify_str) && model.identifyName.length() == identify_str.length() && model.isObjectiveC && model.isPropertyName)
-            {
-                return i;
-            }
-        }
-    }
-    
-    return -1;
-}
-
 //向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {

@@ -186,7 +186,34 @@ bool StringUtil::is_allow_identify_name(string str)
     regex upper_underline_reg("[_[:digit:][:upper:]]*");
     
     string judge_str = stringUtil.trim(str);
-    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "_") && !stringUtil.StartWith(str, "init") && !stringUtil.StartWith(str, "dispatch_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") && !stringUtil.StartWith(str, "CC_") && !stringUtil.StartWith(str, "CG") && !stringUtil.StartWith(str, "CM") && !stringUtil.StartWith(str, "CT") && !stringUtil.StartWith(str, "CF") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "sqlite3_") && !stringUtil.StartWith(str, "set") && !stringUtil.StartWith(str, "is") && !stringUtil.StartWith(str, "NS") && !stringUtil.StartWith(str, "kCG") && !stringUtil.StartWith(str, "AV") && !stringUtil.StartWith(str, "kCF") && !stringUtil.StartWith(str, "kCT") && !stringUtil.StartWith(str, "isEqual") && !stringUtil.StartWith(str, "UI") && !stringUtil.StartWith(str, "Sec") && !stringUtil.StartWith(str, "error") && !stringUtil.EndWith(str, "error") && !stringUtil.StartWith(str, "unsigned"))
+    if (regex_match(str, reg) &&
+        !regex_match(str, upper_underline_reg) &&
+        !stringUtil.StartWith(str, "_") &&
+        !stringUtil.StartWith(str, "init") &&
+        !stringUtil.StartWith(str, "dispatch_") &&
+        !stringUtil.StartWith(str, "gl") &&
+        !stringUtil.StartWith(str, "const_") &&
+        !stringUtil.StartWith(str, "objc_") &&
+        !stringUtil.StartWith(str, "CC_") &&
+        !stringUtil.StartWith(str, "CG") &&
+        !stringUtil.StartWith(str, "CM") &&
+        !stringUtil.StartWith(str, "CT") &&
+        !stringUtil.StartWith(str, "CF") &&
+        !stringUtil.StartWith(str, "NS") &&
+        !stringUtil.StartWith(str, "sqlite3_") &&
+        !stringUtil.StartWith(str, "set") &&
+        !stringUtil.StartWith(str, "is") &&
+        !stringUtil.StartWith(str, "NS") &&
+        !stringUtil.StartWith(str, "kCG") &&
+        !stringUtil.StartWith(str, "AV") &&
+        !stringUtil.StartWith(str, "kCF") &&
+        !stringUtil.StartWith(str, "kCT") &&
+        !stringUtil.StartWith(str, "isEqual") &&
+        !stringUtil.StartWith(str, "UI") &&
+        !stringUtil.StartWith(str, "Sec") &&
+        !stringUtil.StartWith(str, "error") &&
+        !stringUtil.EndWith(str, "error") &&
+        !stringUtil.StartWith(str, "unsigned"))
     {
         return true;
     }
@@ -209,7 +236,12 @@ bool StringUtil::is_allow_identify_name_c_cpp(string str)
     regex upper_underline_reg("[_[:digit:][:upper:]]*");
     
     string judge_str = stringUtil.trim(str);
-    if (regex_match(str, reg) && !regex_match(str, upper_underline_reg) && !stringUtil.StartWith(str, "_") && !stringUtil.StartWith(str, "gl") && !stringUtil.StartWith(str, "const_") && !stringUtil.StartWith(str, "objc_") )
+    if (regex_match(str, reg) &&
+        !regex_match(str, upper_underline_reg) &&
+        !stringUtil.StartWith(str, "_") &&
+        !stringUtil.StartWith(str, "gl") &&
+        !stringUtil.StartWith(str, "const_") &&
+        !stringUtil.StartWith(str, "objc_") )
     {
         return true;
     }
