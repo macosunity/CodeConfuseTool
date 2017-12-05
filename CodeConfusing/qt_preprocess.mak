@@ -43,35 +43,21 @@ compiler_moc_header_make_all: tmp/moc_dialog.cpp tmp/moc_fileviewer.cpp tmp/moc_
 compiler_moc_header_clean:
 	-$(DEL_FILE) tmp/moc_dialog.cpp tmp/moc_fileviewer.cpp tmp/moc_resultdialog.cpp
 tmp/moc_dialog.cpp: ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QDialog \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QStringList \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringlist.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QStringListModel \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringlistmodel.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QFileDialog \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qfiledialog.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QListWidget \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qlistwidget.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QCheckBox \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qcheckbox.h \
 		fileviewer.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QLabel \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QFile \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfile.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDir \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdir.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QFileInfo \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfileinfo.h \
 		srcfilemodel.h \
 		dialog.h \
 		tmp/moc_predefs.h \
@@ -79,34 +65,23 @@ tmp/moc_dialog.cpp: ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QDia
 	/Users/apple/Qt/5.9.1/clang_64/bin/moc $(DEFINES) --include tmp/moc_predefs.h -I/Users/apple/Qt/5.9.1/clang_64/mkspecs/macx-clang -I/Users/apple/CodeConfusingTool/CodeConfusing -I/Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers -I/Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers -I/Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.0.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/apple/Qt/5.9.1/clang_64/lib dialog.h -o tmp/moc_dialog.cpp
 
 tmp/moc_fileviewer.cpp: ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QDialog \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QLabel \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QFile \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfile.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDir \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdir.h \
 		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QFileInfo \
-		../../Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfileinfo.h \
 		fileviewer.h \
 		tmp/moc_predefs.h \
 		../../Qt/5.9.1/clang_64/bin/moc
 	/Users/apple/Qt/5.9.1/clang_64/bin/moc $(DEFINES) --include tmp/moc_predefs.h -I/Users/apple/Qt/5.9.1/clang_64/mkspecs/macx-clang -I/Users/apple/CodeConfusingTool/CodeConfusing -I/Users/apple/Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers -I/Users/apple/Qt/5.9.1/clang_64/lib/QtGui.framework/Headers -I/Users/apple/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.0.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/apple/Qt/5.9.1/clang_64/lib fileviewer.h -o tmp/moc_fileviewer.cpp
 
 tmp/moc_resultdialog.cpp: ../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QDialog \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
-		../../Qt/5.9.1/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		srcfilemodel.h \
 		resultdialog.h \
 		tmp/moc_predefs.h \

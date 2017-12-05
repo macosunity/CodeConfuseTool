@@ -15,7 +15,6 @@
 
 using namespace std;
 
-#warning 处理下 空函数 {}
 void GarbageCodeTool::modifyContentInFile(const char *fileName, string content)
 {
     StringUtil su;
@@ -33,7 +32,8 @@ void GarbageCodeTool::modifyContentInFile(const char *fileName, string content)
            su.EndWith(preline, ")") &&
            su.StartWith(line, "{"))
         {
-            tempStr += content+"\n";
+            string subline = line.substr(1,line.length()-1);
+            tempStr += content+"\n"+subline;
         }
         else
         {
