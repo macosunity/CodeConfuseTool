@@ -27,6 +27,7 @@ void GarbageCodeTool::modifyContentInFile(const char *fileName, string content)
     string tempStr = "";
     while(getline(fin,line,'\n'))
     {
+        preline = su.trim(preline);
         if(preline.length() > 0 &&
            line.length() > 0 &&
            su.EndWith(preline, ")") &&
