@@ -248,22 +248,13 @@ void Dialog::start_choosing()
         QMessageBox::critical(NULL, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #endif
-
-//#ifdef __cplusplus
-//#import "Singleton.hpp"
-//#endif
-    
-#warning 垃圾代码里面不能有return返回值，因为没有检测函数的返回类型，如果想检测可以尝试检测下？？？
-#warning 垃圾代码尽量别使用stdlib之类的库函数
-#warning 垃圾代码尽量别使用长度为1的变量名称。比如A，B，C， 等
-#warning 处理下 空函数 {}
     
     QString val = jsonFile.readAll();
     qDebug() << val << endl;
     jsonFile.close();
     
     vector<string> garbageCodeArr;
-    for (int i=0; i<=1; i++) {
+    for (int i=0; i<=6; i++) {
         
         QString indexKey = QString(std::to_string(i).c_str());
         QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
@@ -277,6 +268,7 @@ void Dialog::start_choosing()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
     {
+        int index = i % 6;
         SrcFileModel file = fileList.at(i);
         
         QString QfilePath = QString(file.filePath.c_str());
@@ -297,7 +289,7 @@ void Dialog::start_choosing()
             qDebug() << cppFilePathString << endl;
             
             GarbageCodeTool gct;
-            gct.insertGarbageCode(file, garbageCodeArr[0]);
+            gct.insertGarbageCode(file, garbageCodeArr[index]);
         }
         else if(stringUtil.EndWith(file.fileName, ".c"))
         {
@@ -312,7 +304,7 @@ void Dialog::start_choosing()
             list->addItem(parseInfoString);
             
             GarbageCodeTool gct;
-            gct.insertGarbageCode(file, garbageCodeArr[1]);
+            gct.insertGarbageCode(file, garbageCodeArr[index]);
         }
         else
         {
