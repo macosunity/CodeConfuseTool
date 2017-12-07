@@ -396,6 +396,12 @@ void OCParser::display(SrcFileModel fileModel)
             if(pos != b->length())
             {
                 string varName = b->substr(pos,b->length()-pos);
+                //不混淆xib绑定的属性和方法
+                if (varName.find("IBOutlet") != string::npos || varName.find("IBAction") != string::npos)
+                {
+                    continue;
+                }
+                
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
@@ -416,9 +422,16 @@ void OCParser::display(SrcFileModel fileModel)
             pos = 0;
             trim(*b);
             ignorespacetab(*b,pos);
-            if(pos != b->length())
+            if (pos != b->length())
             {
                 string propertyName = b->substr(pos,b->length()-pos);
+                
+                //不混淆xib绑定的属性
+                if (propertyName.find("IBOutlet") != string::npos)
+                {
+                    continue;
+                }
+                
                 ClassModel model;
                 model.fileName = fileModel.fileName;
                 model.className = oc_class_name;
@@ -444,6 +457,13 @@ void OCParser::display(SrcFileModel fileModel)
             if(pos != b->length())
             {
                 string functionName = b->substr(pos,b->length()-pos);
+                
+                //不混淆xib绑定的方法
+                if (functionName.find("IBAction") != string::npos)
+                {
+                    continue;
+                }
+                
                 if(!is_property_name_exist(functionName, i->properties))
                 {
                     ClassModel model;
