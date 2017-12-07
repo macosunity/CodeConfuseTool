@@ -94,8 +94,15 @@ Dialog::Dialog(QString file_storage,
     choose = new QPushButton("请选择项目文件夹");
     start = new QPushButton("开始混淆");
     edit_line = new QLineEdit();
-    cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码(不勾选时只混淆C和C++代码)", this);
-    cb_isinject_garbagecode_cpp = new QCheckBox("是否插入C++垃圾代码", this);
+    cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码", this);
+    cb_isconfuse_cpp = new QCheckBox("是否混淆C/C++代码", this);
+    cb_isinject_garbagecode_cpp = new QCheckBox("是否在C/C++函数中插入垃圾代码", this);
+    
+    cb_isconfuse_objc->setCheckState(Qt::Checked);
+    //set default flags
+    is_confuse_objc = true;
+    is_confuse_cpp = false;
+    is_inject_garbagecode_cpp = false;
     
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     
@@ -104,8 +111,9 @@ Dialog::Dialog(QString file_storage,
 
     connect(choose, SIGNAL(clicked(bool)), SLOT(choose_path()));
     connect(start, SIGNAL(clicked(bool)), SLOT(start_choosing()));
-    connect(cb_isconfuse_objc, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
-    connect(cb_isinject_garbagecode_cpp, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(cb_isconfuse_objc, SIGNAL(stateChanged(int)), this, SLOT(onConfuseObjCStateChanged(int)));
+    connect(cb_isconfuse_cpp, SIGNAL(stateChanged(int)), this, SLOT(onConfuseCppStateChanged(int)));
+    connect(cb_isinject_garbagecode_cpp, SIGNAL(stateChanged(int)), this, SLOT(onInjectCodeStateChanged(int)));
     
     QHBoxLayout *inputLayout = new QHBoxLayout();
     inputLayout->addWidget(edit_line);
@@ -113,6 +121,7 @@ Dialog::Dialog(QString file_storage,
     
     QVBoxLayout *checksLayout = new QVBoxLayout();
     checksLayout->addWidget(cb_isconfuse_objc);
+    checksLayout->addWidget(cb_isconfuse_cpp);
     checksLayout->addWidget(cb_isinject_garbagecode_cpp);
     
     QVBoxLayout *allLayout = new QVBoxLayout();
@@ -177,12 +186,11 @@ bool Dialog::is_identify_property(string identify_str)
     return false;
 }
 
-void Dialog::onStateChanged(int state)
+void Dialog::onConfuseObjCStateChanged(int state)
 {
     if (state == Qt::Checked) // "选中"
     {
         is_confuse_objc = true;
-        is_inject_garbagecode_cpp = true;
         qDebug() << "选中: " << state << endl;
     }
     else if(state == Qt::PartiallyChecked) // "半选"
@@ -192,6 +200,41 @@ void Dialog::onStateChanged(int state)
     else // 未选中 - Qt::Unchecked
     {
         is_confuse_objc = false;
+        qDebug() << "未选中: " << state << endl;
+    }
+}
+
+void Dialog::onConfuseCppStateChanged(int state)
+{
+    if (state == Qt::Checked) // "选中"
+    {
+        is_confuse_cpp = true;
+        qDebug() << "选中: " << state << endl;
+    }
+    else if(state == Qt::PartiallyChecked) // "半选"
+    {
+        qDebug() << "半选: " << state << endl;
+    }
+    else // 未选中 - Qt::Unchecked
+    {
+        is_confuse_cpp = false;
+        qDebug() << "未选中: " << state << endl;
+    }
+}
+
+void Dialog::onInjectCodeStateChanged(int state)
+{
+    if (state == Qt::Checked) // "选中"
+    {
+        is_inject_garbagecode_cpp = true;
+        qDebug() << "选中: " << state << endl;
+    }
+    else if(state == Qt::PartiallyChecked) // "半选"
+    {
+        qDebug() << "半选: " << state << endl;
+    }
+    else // 未选中 - Qt::Unchecked
+    {
         is_inject_garbagecode_cpp = false;
         qDebug() << "未选中: " << state << endl;
     }
@@ -321,7 +364,7 @@ void Dialog::generate_confuse_code()
             findCppFileWithFileModel(file);
             findMMFileWithFileModel(file);
             findMFileWithFileModel(file);
-            if (file.cppFilePath.length() > 0)
+            if (is_confuse_cpp && file.cppFilePath.length() > 0)
             {
                 QString headFileString = QString("正在分析:");
                 headFileString = headFileString.append(file.headerFilePath.c_str());
@@ -378,7 +421,7 @@ void Dialog::generate_confuse_code()
                 xibAndsb.push_back(xibfile);
             }
         }
-        else if(stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc"))
+        else if(is_confuse_cpp && (stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc")))
         {
             file.cppFileName = file.fileName;
             file.cppFilePath = file.filePath;
@@ -396,7 +439,7 @@ void Dialog::generate_confuse_code()
             CppParser cppParser;
             cppParser.parseCppFile(file);
         }
-        else if(stringUtil.EndWith(file.fileName, ".c"))
+        else if(is_confuse_cpp && stringUtil.EndWith(file.fileName, ".c"))
         {
             findHeaderFileWithFileModel(file);
             
