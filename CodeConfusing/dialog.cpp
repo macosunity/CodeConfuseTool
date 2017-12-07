@@ -95,6 +95,7 @@ Dialog::Dialog(QString file_storage,
     start = new QPushButton("开始混淆");
     edit_line = new QLineEdit();
     cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码(不勾选时只混淆C和C++代码)", this);
+    cb_isinject_garbagecode_cpp = new QCheckBox("是否插入C++垃圾代码", this);
     
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     
@@ -104,13 +105,15 @@ Dialog::Dialog(QString file_storage,
     connect(choose, SIGNAL(clicked(bool)), SLOT(choose_path()));
     connect(start, SIGNAL(clicked(bool)), SLOT(start_choosing()));
     connect(cb_isconfuse_objc, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
+    connect(cb_isinject_garbagecode_cpp, SIGNAL(stateChanged(int)), this, SLOT(onStateChanged(int)));
     
     QHBoxLayout *inputLayout = new QHBoxLayout();
     inputLayout->addWidget(edit_line);
     inputLayout->addWidget(choose);
     
-    QHBoxLayout *checksLayout = new QHBoxLayout();
+    QVBoxLayout *checksLayout = new QVBoxLayout();
     checksLayout->addWidget(cb_isconfuse_objc);
+    checksLayout->addWidget(cb_isinject_garbagecode_cpp);
     
     QVBoxLayout *allLayout = new QVBoxLayout();
     allLayout->addLayout(inputLayout);
@@ -179,6 +182,7 @@ void Dialog::onStateChanged(int state)
     if (state == Qt::Checked) // "选中"
     {
         is_confuse_objc = true;
+        is_inject_garbagecode_cpp = true;
         qDebug() << "选中: " << state << endl;
     }
     else if(state == Qt::PartiallyChecked) // "半选"
@@ -188,39 +192,13 @@ void Dialog::onStateChanged(int state)
     else // 未选中 - Qt::Unchecked
     {
         is_confuse_objc = false;
+        is_inject_garbagecode_cpp = false;
         qDebug() << "未选中: " << state << endl;
     }
 }
 
-void Dialog::start_choosing()
+void Dialog::inject_garbagecode()
 {
-    start->setEnabled(false);
-
-    list->setMouseTracking(false);
-
-    list->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    list->setSelectionRectVisible(true);
-    list->setSelectionBehavior(QAbstractItemView::SelectColumns);
-    list->setSelectionMode(QAbstractItemView::NoSelection);
-    list->setDragEnabled(false);
-
-    while(list->count() != 0)
-    {
-        QListWidgetItem *item = list->takeItem(0);
-        list->removeItemWidget(item);
-        delete item;
-    }
-    
-    DataBase *database = DataBase::Instance();
-    database->clearIdentifyVec();
-    vector<SrcFileModel>().swap(fileList);
-
-    QString path = edit_line->text();
-
-    QByteArray ba = path.toUtf8();
-    char *pathStr = ba.data();
-    readFileList(pathStr);
-    
     StringUtil stringUtil;
     
     
@@ -317,6 +295,11 @@ void Dialog::start_choosing()
         QCoreApplication::processEvents();
     }
     QApplication::restoreOverrideCursor();
+}
+
+void Dialog::generate_confuse_code()
+{
+    StringUtil stringUtil;
     
     QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
@@ -481,6 +464,44 @@ void Dialog::start_choosing()
         QCoreApplication::processEvents();
     }
     QApplication::restoreOverrideCursor();
+}
+
+void Dialog::start_choosing()
+{
+    start->setEnabled(false);
+
+    list->setMouseTracking(false);
+
+    list->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    list->setSelectionRectVisible(true);
+    list->setSelectionBehavior(QAbstractItemView::SelectColumns);
+    list->setSelectionMode(QAbstractItemView::NoSelection);
+    list->setDragEnabled(false);
+
+    while(list->count() != 0)
+    {
+        QListWidgetItem *item = list->takeItem(0);
+        list->removeItemWidget(item);
+        delete item;
+    }
+    
+    DataBase *database = DataBase::Instance();
+    database->clearIdentifyVec();
+    vector<SrcFileModel>().swap(fileList);
+
+    QString path = edit_line->text();
+
+    QByteArray ba = path.toUtf8();
+    char *pathStr = ba.data();
+    readFileList(pathStr);
+    
+    if(is_inject_garbagecode_cpp)
+    {
+        inject_garbagecode();
+    }
+    
+    generate_confuse_code();
+    
     
     vector<string> identifyVec = database->queryAll();
     
@@ -540,6 +561,7 @@ void Dialog::start_choosing()
     }
     QApplication::restoreOverrideCursor();
     
+    StringUtil stringUtil;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     srand((unsigned)time(NULL));
     unordered_set<string> strset;

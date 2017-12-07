@@ -29,6 +29,7 @@ private:
     QPushButton *start;
     QPushButton *choose;
     QCheckBox *cb_isconfuse_objc;
+    QCheckBox *cb_isinject_garbagecode_cpp;
     QLineEdit *edit_line;
     QPushButton *del;
     
@@ -38,6 +39,7 @@ private:
     vector<SrcFileModel> xibAndsb;
     
     bool is_confuse_objc;
+    bool is_inject_garbagecode_cpp;
     
 public:
     Dialog(QString file_storage, QString dir_storage, QWidget *parent = 0);
@@ -57,6 +59,9 @@ private slots:
     void choose_path();
     void start_choosing();
     void onStateChanged(int state);
+    
+    void generate_confuse_code();
+    void inject_garbagecode();
     
     bool is_identify_property(string identify_str);
     bool is_identify_class(string identify_str);
