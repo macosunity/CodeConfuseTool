@@ -538,12 +538,15 @@ void Dialog::start_choosing()
     char *pathStr = ba.data();
     readFileList(pathStr);
     
-    if(is_inject_garbagecode_cpp)
+    if (is_inject_garbagecode_cpp)
     {
         inject_garbagecode();
     }
     
-    generate_confuse_code();
+    if (is_confuse_cpp || is_confuse_objc)
+    {
+        generate_confuse_code();
+    }
     
     
     vector<string> identifyVec = database->queryAll();
