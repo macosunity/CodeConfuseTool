@@ -249,7 +249,20 @@ void CppParser::D(string& str,string s)
 void CppParser::R(string& str)
 {
     size_t index;
-
+    
+    do
+    {
+        index = str.find("inline ");//删除inline
+        if(index != string::npos)
+        {
+            str.replace(index,7,"");
+        }
+        else
+        {
+            break;
+        }
+    }while(1);
+    
     do
     {
         index = str.find("://");// 找到 :// 的位置 各种协议中包含的字符串, 防止和//注释混淆
@@ -262,6 +275,33 @@ void CppParser::R(string& str)
             break;
         }
     }while(1);
+    
+    //do
+    {
+        StringUtil stringUtil;
+        string lowerstr = str;
+        stringUtil.Tolower(lowerstr);
+        if (lowerstr.find("using_")!=string::npos)
+        {
+            index = lowerstr.find("using_");
+            qDebug() << lowerstr.c_str() << index << endl;
+        }
+        else
+        {
+            index = lowerstr.find("using ");// 找到 using namespace 之类的引用
+            qDebug() << lowerstr.c_str() << index << endl;
+        }
+        
+        if(index != string::npos)
+        {
+            lowerstr.replace(index,3,"//");
+        }
+        else
+        {
+            //break;
+        }
+        
+    }//while(1);
 
     while(1)
     {

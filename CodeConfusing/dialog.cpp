@@ -351,7 +351,7 @@ void Dialog::generate_confuse_code()
         
         QString QfilePath = QString(file.filePath.c_str());
         //过滤掉已经解析过的文件，还有Pods文件
-        if (file.isParsed || QfilePath.contains("Pods/"))
+        if (file.isParsed || QfilePath.contains("Pods/") || QfilePath.contains("sqlite"))
         {
             continue;
         }
@@ -434,6 +434,7 @@ void Dialog::generate_confuse_code()
             QString cppFilePathString = QString("正在分析:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
+            qDebug() <<"curr cpp file is:" << cppFilePathString << endl;
             
             CppParser cppParser;
             cppParser.parseCppFile(file);

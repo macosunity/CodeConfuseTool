@@ -9,7 +9,7 @@ QT       += core gui
 #不输出QDebug调试信息
 #DEFINES  += QT_NO_WARNING_OUTPUT\
 #           QT_NO_DEBUG_OUTPUT
-#CONFIG   += console
+CONFIG   += console
 #CONFIG   -= app_bundle
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.10
 
