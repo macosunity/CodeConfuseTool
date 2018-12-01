@@ -275,33 +275,6 @@ void CppParser::R(string& str)
             break;
         }
     }while(1);
-    
-    //do
-    {
-        StringUtil stringUtil;
-        string lowerstr = str;
-        stringUtil.Tolower(lowerstr);
-        if (lowerstr.find("using_")!=string::npos)
-        {
-            index = lowerstr.find("using_");
-            qDebug() << lowerstr.c_str() << index << endl;
-        }
-        else
-        {
-            index = lowerstr.find("using ");// 找到 using namespace 之类的引用
-            qDebug() << lowerstr.c_str() << index << endl;
-        }
-        
-        if(index != string::npos)
-        {
-            lowerstr.replace(index,3,"//");
-        }
-        else
-        {
-            //break;
-        }
-        
-    }//while(1);
 
     while(1)
     {

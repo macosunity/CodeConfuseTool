@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QCheckBox>
+#include <QLabel>
 #include <vector>
 #include <string>
 #include <unordered_set>
@@ -28,9 +29,11 @@ private:
     QPushButton *add;
     QPushButton *start;
     QPushButton *choose;
+    QLabel  *lbl_ignore_folders;
     QCheckBox *cb_isconfuse_objc;
     QCheckBox *cb_isconfuse_cpp;
     QCheckBox *cb_isinject_garbagecode_cpp;
+    QLineEdit *edit_ignore_folders;
     QLineEdit *edit_line;
     QPushButton *del;
     

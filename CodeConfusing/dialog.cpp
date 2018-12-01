@@ -94,6 +94,8 @@ Dialog::Dialog(QString file_storage,
     choose = new QPushButton("请选择项目文件夹");
     start = new QPushButton("开始混淆");
     edit_line = new QLineEdit();
+    edit_ignore_folders = new QLineEdit();
+    lbl_ignore_folders = new QLabel("请输入要忽略的文件夹名字，以空格分割：");
     cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码", this);
     cb_isconfuse_cpp = new QCheckBox("是否混淆C/C++代码", this);
     cb_isinject_garbagecode_cpp = new QCheckBox("是否在C/C++函数中插入垃圾代码", this);
@@ -107,6 +109,8 @@ Dialog::Dialog(QString file_storage,
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     
     edit_line->setMinimumWidth(300);
+    lbl_ignore_folders->setAlignment(Qt::AlignLeft);
+    lbl_ignore_folders->adjustSize();
     choose->setMinimumWidth(140);
 
     connect(choose, SIGNAL(clicked(bool)), SLOT(choose_path()));
@@ -120,6 +124,14 @@ Dialog::Dialog(QString file_storage,
     inputLayout->addWidget(choose);
     
     QVBoxLayout *checksLayout = new QVBoxLayout();
+    
+    QHBoxLayout *ignoreFolderLayout = new QHBoxLayout();
+    ignoreFolderLayout->addWidget(lbl_ignore_folders);
+    ignoreFolderLayout->addWidget(edit_ignore_folders);
+    ignoreFolderLayout->setStretchFactor(lbl_ignore_folders, 1);
+    ignoreFolderLayout->setStretchFactor(edit_ignore_folders, 2);
+    
+    checksLayout->addLayout(ignoreFolderLayout);
     checksLayout->addWidget(cb_isconfuse_objc);
     checksLayout->addWidget(cb_isconfuse_cpp);
     checksLayout->addWidget(cb_isinject_garbagecode_cpp);
@@ -286,6 +298,9 @@ void Dialog::inject_garbagecode()
         garbageCodeArr.push_back(value.toString().toStdString());
     }
     
+    QString ignore_folders = edit_ignore_folders->text();
+    QStringList ignore_folders_list = ignore_folders.split(" ");
+    
     QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
     {
@@ -294,9 +309,26 @@ void Dialog::inject_garbagecode()
         
         QString QfilePath = QString(file.filePath.c_str());
         //过滤掉已经插入过垃圾代码的cpp文件，还有Pods文件
-        if (file.isParsed || QfilePath.contains("Pods/"))
+        if (file.isParsed || QfilePath.contains("Pods/") || QfilePath.contains("sqlite"))
         {
             continue;
+        }
+        
+        if (ignore_folders.length() > 0)
+        {
+            bool bPathContainsIgnoreFolder = false;
+            for (int k=0; k<ignore_folders_list.size(); k++)
+            {
+                if (QfilePath.contains(ignore_folders_list[k]))
+                {
+                    bPathContainsIgnoreFolder = true;
+                }
+            }
+            
+            if (bPathContainsIgnoreFolder)
+            {
+                continue;
+            }
         }
         
         if(stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc"))
@@ -307,7 +339,7 @@ void Dialog::inject_garbagecode()
             QString cppFilePathString = QString("正在插入垃圾指令:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
-            qDebug() << cppFilePathString << endl;
+            //qDebug() << cppFilePathString << endl;
             
             GarbageCodeTool gct;
             gct.insertGarbageCode(file, garbageCodeArr[index]);
@@ -344,6 +376,9 @@ void Dialog::generate_confuse_code()
 {
     StringUtil stringUtil;
     
+    QString ignore_folders = edit_ignore_folders->text();
+    QStringList ignore_folders_list = ignore_folders.split(" ");
+    
     QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
     {
@@ -354,6 +389,23 @@ void Dialog::generate_confuse_code()
         if (file.isParsed || QfilePath.contains("Pods/") || QfilePath.contains("sqlite"))
         {
             continue;
+        }
+        
+        if (ignore_folders.length() > 0)
+        {
+            bool bPathContainsIgnoreFolder = false;
+            for (int k=0; k<ignore_folders_list.size(); k++)
+            {
+                if (QfilePath.contains(ignore_folders_list[k]))
+                {
+                    bPathContainsIgnoreFolder = true;
+                }
+            }
+            
+            if (bPathContainsIgnoreFolder)
+            {
+                continue;
+            }
         }
 
         if(stringUtil.EndWith(file.fileName, ".h") || stringUtil.EndWith(file.fileName, ".hpp"))
@@ -434,7 +486,7 @@ void Dialog::generate_confuse_code()
             QString cppFilePathString = QString("正在分析:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
-            qDebug() <<"curr cpp file is:" << cppFilePathString << endl;
+            //qDebug() <<"curr cpp file is:" << cppFilePathString << endl;
             
             CppParser cppParser;
             cppParser.parseCppFile(file);
