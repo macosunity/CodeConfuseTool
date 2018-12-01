@@ -28,7 +28,7 @@ public: \
 
 class DataBase
 {
-    DECLARE_SINGLETON(DataBase);
+    DECLARE_SINGLETON(DataBase)
 private:
     vector<string> sqlcmds;
     vector<string> m_identifyVec;

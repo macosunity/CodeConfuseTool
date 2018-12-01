@@ -32,7 +32,7 @@ private:
     void set_up_layouts(QString dir);
     
 public:
-    FileViewer(QString dir = "", QString file_path = "", QString dir_path = "", QWidget *parent = 0);
+    FileViewer(QString dir = "", QString file_path = "", QString dir_path = "", QWidget *parent = nullptr);
     
     void start();
     void next();

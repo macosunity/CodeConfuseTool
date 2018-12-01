@@ -20,7 +20,7 @@ protected:
     QTextEdit *edit_result;
     
 public:
-    ResultDialog(QWidget *parent = 0);
+    ResultDialog(QWidget *parent = nullptr);
     ~ResultDialog();
     void setConfuseResult(vector<string> resultVec, vector<string> disorderIdentifyVec);
     

@@ -36,13 +36,13 @@ void Dialog::readFileList(const char *basePath)
     DIR *dir;
     struct dirent *ptr;
 
-    if ((dir=opendir(basePath)) == NULL)
+    if ((dir=opendir(basePath)) == nullptr)
     {
         perror("Open dir error...");
         return;
     }
 
-    while ((ptr=readdir(dir)) != NULL)
+    while ((ptr=readdir(dir)) != nullptr)
     {
         if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)    ///current dir OR parrent dir
         {
@@ -257,7 +257,7 @@ void Dialog::inject_garbagecode()
     QFile jsonFile(jsonPath);
     if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #else
     QString jsonPath = QCoreApplication::applicationDirPath();
@@ -266,7 +266,7 @@ void Dialog::inject_garbagecode()
     QFile jsonFile(jsonPath);
     if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #endif
     
@@ -289,7 +289,7 @@ void Dialog::inject_garbagecode()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     for(size_t i=0; i<fileList.size(); i++)
     {
-        int index = i % 6;
+        size_t index = i % 6;
         SrcFileModel file = fileList.at(i);
         
         QString QfilePath = QString(file.filePath.c_str());
@@ -355,9 +355,8 @@ void Dialog::generate_confuse_code()
         {
             continue;
         }
-        
-#warning 有的C++头文件是.hpp的
-        if(stringUtil.EndWith(file.fileName, ".h"))
+
+        if(stringUtil.EndWith(file.fileName, ".h") || stringUtil.EndWith(file.fileName, ".hpp"))
         {
             file.headerFilePath = file.filePath;
             
@@ -576,7 +575,7 @@ void Dialog::start_choosing()
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #else
     QDir dir;
@@ -586,7 +585,7 @@ void Dialog::start_choosing()
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #endif
     
@@ -609,12 +608,12 @@ void Dialog::start_choosing()
     
     StringUtil stringUtil;
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    srand((unsigned)time(NULL));
+    srand(static_cast<unsigned>(time(nullptr)));
     unordered_set<string> strset;
     string ss = "";
     while(strset.size() < resultVec.size())
     {
-        int index = random(1, wordsVec.size()-1);
+        size_t index = static_cast<size_t>(random(1, static_cast<int>(wordsVec.size()-1)));
 
         ss = wordsVec[index];
         qDebug() << ss.c_str() << endl;
@@ -807,7 +806,7 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #else
     QDir dir;
@@ -817,7 +816,7 @@ void Dialog::putAllKeyWords(vector<string> &keysVec)
     QFile resFile(resPath);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(NULL, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
 #endif
     

@@ -20,7 +20,7 @@ using namespace std;
 #define TEMPLATE_CLASS          30
 #define VARIABLE                40
 #define FUNCTION                50
-#define UNDEINED                -1
+#define UNDEINED                65535
 #define NOTFOUND                0
 #define HAVEFOUND               1
 
@@ -49,7 +49,7 @@ private:
     inline string& rtrim(string &str);
     inline string& ltrim(string &str);
     string& trim(string &s); //去除空格和换行
-    int judge(string s);//判断字符串名字返回不同的值
+    size_t judge(string s);//判断字符串名字返回不同的值
     void D(string& str,char c);//在字符串str中循环删除字符c
     void D(string& str,string s);//删除所有指定的字符串
     void R(string& str);//以\r为判断删除注释

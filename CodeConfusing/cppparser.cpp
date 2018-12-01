@@ -179,7 +179,7 @@ int CppParser::parseCppFile(SrcFileModel srcFile)
     return 0;
 }
 
-int CppParser::judge(string s)
+size_t CppParser::judge(string s)
 {
     if(s=="#include")
     {
@@ -288,7 +288,7 @@ void CppParser::R(string& str)
     
     do
     {
-        index = (int)str.find("class\t");//消除,后面的换行
+        index = str.find("class\t");//消除,后面的换行
         if(index != string::npos)
         {
             str.replace(index,6,"class ");
@@ -302,7 +302,7 @@ void CppParser::R(string& str)
     
     do
     {
-        index = (int)str.find("friend\t");//消除,后面的换行
+        index = str.find("friend\t");//消除,后面的换行
         if(index != string::npos)
         {
             str.replace(index,7,"friend ");
@@ -552,7 +552,7 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
     //根据分号来区分函数和变量
     for(vector<string>::iterator b = vs.begin(); b!=vs.end();++b)
     {
-        sem_index = (int)b->find_last_of(';');
+        sem_index = b->find_last_of(';');
         if( sem_index != string::npos)
         {
             string cur_var = b->substr(0,sem_index);
@@ -589,7 +589,7 @@ int CppParser::findGlobalVarsAndFunctions(string& str)
  */
 int CppParser::findSubStrAtPos(string& str,string s,size_t& pos)
 {
-    int type = judge(s);
+    size_t type = judge(s);
     size_t fI,nI;//firstIndex,nextIndex
     string temp = "";
     switch(type)
@@ -622,7 +622,6 @@ int CppParser::findSubStrAtPos(string& str,string s,size_t& pos)
                 return NOTFOUND;
             }
         }
-            break;
         case CLASS:
         {
             fI = str.find(s,pos);//找到"class "
@@ -699,6 +698,7 @@ int CppParser::findSubStrAtPos(string& str,string s,size_t& pos)
                 return NOTFOUND;
             }
         }
+        break;
         case TEMPLATE_CLASS:
         {
             fI = str.find(s,pos);//找到"template"
