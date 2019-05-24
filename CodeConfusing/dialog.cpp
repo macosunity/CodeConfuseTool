@@ -2,6 +2,9 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QFile>
+#include <QDir>
+#include <QDirIterator>
+#include <QFileInfo>
 #include <QCoreApplication>
 #include <QTextStream>
 #include <QTextEdit>
@@ -33,53 +36,48 @@ using namespace std;
 
 void Dialog::readFileList(const char *basePath)
 {
-    DIR *dir;
-    struct dirent *ptr;
-
-    if ((dir=opendir(basePath)) == nullptr)
+    QDir dir(basePath);
+    
+    if (!dir.exists())
     {
-        perror("Open dir error...");
+        qDebug() << "dir " << basePath << " not exist!" << endl;
         return;
     }
-
-    while ((ptr=readdir(dir)) != nullptr)
+    
+    dir.setFilter(QDir::Files | QDir::NoSymLinks);
+    QFileInfoList list = dir.entryInfoList();
+    
+    int file_count = list.count();
+    if(file_count <= 0)
     {
-        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)    ///current dir OR parrent dir
-        {
-            continue;
-        }
-        else if(ptr->d_type == 8)    ///file
-        {
-            string filePath = basePath;
-            string fileName = ptr->d_name;
-            filePath = filePath + "/" + fileName;
-            SrcFileModel fileModel;
-            fileModel.fileName = fileName;
-            fileModel.filePath = filePath;
-            fileModel.isParsed = false;
-            fileList.push_back(fileModel);
-        }
-        else if(ptr->d_type == 10)    ///link file
-        {
-//            string filePath = basePath;
-//            string fileName = ptr->d_name;
-//            filePath = filePath + "/" + fileName;
-//            SrcFileModel fileModel;
-//            fileModel.fileName = fileName;
-//            fileModel.filePath = filePath;
-//            fileModel.isParsed = false;
-//            fileList.push_back(fileModel);
-        }
-        else if(ptr->d_type == 4)    ///dir
-        {
-            string filePath = basePath;
-            string fileName = ptr->d_name;
-            filePath = filePath + "/" + fileName;
-            readFileList(filePath.c_str());
-        }
+        return;
     }
-    closedir(dir);
-    return;
+    
+    QStringList string_list;
+    
+    //获取所选文件类型过滤器
+    QStringList filters;
+    filters << QString("*.*");
+    
+    //定义迭代器并设置过滤器
+    QDirIterator dirIter(basePath,
+                         filters,
+                         QDir::Files | QDir::NoSymLinks,
+                         QDirIterator::Subdirectories);
+    
+    while(dirIter.hasNext())
+    {
+        dirIter.next();
+        QFileInfo fileInfo = dirIter.fileInfo();
+        QString absFilePath = fileInfo.absoluteFilePath();
+        qDebug() << absFilePath << endl;
+        
+        SrcFileModel fileModel;
+        fileModel.fileName = fileInfo.fileName().toStdString();
+        fileModel.filePath = absFilePath.toStdString();
+        fileModel.isParsed = false;
+        fileList.push_back(fileModel);
+    }
 }
 
 Dialog::Dialog(QString file_storage, 
