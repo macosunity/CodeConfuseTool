@@ -1,5 +1,4 @@
-
-build-DirWatcher-Desktop_Qt_5_5_1_GCC_32bit-Debug/
-Release/*.cpp
-Release/*.o
-Release/Makefile
+Debug
+Release
+.xcodeproj
+tmp
