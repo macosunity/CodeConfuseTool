@@ -1,9 +1,10 @@
 #include "database.h"
+#include "stringutil.h"
+
 #include <QDebug>
 #include <QUuid>
 #include <QDesktopServices>
 #include <QDir>
-#include "stringutil.h"
 
 DataBase::DataBase()
 {
@@ -18,7 +19,6 @@ void DataBase::clearIdentifyVec()
     vector<string>().swap(m_identifyVec);
 }
 
-//向数据库中插入记录
 bool DataBase::insertRecord(ClassModel classModel)
 {
     StringUtil su;

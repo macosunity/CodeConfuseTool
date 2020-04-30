@@ -1,5 +1,4 @@
-#ifndef STRINGUTIL_H
-#define STRINGUTIL_H
+#pragma once
 
 #include <algorithm>
 #include <functional>
@@ -30,5 +29,3 @@ public:
     bool StartWith(const string& str,const string& strStart);       //字符串以某段开头
     bool EndWith(const string& str,const string& strEnd);           //字符串以某段结尾
 };
-
-#endif // STRINGUTIL_H

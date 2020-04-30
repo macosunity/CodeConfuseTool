@@ -1,5 +1,4 @@
-#ifndef FILEVIEWER_H
-#define FILEVIEWER_H
+#pragma once
 
 #include <QDialog>
 #include <QLabel>
@@ -9,7 +8,6 @@
 #include <QFile>
 #include <QDir>
 #include <QFileInfo>
-
 
 class FileViewer : public QDialog
 {
@@ -48,5 +46,3 @@ private slots:
     void look_inside_clicked();
     
 };
-
-#endif // FILEVIEWER_H

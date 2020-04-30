@@ -1,5 +1,7 @@
-#ifndef DIALOG_H
-#define DIALOG_H
+#pragma once
+
+#include "fileviewer.h"
+#include "srcfilemodel.h"
 
 #include <QDialog>
 #include <QString>
@@ -12,44 +14,23 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QCheckBox>
+#include <QMainWindow>
 #include <QLabel>
+
 #include <vector>
 #include <string>
 #include <unordered_set>
-#include "fileviewer.h"
-#include "srcfilemodel.h"
 
 using namespace std;
 
-class Dialog : public QDialog
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
-private:
-    QListWidget *list;
-    QPushButton *add;
-    QPushButton *start;
-    QPushButton *choose;
-    QLabel  *lbl_ignore_folders;
-    QCheckBox *cb_isconfuse_objc;
-    QCheckBox *cb_isconfuse_cpp;
-    QCheckBox *cb_isinject_garbagecode_cpp;
-    QLineEdit *edit_ignore_folders;
-    QLineEdit *edit_line;
-    QPushButton *del;
-    
-    QString file_storage;
-    QString dir_storage;
-    vector<SrcFileModel> fileList;
-    vector<SrcFileModel> xibAndsb;
-    
-    bool is_confuse_objc;
-    bool is_confuse_cpp;
-    bool is_inject_garbagecode_cpp;
     
 public:
-    Dialog(QString file_storage, QString dir_storage, QWidget *parent = 0);
+    MainWindow(QString file_storage, QString dir_storage, QWidget *parent = nullptr);
     
-    ~Dialog();
+    ~MainWindow();
 
 public slots:
     void add_next_path(QString path);
@@ -72,6 +53,26 @@ private slots:
     
     bool is_identify_property(string identify_str);
     bool is_identify_class(string identify_str);
-};
 
-#endif // DIALOG_H
+private:
+    QListWidget *list = nullptr;
+    QPushButton *add = nullptr;
+    QPushButton *start = nullptr;
+    QPushButton *choose = nullptr;
+    QLabel  *lbl_ignore_folders = nullptr;
+    QCheckBox *cb_isconfuse_objc = nullptr;
+    QCheckBox *cb_isconfuse_cpp = nullptr;
+    QCheckBox *cb_isinject_garbagecode_cpp = nullptr;
+    QLineEdit *edit_ignore_folders = nullptr;
+    QLineEdit *edit_line = nullptr;
+    QPushButton *del = nullptr;
+
+    QString file_storage;
+    QString dir_storage;
+    vector<SrcFileModel> fileList;
+    vector<SrcFileModel> xibAndsb;
+
+    bool is_confuse_objc;
+    bool is_confuse_cpp;
+    bool is_inject_garbagecode_cpp;
+};

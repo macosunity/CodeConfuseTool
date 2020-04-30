@@ -1,5 +1,4 @@
-#ifndef SRCFILEMODEL_H
-#define SRCFILEMODEL_H
+#pragma once
 
 #include <string>
 
@@ -27,5 +26,3 @@ public:
 
     SrcFileModel();
 };
-
-#endif // SRCFILEMODEL_H

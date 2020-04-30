@@ -1,5 +1,11 @@
-#ifndef OCPARSER_H
-#define OCPARSER_H
+#pragma once
+
+#include "srcfilemodel.h"
+#include "classmodel.h"
+
+#include <QFile>
+#include <QMessageBox>
+#include <QDebug>
 
 #include <iostream>
 #include <string>
@@ -7,13 +13,6 @@
 #include <vector>
 #include <iterator>
 #include <map>
-#include <ctype.h>
-#include <stdio.h>
-#include <QFile>
-#include <QMessageBox>
-#include <QDebug>
-#include "srcfilemodel.h"
-#include "classmodel.h"
 
 using namespace std;
 
@@ -75,5 +74,3 @@ private:
     void actionscope_ignore(const string& str,size_t& fI);//忽略一个大的作用域中的所有作用域
     vector<size_t> actionscope(const string& str,size_t& fI);//获取最大的作用域的位置
 };
-
-#endif // OCPARSER_H

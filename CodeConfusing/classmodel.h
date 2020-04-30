@@ -1,6 +1,7 @@
-#ifndef CLASSMODEL_H
-#define CLASSMODEL_H
+#pragma once
+
 #include <string>
+
 using namespace std;
 
 class ClassModel
@@ -18,5 +19,3 @@ public:
 
     ClassModel();
 };
-
-#endif // CLASSMODEL_H

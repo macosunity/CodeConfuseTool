@@ -1,4 +1,5 @@
 #include "fileviewer.h"
+
 #include <QDebug>
 
 FileViewer::FileViewer(QString dir, QString file_path, 

@@ -1,4 +1,12 @@
-#include "dialog.h"
+#include "mainwindow.h"
+
+#include "stringutil.h"
+#include "cppparser.h"
+#include "ocparser.h"
+#include "database.h"
+#include "resultdialog.h"
+#include "garbagecode.h"
+
 #include <QDebug>
 #include <QMessageBox>
 #include <QFile>
@@ -11,36 +19,17 @@
 #include <QApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QJsonValue>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <vector>
-
-#include "stringutil.h"
-
-#include "cppparser.h"
-#include "ocparser.h"
-#include "database.h"
-#include "resultdialog.h"
-#include "garbagecode.h"
 
 #define random(a,b) (rand()%(b-a+1)+a)
 
-#define DEBUG
-
-using namespace std;
-
-void Dialog::readFileList(const char *basePath)
+void MainWindow::readFileList(const char *basePath)
 {
     QDir dir(basePath);
     
     if (!dir.exists())
     {
-        qDebug() << "dir " << basePath << " not exist!" << endl;
         return;
     }
     
@@ -70,7 +59,6 @@ void Dialog::readFileList(const char *basePath)
         dirIter.next();
         QFileInfo fileInfo = dirIter.fileInfo();
         QString absFilePath = fileInfo.absoluteFilePath();
-        qDebug() << absFilePath << endl;
         
         SrcFileModel fileModel;
         fileModel.fileName = fileInfo.fileName().toStdString();
@@ -80,15 +68,14 @@ void Dialog::readFileList(const char *basePath)
     }
 }
 
-Dialog::Dialog(QString file_storage, 
-               QString dir_storage, 
-               QWidget *parent)
-    : QDialog(parent)
+MainWindow::MainWindow(QString file_storage, QString dir_storage, QWidget *parent)
+    : QMainWindow(parent)
 {
     this->file_storage = file_storage;
     this->dir_storage = dir_storage;
     
     list = new QListWidget();
+
     choose = new QPushButton("请选择项目文件夹");
     start = new QPushButton("开始混淆");
     edit_line = new QLineEdit();
@@ -96,19 +83,23 @@ Dialog::Dialog(QString file_storage,
     lbl_ignore_folders = new QLabel("请输入要忽略的文件夹名字，以空格分割：");
     cb_isconfuse_objc = new QCheckBox("是否混淆Objective C代码", this);
     cb_isconfuse_cpp = new QCheckBox("是否混淆C/C++代码", this);
-    cb_isinject_garbagecode_cpp = new QCheckBox("是否在C/C++函数中插入垃圾代码", this);
-    
-    cb_isconfuse_objc->setCheckState(Qt::Checked);
+    cb_isinject_garbagecode_cpp = new QCheckBox("是否在C/C++函数中注入自定义代码", this);
+
     //set default flags
     is_confuse_objc = true;
-    is_confuse_cpp = false;
-    is_inject_garbagecode_cpp = false;
+    is_confuse_cpp = true;
+    is_inject_garbagecode_cpp = true;
+
+    cb_isconfuse_objc->setCheckState(Qt::Checked);
+    cb_isconfuse_cpp->setCheckState(Qt::Checked);
+    cb_isinject_garbagecode_cpp->setCheckState(Qt::Checked);
     
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    
-    edit_line->setMinimumWidth(300);
+
     lbl_ignore_folders->setAlignment(Qt::AlignLeft);
     lbl_ignore_folders->adjustSize();
+
+    edit_line->setMinimumWidth(300);
     choose->setMinimumWidth(140);
 
     connect(choose, SIGNAL(clicked(bool)), SLOT(choose_path()));
@@ -134,30 +125,33 @@ Dialog::Dialog(QString file_storage,
     checksLayout->addWidget(cb_isconfuse_cpp);
     checksLayout->addWidget(cb_isinject_garbagecode_cpp);
     
-    QVBoxLayout *allLayout = new QVBoxLayout();
-    allLayout->addLayout(inputLayout);
-    allLayout->addLayout(checksLayout);
-    allLayout->addWidget(list);
-    allLayout->addWidget(start);
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addLayout(inputLayout);
+    mainLayout->addLayout(checksLayout);
+    mainLayout->addWidget(list);
+    mainLayout->addWidget(start);
     
-    setLayout(allLayout);
-    setWindowTitle("项目代码混淆工具");
+    QWidget *mainWidget = new QWidget;
+    mainWidget->setLayout(mainLayout);
+
+    setCentralWidget(mainWidget);
+
+    setWindowTitle("项目代码混淆&注入工具");
     setWindowFlags(Qt::Window);
-    setGeometry(400,400,800,490);
 }
 
-void Dialog::choose_path()
+void MainWindow::choose_path()
 {
     QString path = QFileDialog::getExistingDirectory(this, tr("Choose Directory"), ".");
     edit_line->setText(path);
 }
 
-void Dialog::add_next_path(QString path)
+void MainWindow::add_next_path(QString path)
 {
     list->insertItem(0, path);
 }
 
-bool Dialog::is_identify_class(string identify_str)
+bool MainWindow::is_identify_class(string identify_str)
 {
     DataBase *database = DataBase::Instance();
     
@@ -177,7 +171,7 @@ bool Dialog::is_identify_class(string identify_str)
 }
 
 
-bool Dialog::is_identify_property(string identify_str)
+bool MainWindow::is_identify_property(string identify_str)
 {
     DataBase *database = DataBase::Instance();
     
@@ -196,122 +190,95 @@ bool Dialog::is_identify_property(string identify_str)
     return false;
 }
 
-void Dialog::onConfuseObjCStateChanged(int state)
+void MainWindow::onConfuseObjCStateChanged(int state)
 {
     if (state == Qt::Checked) // "选中"
     {
         is_confuse_objc = true;
-        qDebug() << "选中: " << state << endl;
     }
     else if(state == Qt::PartiallyChecked) // "半选"
     {
-        qDebug() << "半选: " << state << endl;
     }
     else // 未选中 - Qt::Unchecked
     {
         is_confuse_objc = false;
-        qDebug() << "未选中: " << state << endl;
     }
 }
 
-void Dialog::onConfuseCppStateChanged(int state)
+void MainWindow::onConfuseCppStateChanged(int state)
 {
     if (state == Qt::Checked) // "选中"
     {
         is_confuse_cpp = true;
-        qDebug() << "选中: " << state << endl;
     }
     else if(state == Qt::PartiallyChecked) // "半选"
     {
-        qDebug() << "半选: " << state << endl;
     }
     else // 未选中 - Qt::Unchecked
     {
         is_confuse_cpp = false;
-        qDebug() << "未选中: " << state << endl;
     }
 }
 
-void Dialog::onInjectCodeStateChanged(int state)
+void MainWindow::onInjectCodeStateChanged(int state)
 {
     if (state == Qt::Checked) // "选中"
     {
         is_inject_garbagecode_cpp = true;
-        qDebug() << "选中: " << state << endl;
     }
     else if(state == Qt::PartiallyChecked) // "半选"
     {
-        qDebug() << "半选: " << state << endl;
     }
     else // 未选中 - Qt::Unchecked
     {
         is_inject_garbagecode_cpp = false;
-        qDebug() << "未选中: " << state << endl;
     }
 }
 
-void Dialog::inject_garbagecode()
+void MainWindow::inject_garbagecode()
 {
     StringUtil stringUtil;
     
-    
-#ifdef DEBUG
-    QDir curr_dir;
-    QString jsonPath = curr_dir.absolutePath();
-    QDir jsonDir(jsonPath);
-    jsonDir.cdUp();
-    jsonPath = jsonDir.absolutePath();
-    qDebug() << jsonPath;
-    jsonPath = jsonPath.append("/garbagepiece.json");
-    
-    QFile jsonFile(jsonPath);
-    if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    QString codePiecePath = QString(":/resources/codepiece.json");
+    QFile codePieceJsonFile(codePiecePath);
+    if(!codePieceJsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(nullptr, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
+        QMessageBox::critical(nullptr, "critical", "读取自定义代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
-#else
-    QString jsonPath = QCoreApplication::applicationDirPath();
-    jsonPath = jsonPath.append("/garbagepiece.json");
-    qDebug() << jsonPath;
-    QFile jsonFile(jsonPath);
-    if(!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(nullptr, "critical", "读取垃圾代码文件出错！", QMessageBox::Yes, QMessageBox::Yes);
-    }
-#endif
     
-    QString val = jsonFile.readAll();
-    qDebug() << val << endl;
-    jsonFile.close();
+    QString val = codePieceJsonFile.readAll();
+    codePieceJsonFile.close();
     
     vector<string> garbageCodeArr;
-    for (int i=0; i<=6; i++) {
-        
-        QString indexKey = QString(std::to_string(i).c_str());
-        QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
-        QJsonObject jsonObj = doc.object();
-        QJsonValue value = jsonObj.value(indexKey);
-        
-        qDebug() << value << endl;
+    QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject jsonObj = doc.object();
+
+    QStringList keyList = jsonObj.keys();
+
+    for(int i=0; i<keyList.size(); i++) {
+        QString key = keyList.at(i);
+        QJsonValue value = jsonObj.value(key);
         garbageCodeArr.push_back(value.toString().toStdString());
     }
-    
+
     QString ignore_folders = edit_ignore_folders->text();
     QStringList ignore_folders_list = ignore_folders.split(" ");
     
     QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    StringUtil su;
+    GarbageCodeTool gct;
     for(size_t i=0; i<fileList.size(); i++)
     {
-        size_t index = i % 6;
         SrcFileModel file = fileList.at(i);
-        
+
         QString QfilePath = QString(file.filePath.c_str());
-        //过滤掉已经插入过垃圾代码的cpp文件，还有Pods文件
+        //过滤掉已经注入过垃圾代码的cpp文件，还有Pods文件
         if (file.isParsed || QfilePath.contains("Pods/") || QfilePath.contains("sqlite"))
         {
             continue;
         }
-        
+
         if (ignore_folders.length() > 0)
         {
             bool bPathContainsIgnoreFolder = false;
@@ -322,55 +289,75 @@ void Dialog::inject_garbagecode()
                     bPathContainsIgnoreFolder = true;
                 }
             }
-            
+
             if (bPathContainsIgnoreFolder)
             {
                 continue;
             }
         }
-        
+
         if(stringUtil.EndWith(file.fileName, ".cpp") || stringUtil.EndWith(file.fileName, ".cxx") || stringUtil.EndWith(file.fileName, ".cc"))
         {
             file.cppFileName = file.fileName;
             file.cppFilePath = file.filePath;
-            
-            QString cppFilePathString = QString("正在插入垃圾指令:");
+
+            QString cppFilePathString = QString("正在注入自定义代码:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
-            //qDebug() << cppFilePathString << endl;
-            
-            GarbageCodeTool gct;
-            gct.insertGarbageCode(file, garbageCodeArr[index]);
+
+            for(size_t index=0; index<garbageCodeArr.size(); index++)
+            {
+                string code = su.trim(garbageCodeArr[index]);
+                if (su.StartWith(code, "#include"))
+                {
+                    gct.insertIncludeCode(file, code);
+                }
+                else
+                {
+                    gct.insertGarbageCode(file, code);
+                }
+            }
         }
         else if(stringUtil.EndWith(file.fileName, ".c"))
         {
             findHeaderFileWithFileModel(file);
-            
+
             file.cFileName = file.fileName;
             file.cFilePath = file.filePath;
-            
-            QString parseInfoString = QString("正在插入垃圾指令:");
+
+            QString parseInfoString = QString("正在注入自定义代码:");
             parseInfoString = parseInfoString.append(file.filePath.c_str());
-            qDebug() << parseInfoString << endl;
             list->addItem(parseInfoString);
-            
-            GarbageCodeTool gct;
-            gct.insertGarbageCode(file, garbageCodeArr[index]);
+
+            for(size_t index=0; index<garbageCodeArr.size(); index++)
+            {
+                string code = su.trim(garbageCodeArr[index]);
+                if (su.StartWith(code, "#include"))
+                {
+                    gct.insertIncludeCode(file, code);
+                }
+                //由于C语言要求变量声明必须在所有语句之前，针对C文件暂不做代码注入
+//                else
+//                {
+//                    gct.insertGarbageCode(file, code);
+//                }
+            }
         }
         else
         {
             //跳过其他文件
         }
-        
+
         list->update();
         list->repaint();
         list->scrollToBottom();
         QCoreApplication::processEvents();
     }
+
     QApplication::restoreOverrideCursor();
 }
 
-void Dialog::generate_confuse_code()
+void MainWindow::generate_confuse_code()
 {
     StringUtil stringUtil;
     
@@ -484,7 +471,6 @@ void Dialog::generate_confuse_code()
             QString cppFilePathString = QString("正在分析:");
             cppFilePathString = cppFilePathString.append(file.cppFilePath.c_str());
             list->addItem(cppFilePathString);
-            //qDebug() <<"curr cpp file is:" << cppFilePathString << endl;
             
             CppParser cppParser;
             cppParser.parseCppFile(file);
@@ -559,7 +545,7 @@ void Dialog::generate_confuse_code()
     QApplication::restoreOverrideCursor();
 }
 
-void Dialog::start_choosing()
+void MainWindow::start_choosing()
 {
     start->setEnabled(false);
 
@@ -587,12 +573,12 @@ void Dialog::start_choosing()
     QByteArray ba = path.toUtf8();
     char *pathStr = ba.data();
     readFileList(pathStr);
-    
+
     if (is_inject_garbagecode_cpp)
     {
         inject_garbagecode();
     }
-    
+
     if (is_confuse_cpp || is_confuse_objc)
     {
         generate_confuse_code();
@@ -614,36 +600,17 @@ void Dialog::start_choosing()
     sort(resultVec.begin(),resultVec.end());
     resultVec.erase(unique(resultVec.begin(), resultVec.end()), resultVec.end());
 
-
-#ifdef DEBUG
-    QDir dir;
-    QString resPath = dir.absolutePath();
-    QDir resDir(resPath);
-    resDir.cdUp();
-    resPath = resDir.absolutePath();
-    qDebug() << resPath;
-    resPath = resPath.append("/DICT.txt");
-    QFile resFile(resPath);
-    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    QString resDictPath = QString(":/resources/dict.txt");
+    QFile resDictFile(resDictPath);
+    if(!resDictFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(nullptr, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
-#else
-    QDir dir;
-    QString resPath = QCoreApplication::applicationDirPath();
-    resPath = resPath.append("/DICT.txt");
-    qDebug() << resPath;
-    QFile resFile(resPath);
-    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(nullptr, "critical", "读取字典文件出错！", QMessageBox::Yes, QMessageBox::Yes);
-    }
-#endif
     
     QApplication::setOverrideCursor(Qt::WaitCursor);
     vector<string> wordsVec;
     
-    QTextStream stream(&resFile);
+    QTextStream stream(&resDictFile);
     QString line;
     int n = 1;
     while (!stream.atEnd())
@@ -667,7 +634,6 @@ void Dialog::start_choosing()
         size_t index = static_cast<size_t>(random(1, static_cast<int>(wordsVec.size()-1)));
 
         ss = wordsVec[index];
-        qDebug() << ss.c_str() << endl;
         string ssFirstCharStr = ss.substr(0,1);
         stringUtil.Toupper(ssFirstCharStr);
         ss = ss.replace(0, 1, ssFirstCharStr);
@@ -701,7 +667,7 @@ void Dialog::start_choosing()
     start->setEnabled(true);
 }
 
-bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
+bool MainWindow::findCppFileWithFileModel(SrcFileModel &fileModel)
 {
     QFile srcFile(fileModel.filePath.c_str());
     QFileInfo fileInfo = QFileInfo(srcFile);
@@ -741,7 +707,7 @@ bool Dialog::findCppFileWithFileModel(SrcFileModel &fileModel)
 }
 
 //Objective C
-bool Dialog::findMFileWithFileModel(SrcFileModel &fileModel)
+bool MainWindow::findMFileWithFileModel(SrcFileModel &fileModel)
 {
     QFile srcFile(fileModel.filePath.c_str());
     QFileInfo fileInfo = QFileInfo(srcFile);
@@ -775,7 +741,7 @@ bool Dialog::findMFileWithFileModel(SrcFileModel &fileModel)
 }
 
 //Objective C++
-bool Dialog::findMMFileWithFileModel(SrcFileModel &fileModel)
+bool MainWindow::findMMFileWithFileModel(SrcFileModel &fileModel)
 {
     QFile srcFile(fileModel.filePath.c_str());
     QFileInfo fileInfo = QFileInfo(srcFile);
@@ -808,7 +774,7 @@ bool Dialog::findMMFileWithFileModel(SrcFileModel &fileModel)
     return false;
 }
 
-bool Dialog::findHeaderFileWithFileModel(SrcFileModel &fileModel)
+bool MainWindow::findHeaderFileWithFileModel(SrcFileModel &fileModel)
 {
     QFile qSrcfile(fileModel.filePath.c_str());
     QFileInfo fileInfo = QFileInfo(qSrcfile);
@@ -839,37 +805,19 @@ bool Dialog::findHeaderFileWithFileModel(SrcFileModel &fileModel)
     return false;
 }
 
-Dialog::~Dialog()
+MainWindow::~MainWindow()
 {
     
 }
 
-void Dialog::putAllKeyWords(vector<string> &keysVec)
+void MainWindow::putAllKeyWords(vector<string> &keysVec)
 {
-#ifdef DEBUG
-    QDir dir;
-    QString resPath = dir.absolutePath();
-    QDir resDir(resPath);
-    resDir.cdUp();
-    resPath = resDir.absolutePath();
-    qDebug() << resPath;
-    resPath = resPath.append("/reskeys.txt");
-    QFile resFile(resPath);
+    QString reskeysFile = QString(":/resources/reskeys.txt");
+    QFile resFile(reskeysFile);
     if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(nullptr, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
     }
-#else
-    QDir dir;
-    QString resPath = QCoreApplication::applicationDirPath();
-    resPath = resPath.append("/reskeys.txt");
-    qDebug() << resPath;
-    QFile resFile(resPath);
-    if(!resFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(nullptr, "critical", "读取关键字文件出错！", QMessageBox::Yes, QMessageBox::Yes);
-    }
-#endif
     
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QTextStream stream(&resFile);

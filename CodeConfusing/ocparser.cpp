@@ -412,7 +412,6 @@ void OCParser::display(SrcFileModel fileModel)
                 
                 if (handleObjectiveCIdentify(model))
                 {
-//                    qDebug() << "找到OC变量： " << varName.c_str() << endl;
                     database->insertRecord(model);
                 }
             }
@@ -442,7 +441,6 @@ void OCParser::display(SrcFileModel fileModel)
                 
                 if (handleObjectiveCIdentify(model))
                 {
-//                    qDebug() << "找到OC属性： " << propertyName.c_str() << endl;
                     database->insertRecord(model);
                 }
 
@@ -476,7 +474,6 @@ void OCParser::display(SrcFileModel fileModel)
 
                     if (handleObjectiveCIdentify(model))
                     {
-//                        qDebug() << "找到OC方法： " << functionName.c_str() << endl;
                         database->insertRecord(model);
                     }
                 }
@@ -527,7 +524,6 @@ int OCParser::find(string& str,string s,size_t& pos){
                 return OC_NOTFOUND;
             }
         }
-            break;
         case OC_CLASS:
         {
             fI = str.find(s,pos);//找到"@interface"
@@ -800,21 +796,18 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
     if (NS1 != string::npos)
     {
         identify_str = identify_str.substr(0, NS1);
-//        qDebug() << identify_str.c_str() << endl;
     }
     
     size_t ATTR = identify_str.find("__attribute__");
     if (ATTR != string::npos)
     {
         identify_str = identify_str.substr(0, ATTR);
-//        qDebug() << identify_str.c_str() << endl;
     }
     
     size_t UI1 = identify_str.find("UI_APPEARANCE_SELECTOR");
     if (UI1 != string::npos)
     {
         identify_str = identify_str.substr(0, UI1);
-//        qDebug() << identify_str.c_str() << endl;
     }
     
     identify_str = trim(identify_str);
@@ -876,7 +869,6 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
         if (last_space_index != string::npos)
         {
             identify_str = identify_str.substr(last_space_index, identify_str.length()-last_space_index);
-//            qDebug() << identify_str.c_str() << endl;
         }
         
         stringUtil.deleteSpecialChar(identify_str);
@@ -908,7 +900,7 @@ bool OCParser::handleObjectiveCIdentify(ClassModel &classModel)
         stringUtil.deleteSpecialChar(identify_str);
         if (stringUtil.is_allow_identify_name(identify_str))
         {
-//            qDebug() << "发现其他1:" << classModel.identifyName.c_str() << identify_str.c_str();
+            //qDebug() << "other identify:" << classModel.identifyName.c_str() << identify_str.c_str();
         }
     }
     

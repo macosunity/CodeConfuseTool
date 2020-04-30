@@ -1,5 +1,4 @@
-#ifndef CPPPARSER_H
-#define CPPPARSER_H
+#pragma once
 
 #include<string>
 #include<fstream>
@@ -73,6 +72,3 @@ private:
     
     bool handleCppIdentify(ClassModel &classModel);
 };
-
-
-#endif // CPPPARSER_H

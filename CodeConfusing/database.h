@@ -1,13 +1,15 @@
-#ifndef DATABASE_H
-#define DATABASE_H
+#pragma once
+
+#include "classmodel.h"
 
 #include <QTextCodec>
 #include <QTime>
-#include <QtDebug>
+#include <QDebug>
+#include <QMutex>
+
 #include <iterator>
 #include <regex>
 #include <string>
-#include "classmodel.h"
 
 using namespace std;
 
@@ -45,5 +47,3 @@ public:
     vector<ClassModel> queryAllModel();
     bool deleteAll();         //删除所有信息
 };
-
-#endif // DATABASE_H

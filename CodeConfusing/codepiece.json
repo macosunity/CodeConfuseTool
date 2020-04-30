@@ -1,0 +1,5 @@
+{
+ "0":"printf(\"(%s)%s:[%d]\\n\", __FILE__, __FUNCTION__, __LINE__);"
+    ,
+ "1":"#include <stdio.h>"
+}

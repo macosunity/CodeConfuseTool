@@ -34,7 +34,7 @@ void GarbageCodeTool::modifyContentInFile(const char *fileName, string content)
            su.StartWith(line, "{"))
         {
             string subline = line.substr(1,line.length()-1);
-            tempStr += content+"\n"+subline;
+            tempStr += + "{\n\t" + content+"\n" + subline + "\n";
         }
         else
         {
@@ -50,9 +50,43 @@ void GarbageCodeTool::modifyContentInFile(const char *fileName, string content)
     fout.close();
 }
 
-int GarbageCodeTool::insertGarbageCode(SrcFileModel srcFile, string garbageCode)
+void GarbageCodeTool::insertGarbageCode(SrcFileModel srcFile, string garbageCode)
 {
     modifyContentInFile(srcFile.filePath.c_str(), garbageCode);
-    
-    return 0;
+}
+
+void GarbageCodeTool::insertIncludeCode(SrcFileModel srcFile, string includeCode)
+{
+    StringUtil su;
+
+    string line;
+    string preline = "";
+
+    const char *fileName = srcFile.filePath.c_str();
+    ifstream fin(fileName);
+
+    bool isHeadInjected = false;
+    string tempStr = "";
+    while(getline(fin,line,'\n'))
+    {
+        if(line.length() > 0 &&
+           su.StartWith(line, "#include") &&
+           isHeadInjected == false)
+        {
+            string subline = line.substr(0,line.length());
+            qDebug() << "subline:" << subline.c_str()<< endl;
+            tempStr += + "\n" + includeCode+"\n"+subline+"\n";
+
+            isHeadInjected = true;
+        }
+        else
+        {
+            tempStr += line+"\n";
+        }
+    }
+    fin.close();
+
+    ofstream fout(fileName, ofstream::out);
+    fout << tempStr;
+    fout.close();
 }

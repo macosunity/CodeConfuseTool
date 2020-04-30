@@ -1,5 +1,4 @@
-#ifndef RESULTDIALOG_H
-#define RESULTDIALOG_H
+#pragma once
 
 #include <QDialog>
 #include <QTextEdit>
@@ -27,5 +26,3 @@ public:
 private slots:
     void hideDialog();
 };
-
-#endif // RESULTDIALOG_H
